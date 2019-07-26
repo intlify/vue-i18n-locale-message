@@ -1,0 +1,71 @@
+{
+  "name": "vue-i18n-locale-message",
+  "description": "i18n locale messages management tool for vue-i18n",
+  "version": "0.0.1",
+  "author": {
+    "name": "kazuya kawaguchi",
+    "email": "kawakazu80@gmail.com"
+  },
+  "bugs": {
+    "url": "https://github.com/kazupon/vue-i18n-locale-message/issues"
+  },
+  "files": [
+    "lib",
+    "src"
+  ],
+  "dependencies": {
+    "@vue/component-compiler-utils": "^3.0.0",
+    "debug": "^4.1.1",
+    "vue-template-compiler": "^2.6.10"
+  },
+  "devDependencies": {
+    "@types/debug": "^4.1.4",
+    "@types/jest": "^24.0.15",
+    "@types/node": "^12.6.8",
+    "@typescript-eslint/eslint-plugin": "^1.13.0",
+    "@typescript-eslint/parser": "^1.13.0",
+    "@typescript-eslint/typescript-estree": "^1.13.0",
+    "conventional-changelog-cli": "^2.0.21",
+    "conventional-github-releaser": "^3.1.3",
+    "eslint": "^6.1.0",
+    "eslint-plugin-vue-libs": "^4.0.0",
+    "git-commit-message-convention": "git://github.com/kazupon/git-commit-message-convention.git",
+    "jest": "^24.8.0",
+    "opener": "^1.5.1",
+    "ts-jest": "^24.0.2",
+    "typescript": "^3.5.3",
+    "typescript-eslint-language-service": "^1.1.2"
+  },
+  "engines": {
+    "node": ">= 8"
+  },
+  "homepage": "https://github.com/kazupon/vue-i18n-locale-message#readme",
+  "keywords": [
+    "i18n",
+    "messages",
+    "vue",
+    "vue-i18n"
+  ],
+  "license": "MIT",
+  "main": "lib/index.js",
+  "peerDependencies": {
+    "vue-template-compiler": "*"
+  },
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kazupon/vue-i18n-locale-message.git"
+  },
+  "scripts": {
+    "build": "tsc -p .",
+    "test:cover": "npm run test:unit -- --coverage",
+    "test:unit": "jest --env node",
+    "watch": "tsc -p . --watch",
+    "lint": "eslint ./src ./test --ext .ts",
+    "release": "conventional-github-releaser -n ./node_modules/git-commit-message-convention/convention.js",
+    "test": "npm run lint && npm run test:cover",
+    "changelog": "conventional-changelog -i CHANGELOG.md -s -n ./node_modules/git-commit-message-convention/convention.js",
+    "clean": "rm -rf ./coverage && rm -rf ./lib/*.js*",
+    "coverage": "opener coverage/lcov-report/index.html"
+  }
+}
