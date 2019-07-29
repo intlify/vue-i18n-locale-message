@@ -48,7 +48,7 @@ export type LocaleMessages = { [key: string]: LocaleMessageObject }
  *        </i18n>
  *      `,
  *      component: 'Modal',
- *      messagePath: '/components/common'
+ *      messageHierarchy: ['components', 'common', 'Modal']
  *    }
  */
 
@@ -56,5 +56,5 @@ export type LocaleMessageMeta = {
   contentPath: string
   content: string
   component: string
-  messagePath: string
+  messageHierarchy: string[]
 }

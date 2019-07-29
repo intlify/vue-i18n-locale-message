@@ -1,0 +1,47 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`squeeze 1`] = `
+Object {
+  "en": Object {
+    "App": Object {
+      "title": "Application",
+    },
+    "Modal": Object {
+      "components": Object {
+        "cancel": "Cancel",
+        "ok": "OK",
+      },
+    },
+    "RankingTable": Object {
+      "nest": Object {
+        "components": Object {
+          "headers": Object {
+            "name": "Name",
+            "rank": "Rank",
+            "score": "Score",
+          },
+        },
+      },
+    },
+  },
+  "ja": Object {
+    "App": Object {
+      "title": "アプリケーション",
+    },
+    "Login": Object {
+      "pages": Object {
+        "button": "ログイン",
+        "confirm": "パスワードの確認入力",
+        "id": "ユーザーID",
+        "passowrd": "パスワード",
+      },
+    },
+    "Modal": Object {
+      "components": Object {
+        "cancel": "キャンセル",
+        "ok": "OK",
+      },
+    },
+  },
+}
+`;
