@@ -40,13 +40,17 @@ function squeezeFromI18nBlock (content: string): LocaleMessages {
 
   return desc.customBlocks.reduce((messages, block) => {
     debug('i18n block attrs', block.attrs)
+
     if (block.type === 'i18n') {
-      const lang = block.attrs.lang as string || 'json'
+      let lang = block.attrs.lang
+      lang = (!lang || typeof lang !== 'string') ? 'json' : lang
       const obj = parseContent(block.content, lang)
-      if (block.attrs.locale) {
-        return Object.assign(messages, { [block.attrs.locale as string]: obj })
-      } else {
+
+      const locale = block.attrs.locale
+      if (!locale || typeof locale !== 'string') {
         return Object.assign(messages, obj)
+      } else {
+        return Object.assign(messages, { [locale]: obj })
       }
     } else {
       return messages
