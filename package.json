@@ -9,20 +9,18 @@
   "bugs": {
     "url": "https://github.com/kazupon/vue-i18n-locale-message/issues"
   },
-  "types": "types/index.d.ts",
-  "files": [
-    "types",
-    "lib",
-    "src"
-  ],
   "dependencies": {
     "@vue/component-compiler-utils": "^3.0.0",
     "debug": "^4.1.1",
+    "js-yaml": "^3.13.1",
+    "json5": "^2.1.0",
     "vue-template-compiler": "^2.6.10"
   },
   "devDependencies": {
     "@types/debug": "^4.1.4",
     "@types/jest": "^24.0.15",
+    "@types/js-yaml": "^3.12.1",
+    "@types/json5": "^0.0.30",
     "@types/node": "^12.6.8",
     "@typescript-eslint/eslint-plugin": "^1.13.0",
     "@typescript-eslint/parser": "^1.13.0",
@@ -43,6 +41,11 @@
   "engines": {
     "node": ">= 8"
   },
+  "files": [
+    "types",
+    "lib",
+    "src"
+  ],
   "homepage": "https://github.com/kazupon/vue-i18n-locale-message#readme",
   "keywords": [
     "i18n",
@@ -59,14 +62,15 @@
   },
   "scripts": {
     "build": "tsc -p .",
-    "test:cover": "npm run test:unit -- --coverage",
-    "test:unit": "jest --env node",
-    "watch": "tsc -p . --watch",
+    "changelog": "conventional-changelog -i CHANGELOG.md -s -n ./node_modules/git-commit-message-convention/convention.js",
+    "clean": "rm -rf ./coverage && rm -rf ./lib/*.js*",
+    "coverage": "opener coverage/lcov-report/index.html",
     "lint": "eslint ./src ./test --ext .ts",
     "release": "conventional-github-releaser -n ./node_modules/git-commit-message-convention/convention.js",
     "test": "npm run lint && npm run test:cover",
-    "changelog": "conventional-changelog -i CHANGELOG.md -s -n ./node_modules/git-commit-message-convention/convention.js",
-    "clean": "rm -rf ./coverage && rm -rf ./lib/*.js*",
-    "coverage": "opener coverage/lcov-report/index.html"
-  }
+    "test:cover": "npm run test:unit -- --coverage",
+    "test:unit": "jest --env node",
+    "watch": "tsc -p . --watch"
+  },
+  "types": "types/index.d.ts"
 }

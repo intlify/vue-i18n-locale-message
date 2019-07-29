@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`squeeze 1`] = `
+exports[`basic 1`] = `
 Object {
   "en": Object {
     "App": Object {
@@ -36,6 +36,48 @@ Object {
         "passowrd": "パスワード",
       },
     },
+    "Modal": Object {
+      "components": Object {
+        "cancel": "キャンセル",
+        "ok": "OK",
+      },
+    },
+  },
+}
+`;
+
+exports[`json5 1`] = `
+Object {
+  "en": Object {
+    "Modal": Object {
+      "components": Object {
+        "cancel": "Cancel",
+        "ok": "OK",
+      },
+    },
+  },
+  "ja": Object {
+    "Modal": Object {
+      "components": Object {
+        "cancel": "キャンセル",
+        "ok": "OK",
+      },
+    },
+  },
+}
+`;
+
+exports[`yaml 1`] = `
+Object {
+  "en": Object {
+    "Modal": Object {
+      "components": Object {
+        "cancel": "Cancel",
+        "ok": "OK",
+      },
+    },
+  },
+  "ja": Object {
     "Modal": Object {
       "components": Object {
         "cancel": "キャンセル",

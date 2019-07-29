@@ -3,6 +3,8 @@ import { VueTemplateCompiler } from '@vue/component-compiler-utils/dist/types'
 
 import { parse } from '@vue/component-compiler-utils'
 import * as compiler from 'vue-template-compiler'
+import JSON5 from 'json5'
+import yaml from 'js-yaml'
 
 import { debug as Debug } from 'debug'
 const debug = Debug('vue-i18n-locale-messages:squeezer')
@@ -37,8 +39,10 @@ function squeezeFromI18nBlock (content: string): LocaleMessages {
   })
 
   return desc.customBlocks.reduce((messages, block) => {
+    debug('i18n block attrs', block.attrs)
     if (block.type === 'i18n') {
-      const obj = JSON.parse(block.content)
+      const lang = block.attrs.lang as string || 'json'
+      const obj = parseContent(block.content, lang)
       if (block.attrs.locale) {
         return Object.assign(messages, { [block.attrs.locale as string]: obj })
       } else {
@@ -48,4 +52,17 @@ function squeezeFromI18nBlock (content: string): LocaleMessages {
       return messages
     }
   }, {})
+}
+
+function parseContent (content: string, lang: string): any {
+  switch (lang) {
+    case 'yaml':
+    case 'yml':
+      return yaml.safeLoad(content)
+    case 'json5':
+      return JSON5.parse(content)
+    case 'json':
+    default:
+      return JSON.parse(content)
+  }
 }
