@@ -9,7 +9,9 @@
   "bugs": {
     "url": "https://github.com/kazupon/vue-i18n-locale-message/issues"
   },
+  "types": "types/index.d.ts",
   "files": [
+    "types",
     "lib",
     "src"
   ],
@@ -34,7 +36,9 @@
     "opener": "^1.5.1",
     "ts-jest": "^24.0.2",
     "typescript": "^3.5.3",
-    "typescript-eslint-language-service": "^1.1.2"
+    "typescript-eslint-language-service": "^1.1.2",
+    "vue": "^2.6.10",
+    "vue-template-compiler": "^2.6.10"
   },
   "engines": {
     "node": ">= 8"
@@ -48,9 +52,6 @@
   ],
   "license": "MIT",
   "main": "lib/index.js",
-  "peerDependencies": {
-    "vue-template-compiler": "*"
-  },
   "private": true,
   "repository": {
     "type": "git",

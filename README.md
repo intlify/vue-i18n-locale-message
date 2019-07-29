@@ -5,7 +5,7 @@ i18n locale messages management tool for vue-i18n
 :construction_worker: WIP 
 
 ## :white_check_mark: TODO
-- [ ] API design
+- [x] API design
 - [ ] extract locale messages from SFC
 - [ ] infuse to SFC from locale mesasges 
 - [ ] CLI tool

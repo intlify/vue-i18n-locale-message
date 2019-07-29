@@ -1,3 +1,9 @@
-export default function add (a: number, b: number) {
-  return a + b
+import getLocaleMessageMeta from './reflector'
+import squeeze from './squeezer'
+import infuse from './infuser'
+
+export {
+  getLocaleMessageMeta,
+  squeeze,
+  infuse
 }

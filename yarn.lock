@@ -4957,9 +4957,9 @@ type-check@~0.3.2:
     prelude-ls "~1.1.2"
 
 typescript-eslint-language-service@^1.1.2:
-  version "1.1.2"
-  resolved "https://registry.yarnpkg.com/typescript-eslint-language-service/-/typescript-eslint-language-service-1.1.2.tgz#20aaba6543edd7e19429438336f5e9e2bcd9fd18"
-  integrity sha512-Nai2BJo5G3hBmmmGWSyU/W5fLeU0NLE4CtY7oU2zZCxsVrjOxZJ3fZp75Zutj1uCigYts4xHIUhlFoif4s5/Mw==
+  version "1.2.3"
+  resolved "https://registry.yarnpkg.com/typescript-eslint-language-service/-/typescript-eslint-language-service-1.2.3.tgz#33d0e677c89952b568430c9470146bb82ba9258b"
+  integrity sha512-6n1saBgS3pQIlzCTgvdXnuObg9MSqfbhrodDDydtpXrYoL1Ii/GXq2CL+zj9ykIb5lu7DsZ77BnzcjqjeVyyVw==
 
 typescript@^3.5.3:
   version "3.5.3"
@@ -5095,6 +5095,11 @@ vue-template-es2015-compiler@^1.9.0:
   version "1.9.1"
   resolved "https://registry.yarnpkg.com/vue-template-es2015-compiler/-/vue-template-es2015-compiler-1.9.1.tgz#1ee3bc9a16ecbf5118be334bb15f9c46f82f5825"
   integrity sha512-4gDntzrifFnCEvyoO8PqyJDmguXgVPxKiIxrBKjIowvL9l+N66196+72XVYR8BBf1Uv1Fgt3bGevJ+sEmxfZzw==
+
+vue@^2.6.10:
+  version "2.6.10"
+  resolved "https://registry.yarnpkg.com/vue/-/vue-2.6.10.tgz#a72b1a42a4d82a721ea438d1b6bf55e66195c637"
+  integrity sha512-ImThpeNU9HbdZL3utgMCq0oiMzAkt1mcgy3/E6zWC/G6AaQoeuFdsl9nDhTDU3X1R6FK7nsIUuRACVcjI+A2GQ==
 
 w3c-hr-time@^1.0.1:
   version "1.0.1"
