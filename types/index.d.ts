@@ -1,3 +1,5 @@
+import { SFCCustomBlock } from '@vue/component-compiler-utils'
+
 /**
  *  Locale Message Recursive Structure
  *    e.g.
@@ -29,11 +31,23 @@ export interface LocaleMessageObject { [key: string]: LocaleMessage }
 export type LocaleMessages = { [key: string]: LocaleMessageObject }
 
 /**
- *  Locale Message Meta to squeeze / infuse.
+ *  SFC (Single-file component) file info
  *    e.g.
  *    {
- *      contentPath: '/path/to/project1/src/components/common/Modal.vue',
+ *      path: '/path/to/project1/src/components/common/Modal.vue',
  *      content: `
+ *        <template>
+ *          <!-- template contents is here ... -->
+ *        </template>
+ *
+ *        <script>
+ *          // script codes is here ...
+ *        </script>
+ *
+ *        <style scoped>
+ *          // css style codes is here ...
+ *        </style>
+ *
  *        <i18n>
  *        {
  *          "en": {
@@ -47,14 +61,47 @@ export type LocaleMessages = { [key: string]: LocaleMessageObject }
  *        }
  *        </i18n>
  *      `,
+ *    }
+ */
+
+export interface SFCFileInfo {
+  path: string
+  content: string
+}
+
+/**
+ *  Locale Message Meta to squeeze / infuse.
+ *    e.g.
+ *    {
+ *      contentPath: '/path/to/project1/src/components/common/Modal.vue',
+ *      blocks: [{
+ *        type: 'i18n',
+ *        content: `
+ *        {
+ *          "en": {
+ *            "ok": "OK",
+ *            "cancel": "Cancel"
+ *          },
+ *          "ja": {
+ *            "ok": "OK",
+ *            "cancel": "キャンセル"
+ *          }
+ *        }
+ *        `,
+ *        attrs: { ... },
+ *        start: 10,
+ *        end: 30,
+ *        map: { ... }
+ *      }, ...],
  *      component: 'Modal',
  *      messageHierarchy: ['components', 'common', 'Modal']
  *    }
  */
 
-export type LocaleMessageMeta = {
+export interface LocaleMessageMeta {
   contentPath: string
   content: string
+  blocks: SFCCustomBlock[]
   component: string
   messageHierarchy: string[]
 }
