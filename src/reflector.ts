@@ -35,6 +35,6 @@ function parsePath (basePath: string, targetPath: string) {
   return {
     contentPath: targetPath,
     component: parsed.name,
-    hierarchy: parsedTargetPath
+    hierarchy: [...parsedTargetPath, parsed.name]
   }
 }
