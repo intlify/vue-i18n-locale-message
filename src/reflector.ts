@@ -15,14 +15,12 @@ export default function reflectLocaleMessageMeta (basePath: string, components: 
       filename: target.path,
       compiler: compiler as VueTemplateCompiler
     })
-    const { contentPath, component, messageHierarchy } = parsePath(basePath, target.path)
-    const cm = ''
+    const { contentPath, component, hierarchy } = parsePath(basePath, target.path)
     return {
       contentPath,
-      content: cm,
       blocks: desc.customBlocks,
       component,
-      messageHierarchy
+      hierarchy
     }
   })
 }
@@ -37,6 +35,6 @@ function parsePath (basePath: string, targetPath: string) {
   return {
     contentPath: targetPath,
     component: parsed.name,
-    messageHierarchy: parsedTargetPath
+    hierarchy: parsedTargetPath
   }
 }

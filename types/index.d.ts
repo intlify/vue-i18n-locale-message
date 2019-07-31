@@ -94,14 +94,13 @@ export interface SFCFileInfo {
  *        map: { ... }
  *      }, ...],
  *      component: 'Modal',
- *      messageHierarchy: ['components', 'common', 'Modal']
+ *      hierarchy: ['components', 'common', 'Modal']
  *    }
  */
 
 export interface LocaleMessageMeta {
   contentPath: string
-  content: string
   blocks: SFCCustomBlock[]
   component: string
-  messageHierarchy: string[]
+  hierarchy: string[]
 }

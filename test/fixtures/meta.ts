@@ -1,62 +1,73 @@
 export default [{
   contentPath: '/path/to/project1/src/App.vue',
-  content: `
-  <i18n>
-  {
-    "en": { "title": "Application" },
-    "ja": { "title": "アプリケーション" }
-  }
-  </i18n>
-  `,
+  blocks: [{
+    type: 'i18n',
+    content: `
+    {
+      "en": { "title": "Application" },
+      "ja": { "title": "アプリケーション" }
+    }
+    `,
+    attrs: {}
+  }],
   component: 'App',
-  messageHierarchy: ['App']
+  hierarchy: ['App']
 }, {
   contentPath: '/path/to/project1/src/components/Modal.vue',
-  content: `
-  <i18n locale="en">
-  {
-     "ok": "OK",
-     "cancel": "Cancel"
-  }
-  </i18n>
-  <i18n locale="ja">
-  {
-     "ok": "OK",
-     "cancel": "キャンセル"
-  }
-  </i18n>
-  `,
+  blocks: [{
+    type: 'i18n',
+    content: `
+    {
+      "ok": "OK",
+      "cancel": "Cancel"
+    }
+    `,
+    attrs: { locale: 'en' }
+  }, {
+    type: 'i18n',
+    content: `
+    {
+      "ok": "OK",
+      "cancel": "キャンセル"
+    }
+    `,
+    attrs: { locale: 'ja' }
+  }],
   component: 'Modal',
-  messageHierarchy: ['components', 'Modal']
+  hierarchy: ['components', 'Modal']
 }, {
   contentPath: '/path/to/project1/src/components/nest/RankingTable.vue',
-  content: `
-  <i18n locale="en">
-  {
-    "headers": {
-      "rank": "Rank",
-      "name": "Name",
-      "score": "Score"
+  blocks: [{
+    type: 'i18n',
+    content: `
+    {
+      "headers": {
+        "rank": "Rank",
+        "name": "Name",
+        "score": "Score"
+      }
     }
-  }
-  </i18n>
-  `,
+    `,
+    attrs: { locale: 'en' }
+  }],
   component: 'RankingTable',
-  messageHierarchy: ['components', 'nest', 'RankingTable']
+  hierarchy: ['components', 'nest', 'RankingTable']
 }, {
   contentPath: '/path/to/project1/src/pages/Login.vue',
-  content: `
-  <i18n>
-  {
-    "ja": {
-      "id": "ユーザーID",
-      "passowrd": "パスワード",
-      "confirm": "パスワードの確認入力",
-      "button": "ログイン"
+  blocks: [{
+    type: 'i18n',
+    content: `
+    {
+      "ja": {
+        "id": "ユーザーID",
+        "passowrd": "パスワード",
+        "confirm": "パスワードの確認入力",
+        "button": "ログイン"
+      }
     }
-  }
-  </i18n>
-  `,
+    `,
+    attrs: {}
+  }],
   compnent: 'Login',
-  messageHierarchy: ['pages', 'Login']
+  hierarchy: ['pages', 'Login']
 }]

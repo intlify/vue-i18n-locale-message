@@ -1,22 +1,20 @@
 import { LocaleMessageMeta, LocaleMessages } from '../types'
-import { VueTemplateCompiler } from '@vue/component-compiler-utils/dist/types'
+import { SFCCustomBlock } from '@vue/component-compiler-utils'
 
-import { parse } from '@vue/component-compiler-utils'
-import * as compiler from 'vue-template-compiler'
 import JSON5 from 'json5'
 import yaml from 'js-yaml'
 
 import { debug as Debug } from 'debug'
-const debug = Debug('vue-i18n-locale-messages:squeezer')
+const debug = Debug('vue-i18n-locale-message:squeezer')
 
 export default function sqeeze (meta: LocaleMessageMeta[]): LocaleMessages {
   const messages: LocaleMessages = {}
 
   meta.forEach(target => {
-    const blockMessages = squeezeFromI18nBlock(target.content)
+    const blockMessages = squeezeFromI18nBlock(target.blocks)
     const locales = Object.keys(blockMessages)
     const collects: LocaleMessages = locales.reduce((messages, locale) => {
-      const ret = target.messageHierarchy.reduce((messages, key) => {
+      const ret = target.hierarchy.reduce((messages, key) => {
         return Object.assign({}, { [key]: messages })
       }, blockMessages[locale])
       return Object.assign(messages, { [locale]: ret })
@@ -32,13 +30,8 @@ export default function sqeeze (meta: LocaleMessageMeta[]): LocaleMessages {
   return messages
 }
 
-function squeezeFromI18nBlock (content: string): LocaleMessages {
-  const desc = parse({
-    source: content,
-    compiler: compiler as VueTemplateCompiler
-  })
-
-  return desc.customBlocks.reduce((messages, block) => {
+function squeezeFromI18nBlock (blocks: SFCCustomBlock[]): LocaleMessages {
+  return blocks.reduce((messages, block) => {
     debug('i18n block attrs', block.attrs)
 
     if (block.type === 'i18n') {

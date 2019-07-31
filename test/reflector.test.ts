@@ -38,6 +38,6 @@ test('reflectLocaleMessageMeta', () => {
   const [meta] = metaInfo
   expect(meta.contentPath).toBe(componentInfo.path)
   expect(meta.component).toBe('Modal')
-  expect(meta.messageHierarchy).toEqual(['components', 'common'])
+  expect(meta.hierarchy).toEqual(['components', 'common'])
   expect(meta.blocks.length).toBe(1)
 })
