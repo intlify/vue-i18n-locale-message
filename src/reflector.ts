@@ -10,31 +10,25 @@ const debug = Debug('vue-i18n-locale-message:reflector')
 
 export default function reflectLocaleMessageMeta (basePath: string, components: SFCFileInfo[]): LocaleMessageMeta[] {
   return components.map(target => {
-    const desc = parse({
+    const { customBlocks } = parse({
       source: target.content,
       filename: target.path,
       compiler: compiler as VueTemplateCompiler
     })
-    const { contentPath, component, hierarchy } = parsePath(basePath, target.path)
-    return {
-      contentPath,
-      blocks: desc.customBlocks,
-      component,
-      hierarchy
-    }
+    return { ...parsePath(basePath, target.path), blocks: customBlocks }
   })
 }
 
 function parsePath (basePath: string, targetPath: string) {
-  const parsed = path.parse(targetPath)
+  const { dir, name } = path.parse(targetPath)
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [_, target] = parsed.dir.split(basePath)
+  const [_, target] = dir.split(basePath)
   const parsedTargetPath = target.split(path.sep)
   parsedTargetPath.shift()
-  debug(`parsePath: contentPath = ${targetPath}, component = ${parsed.name}, messageHierarchy = ${parsedTargetPath}`)
+  debug(`parsePath: contentPath = ${targetPath}, component = ${name}, messageHierarchy = ${parsedTargetPath}`)
   return {
     contentPath: targetPath,
-    component: parsed.name,
-    hierarchy: [...parsedTargetPath, parsed.name]
+    component: name,
+    hierarchy: [...parsedTargetPath, name]
   }
 }
