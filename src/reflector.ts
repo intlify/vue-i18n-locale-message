@@ -1,4 +1,5 @@
-import { LocaleMessageMeta, SFCFileInfo } from '../types'
+import { SFCDescriptor } from 'vue-template-compiler'
+import { SFCFileInfo } from '../types'
 import { VueTemplateCompiler } from '@vue/component-compiler-utils/dist/types'
 
 import { parse } from '@vue/component-compiler-utils'
@@ -8,14 +9,21 @@ import path from 'path'
 import { debug as Debug } from 'debug'
 const debug = Debug('vue-i18n-locale-message:reflector')
 
-export default function reflectLocaleMessageMeta (basePath: string, components: SFCFileInfo[]): LocaleMessageMeta[] {
+export default function reflectSFCDescriptor (basePath: string, components: SFCFileInfo[]): SFCDescriptor[] {
   return components.map(target => {
-    const { customBlocks } = parse({
+    const { template, script, styles, customBlocks } = parse({
       source: target.content,
       filename: target.path,
       compiler: compiler as VueTemplateCompiler
-    })
-    return { ...parsePath(basePath, target.path), blocks: customBlocks }
+    }) as SFCDescriptor
+    return {
+      ...parsePath(basePath, target.path),
+      raw: target.content,
+      customBlocks,
+      template,
+      script,
+      styles
+    }
   })
 }
 

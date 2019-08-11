@@ -1,43 +1,11 @@
 import { SFCFileInfo } from '../types'
-import reflectLocaleMessageMeta from '../src/reflector'
+import files from './fixtures/meta'
+import jsonMetaInfo from './fixtures/format/json'
+import reflectSFCDescriptor from '../src/reflector'
 
-test('reflectLocaleMessageMeta', () => {
-  const componentInfo: SFCFileInfo = {
-    path: '/path/to/project1/src/components/common/Modal.vue',
-    content: `
-      <template>
-        <!-- template contents is here ... -->
-      </template>
-      
-      <script>
-        // script codes is here ...
-        export default {}
-      </script>
-
-      <style scoped>
-        // css style codes is here ...
-      </style>
-
-      <i18n>
-      {
-        "en": {
-          "ok": "OK",
-          "cancel": "Cancel"
-        },
-        "ja": {
-          "ok": "OK",
-          "cancel": "キャンセル"
-        }
-      }
-      </i18n>
-    `
-  }
-
-  const metaInfo = reflectLocaleMessageMeta('/path/to/project1/src', [componentInfo])
-  expect(metaInfo.length).toBe(1)
-  const [meta] = metaInfo
-  expect(meta.contentPath).toBe(componentInfo.path)
-  expect(meta.component).toBe('Modal')
-  expect(meta.hierarchy).toEqual(['components', 'common', 'Modal'])
-  expect(meta.blocks.length).toBe(1)
+test('reflectSFCDescriptor', () => {
+  const descriptors = reflectSFCDescriptor('/path/to/project1/src', files as SFCFileInfo[])
+  expect(descriptors[0].contentPath).toEqual(jsonMetaInfo[0].contentPath)
+  expect(descriptors[0].component).toEqual(jsonMetaInfo[0].component)
+  expect(descriptors[0].hierarchy).toEqual(jsonMetaInfo[0].hierarchy)
 })

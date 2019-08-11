@@ -1,17 +1,15 @@
-import { LocaleMessageMeta, LocaleMessages } from '../types'
-import { SFCCustomBlock } from '@vue/component-compiler-utils'
-
-import JSON5 from 'json5'
-import yaml from 'js-yaml'
+import { SFCDescriptor, SFCBlock } from 'vue-template-compiler'
+import { LocaleMessages } from '../types'
+import { parseContent } from './utils'
 
 import { debug as Debug } from 'debug'
 const debug = Debug('vue-i18n-locale-message:squeezer')
 
-export default function sqeeze (meta: LocaleMessageMeta[]): LocaleMessages {
+export default function sqeeze (meta: SFCDescriptor[]): LocaleMessages {
   const messages: LocaleMessages = {}
 
   meta.forEach(target => {
-    const blockMessages = squeezeFromI18nBlock(target.blocks)
+    const blockMessages = squeezeFromI18nBlock(target.customBlocks)
     const locales = Object.keys(blockMessages)
     const collects: LocaleMessages = locales.reduce((messages, locale) => {
       const ret = target.hierarchy.reduce((messages, key) => {
@@ -30,7 +28,7 @@ export default function sqeeze (meta: LocaleMessageMeta[]): LocaleMessages {
   return messages
 }
 
-function squeezeFromI18nBlock (blocks: SFCCustomBlock[]): LocaleMessages {
+function squeezeFromI18nBlock (blocks: SFCBlock[]): LocaleMessages {
   return blocks.reduce((messages, block) => {
     debug('i18n block attrs', block.attrs)
 
@@ -49,17 +47,4 @@ function squeezeFromI18nBlock (blocks: SFCCustomBlock[]): LocaleMessages {
       return messages
     }
   }, {})
-}
-
-function parseContent (content: string, lang: string): any {
-  switch (lang) {
-    case 'yaml':
-    case 'yml':
-      return yaml.safeLoad(content)
-    case 'json5':
-      return JSON5.parse(content)
-    case 'json':
-    default:
-      return JSON.parse(content)
-  }
 }

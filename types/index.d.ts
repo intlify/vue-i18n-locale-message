@@ -1,4 +1,4 @@
-import { SFCCustomBlock } from '@vue/component-compiler-utils'
+import { SFCDescriptor } from 'vue-template-compiler'
 
 /**
  *  Locale Message Recursive Structure
@@ -25,10 +25,11 @@ import { SFCCustomBlock } from '@vue/component-compiler-utils'
  *    }
  */
 
+export type Locale = string
 export type LocaleMessage = string | LocaleMessageObject | LocaleMessageArray
 export interface LocaleMessageArray extends Array<LocaleMessage> {}
 export interface LocaleMessageObject { [key: string]: LocaleMessage }
-export type LocaleMessages = { [key: string]: LocaleMessageObject }
+export type LocaleMessages = Record<Locale, LocaleMessageObject>
 
 /**
  *  SFC (Single-file component) file info
@@ -70,11 +71,13 @@ export interface SFCFileInfo {
 }
 
 /**
- *  Locale Message Meta to squeeze / infuse.
+ *  Extend SFCDescriptor, due to squeeze / infuse.
  *    e.g.
  *    {
- *      contentPath: '/path/to/project1/src/components/common/Modal.vue',
- *      blocks: [{
+ *      template: { ... },
+ *      script: { ... },
+ *      styles: [{ ... }],
+ *      customBlocks: [{
  *        type: 'i18n',
  *        content: `
  *        {
@@ -93,14 +96,18 @@ export interface SFCFileInfo {
  *        end: 30,
  *        map: { ... }
  *      }, ...],
+ *      contentPath: '/path/to/project1/src/components/common/Modal.vue',
  *      component: 'Modal',
  *      hierarchy: ['components', 'common', 'Modal']
  *    }
  */
 
-export interface LocaleMessageMeta {
-  contentPath: string
-  blocks: SFCCustomBlock[]
-  component: string
-  hierarchy: string[]
+// extend for vue-i18n-locale-message
+declare module 'vue-template-compiler' {
+  interface SFCDescriptor {
+    raw: string
+    contentPath: string
+    component: string
+    hierarchy: string[]
+  }
 }

@@ -1,9 +1,9 @@
-import getLocaleMessageMeta from './reflector'
+import reflectSFCDescriptor from './reflector'
 import squeeze from './squeezer'
 import infuse from './infuser'
 
 export {
-  getLocaleMessageMeta,
+  reflectSFCDescriptor,
   squeeze,
   infuse
 }
