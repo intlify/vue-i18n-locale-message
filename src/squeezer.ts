@@ -1,18 +1,20 @@
-import { SFCDescriptor, SFCBlock } from 'vue-template-compiler'
-import { LocaleMessages } from '../types'
-import { parseContent } from './utils'
+import { SFCBlock } from 'vue-template-compiler'
+import { LocaleMessages, SFCFileInfo } from '../types'
+
+import { reflectSFCDescriptor, parseContent } from './utils'
 
 import { debug as Debug } from 'debug'
 const debug = Debug('vue-i18n-locale-message:squeezer')
 
-export default function sqeeze (meta: SFCDescriptor[]): LocaleMessages {
-  const messages: LocaleMessages = {}
+export default function sqeeze (basePath: string, files: SFCFileInfo[]): LocaleMessages {
+  const descriptors = reflectSFCDescriptor(basePath, files)
 
-  meta.forEach(target => {
-    const blockMessages = squeezeFromI18nBlock(target.customBlocks)
+  const messages: LocaleMessages = {}
+  descriptors.forEach(descriptor => {
+    const blockMessages = squeezeFromI18nBlock(descriptor.customBlocks)
     const locales = Object.keys(blockMessages)
     const collects: LocaleMessages = locales.reduce((messages, locale) => {
-      const ret = target.hierarchy.reduce((messages, key) => {
+      const ret = descriptor.hierarchy.reduce((messages, key) => {
         return Object.assign({}, { [key]: messages })
       }, blockMessages[locale])
       return Object.assign(messages, { [locale]: ret })

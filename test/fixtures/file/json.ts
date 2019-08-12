@@ -13,8 +13,7 @@ export default {}
   "en": { "title": "Application" },
   "ja": { "title": "アプリケーション" }
 }
-</i18n>
-  `
+</i18n>`
 }, {
   path: '/path/to/project1/src/components/Modal.vue',
   content: `<template>
@@ -37,8 +36,7 @@ export default {}
   "ok": "OK",
   "cancel": "キャンセル"
 }
-</i18n>
-  `
+</i18n>`
 }, {
   path: '/path/to/project1/src/components/nest/RankingTable.vue',
   content: `<template>
@@ -57,8 +55,7 @@ export default {}
     "score": "Score"
   }
 }
-</i18n>
-  `
+</i18n>`
 }, {
   path: '/path/to/project1/src/pages/Login.vue',
   content: `<template>
@@ -78,6 +75,5 @@ export default {}
     "button": "ログイン"
   }
 }
-</i18n>
-`
+</i18n>`
 }]

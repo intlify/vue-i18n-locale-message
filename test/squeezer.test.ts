@@ -1,20 +1,21 @@
+import { SFCFileInfo } from '../types'
+
 import squeeze from '../src/squeezer'
-import jsonMetaInfo from './fixtures/format/json'
-import yamlMetaInfo from './fixtures/format/yaml'
-import json5MetaInfo from './fixtures/format/json5'
-import { SFCDescriptor } from 'vue-template-compiler'
+import jsonFiles from './fixtures/file/json'
+import yamlFiles from './fixtures/file/yaml'
+import json5Files from './fixtures/file/json5'
 
 test('basic', () => {
-  const messages = squeeze(jsonMetaInfo as SFCDescriptor[])
+  const messages = squeeze('/path/to/project1/src', jsonFiles as SFCFileInfo[])
   expect(messages).toMatchSnapshot()
 })
 
 test('yaml', () => {
-  const messages = squeeze(yamlMetaInfo as SFCDescriptor[])
+  const messages = squeeze('/path/to/project1/src', yamlFiles as SFCFileInfo[])
   expect(messages).toMatchSnapshot()
 })
 
 test('json5', () => {
-  const messages = squeeze(json5MetaInfo as SFCDescriptor[])
+  const messages = squeeze('/path/to/project1/src', json5Files as SFCFileInfo[])
   expect(messages).toMatchSnapshot()
 })
