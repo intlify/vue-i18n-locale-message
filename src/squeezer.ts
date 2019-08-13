@@ -9,25 +9,29 @@ const debug = Debug('vue-i18n-locale-message:squeezer')
 export default function sqeeze (basePath: string, files: SFCFileInfo[]): LocaleMessages {
   const descriptors = reflectSFCDescriptor(basePath, files)
 
-  const messages: LocaleMessages = {}
-  descriptors.forEach(descriptor => {
+  return descriptors.reduce((messages, descriptor) => {
     const blockMessages = squeezeFromI18nBlock(descriptor.customBlocks)
     const locales = Object.keys(blockMessages)
-    const collects: LocaleMessages = locales.reduce((messages, locale) => {
-      const ret = descriptor.hierarchy.reduce((messages, key) => {
-        return Object.assign({}, { [key]: messages })
-      }, blockMessages[locale])
-      return Object.assign(messages, { [locale]: ret })
-    }, {})
-    debug('collects', collects)
-
-    locales.forEach(locale => {
-      messages[locale] = messages[locale] || {}
-      messages[locale] = Object.assign(messages[locale], collects[locale])
-    })
-  })
-
-  return messages
+    return locales.reduce((messages, locale) => {
+      if (!messages[locale]) {
+        messages[locale] = {}
+      }
+      const localeMessages = messages[locale]
+      const localeBlockMessages = blockMessages[locale]
+      let target: any = localeMessages
+      const hierarchy = descriptor.hierarchy.concat()
+      while (hierarchy.length >= 0) {
+        const key = hierarchy.shift()
+        if (!key) { break }
+        if (!target[key]) {
+          target[key] = {}
+        }
+        target = target[key]
+      }
+      Object.assign(target, localeBlockMessages)
+      return messages
+    }, messages)
+  }, {} as LocaleMessages)
 }
 
 function squeezeFromI18nBlock (blocks: SFCBlock[]): LocaleMessages {

@@ -6,15 +6,13 @@ Object {
     "App": Object {
       "title": "Application",
     },
-    "Modal": Object {
-      "components": Object {
+    "components": Object {
+      "Modal": Object {
         "cancel": "Cancel",
         "ok": "OK",
       },
-    },
-    "RankingTable": Object {
       "nest": Object {
-        "components": Object {
+        "RankingTable": Object {
           "headers": Object {
             "name": "Name",
             "rank": "Rank",
@@ -28,18 +26,18 @@ Object {
     "App": Object {
       "title": "アプリケーション",
     },
-    "Login": Object {
-      "pages": Object {
+    "components": Object {
+      "Modal": Object {
+        "cancel": "キャンセル",
+        "ok": "OK",
+      },
+    },
+    "pages": Object {
+      "Login": Object {
         "button": "ログイン",
         "confirm": "パスワードの確認入力",
         "id": "ユーザーID",
         "passowrd": "パスワード",
-      },
-    },
-    "Modal": Object {
-      "components": Object {
-        "cancel": "キャンセル",
-        "ok": "OK",
       },
     },
   },
@@ -49,16 +47,16 @@ Object {
 exports[`json5 1`] = `
 Object {
   "en": Object {
-    "Modal": Object {
-      "components": Object {
+    "components": Object {
+      "Modal": Object {
         "cancel": "Cancel",
         "ok": "OK",
       },
     },
   },
   "ja": Object {
-    "Modal": Object {
-      "components": Object {
+    "components": Object {
+      "Modal": Object {
         "cancel": "キャンセル",
         "ok": "OK",
       },
@@ -70,16 +68,16 @@ Object {
 exports[`yaml 1`] = `
 Object {
   "en": Object {
-    "Modal": Object {
-      "components": Object {
+    "components": Object {
+      "Modal": Object {
         "cancel": "Cancel",
         "ok": "OK",
       },
     },
   },
   "ja": Object {
-    "Modal": Object {
-      "components": Object {
+    "components": Object {
+      "Modal": Object {
         "cancel": "キャンセル",
         "ok": "OK",
       },
