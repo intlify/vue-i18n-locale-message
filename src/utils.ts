@@ -60,7 +60,9 @@ export function stringfyContent (content: any, lang: string): string {
   switch (lang) {
     case 'yaml':
     case 'yml':
-      return yaml.safeDump(content)
+      const s = yaml.safeDump(content, { indent: 20 })
+      debug('yaml:', s)
+      return s
     case 'json5':
       return JSON5.stringify(content, null, 2)
     case 'json':

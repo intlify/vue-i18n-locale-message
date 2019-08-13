@@ -9,12 +9,12 @@ export default {}
 </script>
 
 <i18n lang="yaml" locale="en">
-  ok: OK
-  cancel: Cancel
+ok: OK
+cancel: Cancel
 </i18n>
 
 <i18n lang="yml" locale="ja">
-  ok: OK
-  cancel: キャンセル
+ok: OK
+cancel: キャンセル
 </i18n>`
 }]
