@@ -1,0 +1,93 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`absolute path 1`] = `
+Object {
+  "/path/to/project1/locales.json": "{
+  \\"en\\": {
+    \\"App\\": {
+      \\"title\\": \\"Application\\"
+    },
+    \\"components\\": {
+      \\"Modal\\": {
+        \\"ok\\": \\"OK\\",
+        \\"cancel\\": \\"Cancel\\"
+      },
+      \\"nest\\": {
+        \\"RankingTable\\": {
+          \\"headers\\": {
+            \\"rank\\": \\"Rank\\",
+            \\"name\\": \\"Name\\",
+            \\"score\\": \\"Score\\"
+          }
+        }
+      }
+    }
+  },
+  \\"ja\\": {
+    \\"App\\": {
+      \\"title\\": \\"アプリケーション\\"
+    },
+    \\"components\\": {
+      \\"Modal\\": {
+        \\"ok\\": \\"OK\\",
+        \\"cancel\\": \\"キャンセル\\"
+      }
+    },
+    \\"pages\\": {
+      \\"Login\\": {
+        \\"id\\": \\"ユーザーID\\",
+        \\"passowrd\\": \\"パスワード\\",
+        \\"confirm\\": \\"パスワードの確認入力\\",
+        \\"button\\": \\"ログイン\\"
+      }
+    }
+  }
+}",
+}
+`;
+
+exports[`relative path 1`] = `
+Object {
+  "/path/to/project1/locales-1.json": "{
+  \\"en\\": {
+    \\"App\\": {
+      \\"title\\": \\"Application\\"
+    },
+    \\"components\\": {
+      \\"Modal\\": {
+        \\"ok\\": \\"OK\\",
+        \\"cancel\\": \\"Cancel\\"
+      },
+      \\"nest\\": {
+        \\"RankingTable\\": {
+          \\"headers\\": {
+            \\"rank\\": \\"Rank\\",
+            \\"name\\": \\"Name\\",
+            \\"score\\": \\"Score\\"
+          }
+        }
+      }
+    }
+  },
+  \\"ja\\": {
+    \\"App\\": {
+      \\"title\\": \\"アプリケーション\\"
+    },
+    \\"components\\": {
+      \\"Modal\\": {
+        \\"ok\\": \\"OK\\",
+        \\"cancel\\": \\"キャンセル\\"
+      }
+    },
+    \\"pages\\": {
+      \\"Login\\": {
+        \\"id\\": \\"ユーザーID\\",
+        \\"passowrd\\": \\"パスワード\\",
+        \\"confirm\\": \\"パスワードの確認入力\\",
+        \\"button\\": \\"ログイン\\"
+      }
+    }
+  }
+}",
+}
+`;

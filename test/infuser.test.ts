@@ -96,4 +96,4 @@ test('json5', () => {
 
   const outputFiles = infuse(basePath, json5Files, messages)
   outputFiles.forEach(file => expect(file.content).toMatchSnapshot(file.path))
-})  
+})

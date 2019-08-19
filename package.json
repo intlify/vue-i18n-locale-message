@@ -6,24 +6,29 @@
     "name": "kazuya kawaguchi",
     "email": "kawakazu80@gmail.com"
   },
+  "bin": "lib/cli.js",
   "bugs": {
     "url": "https://github.com/kazupon/vue-i18n-locale-message/issues"
   },
   "dependencies": {
     "@vue/component-compiler-utils": "^3.0.0",
     "debug": "^4.1.1",
+    "glob": "^7.1.4",
     "js-yaml": "^3.13.1",
     "json5": "^2.1.0",
     "prettier": "^1.18.2",
-    "vue-template-compiler": "^2.6.10"
+    "vue-template-compiler": "^2.6.10",
+    "yargs": "^13.3.0"
   },
   "devDependencies": {
     "@types/debug": "^4.1.4",
+    "@types/glob": "^7.1.1",
     "@types/jest": "^24.0.15",
     "@types/js-yaml": "^3.12.1",
     "@types/json5": "^0.0.30",
     "@types/node": "^12.6.8",
     "@types/prettier": "^1.18.1",
+    "@types/yargs": "^13.0.2",
     "@typescript-eslint/eslint-plugin": "^1.13.0",
     "@typescript-eslint/parser": "^1.13.0",
     "@typescript-eslint/typescript-estree": "^1.13.0",

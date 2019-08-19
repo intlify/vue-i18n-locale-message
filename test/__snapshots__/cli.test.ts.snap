@@ -1,0 +1,42 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`infuse command output help 1`] = `
+"processChild.js infuse
+
+infuse locale messages to single-file components
+
+Options:
+  --version       Show version number                                  [boolean]
+  --help          Show help                                            [boolean]
+  --target, -t    target path that single-file components is stored
+                                                             [string] [required]
+  --messages, -o  locale messages path to be infused         [string] [required]"
+`;
+
+exports[`squeeze command output help 1`] = `
+"processChild.js squeeze
+
+squeeze locale messages from single-file components
+
+Options:
+  --version     Show version number                                    [boolean]
+  --help        Show help                                              [boolean]
+  --target, -t  target path that single-file components is stored
+                                                             [string] [required]
+  --output, -o  path to output squeezed locale messages
+                           [string] [default: \\"/path/to/project1/messages.json\\"]"
+`;
+
+exports[`top output help 1`] = `
+"Usage: processChild.js <command> [options]
+
+Commands:
+  processChild.js squeeze  squeeze locale messages from single-file components
+                                                                  [aliases: sqz]
+  processChild.js infuse   infuse locale messages to single-file components
+                                                                  [aliases: inf]
+
+Options:
+  --version  Show version number                                       [boolean]
+  --help     Show help                                                 [boolean]"
+`;
