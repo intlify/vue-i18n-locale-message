@@ -10,7 +10,7 @@ Options:
   --help          Show help                                            [boolean]
   --target, -t    target path that single-file components is stored
                                                              [string] [required]
-  --messages, -o  locale messages path to be infused         [string] [required]"
+  --messages, -m  locale messages path to be infused         [string] [required]"
 `;
 
 exports[`squeeze command output help 1`] = `

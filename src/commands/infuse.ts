@@ -24,7 +24,7 @@ export const builder = (args: Argv): Argv<InfuseOptions> => {
     })
     .option('messages', {
       type: 'string',
-      alias: 'o',
+      alias: 'm',
       describe: 'locale messages path to be infused',
       demandOption: true
     })
