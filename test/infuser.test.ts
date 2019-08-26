@@ -97,3 +97,23 @@ test('json5', () => {
   const outputFiles = infuse(basePath, json5Files, messages)
   outputFiles.forEach(file => expect(file.content).toMatchSnapshot(file.path))
 })
+
+test('not full localitation', () => {
+  const messages = squeeze(basePath, jsonFiles as SFCFileInfo[])
+
+  // edit locale messages 'ja' only (e.g. translator)
+  Object.assign(messages['ja']['components'], {
+    nest: {
+      'RankingTable': {
+        headers: {
+          rank: 'ランク',
+          name: '名前',
+          score: 'スコア'
+        }
+      }
+    }
+  })
+
+  const outputFiles = infuse(basePath, jsonFiles, messages)
+  outputFiles.forEach(file => expect(file.content).toMatchSnapshot(file.path))
+})

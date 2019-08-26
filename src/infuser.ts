@@ -36,16 +36,27 @@ function generate (locales: Locale[], messages: LocaleMessages, descriptor: SFCD
 
 function getTargetLocaleMessages (locales: Locale[], messages: LocaleMessages, descriptor: SFCDescriptor): LocaleMessages {
   return locales.reduce((target, locale) => {
+    debug(`processing curernt: locale=${locale}, target=${target}`)
+
     const obj = messages[locale]
     if (obj) {
       let o: any = obj
+      let prev: any = null
       const hierarchy = descriptor.hierarchy.concat()
       while (hierarchy.length > 0) {
         const key = hierarchy.shift()
-        if (!key) { break }
+        debug('processing hierarchy key: ', key)
+
+        if (!key || !o) { break }
         o = o[key]
+        prev = o
       }
-      return Object.assign(target, { [locale]: o }) as LocaleMessages
+
+      if (!o && !prev) {
+        return target
+      } else {
+        return Object.assign(target, { [locale]: ((!o && prev) ? prev : o) }) as LocaleMessages
+      }
     } else {
       return target
     }
@@ -112,6 +123,8 @@ ${format(stringfyContent(target[locale], 'json'), 'json')}</i18n>`)
 }
 
 function format (source: string, lang: string): string {
+  debug(`format: lang=${lang}, source=${source}`)
+
   switch (lang) {
     case 'vue':
       return prettier.format(source, { parser: 'vue' })
