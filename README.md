@@ -8,7 +8,7 @@ i18n locale messages management tool for vue-i18n
 - [x] API design
 - [x] extract locale messages from SFC
 - [x] infuse to SFC from locale mesasges 
-- [ ] CLI tool
+- [x] CLI tool
 - [ ] integrate vue-cli-plugin-i18n
 - [ ] documentation
 
