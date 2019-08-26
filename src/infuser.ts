@@ -127,7 +127,7 @@ function format (source: string, lang: string): string {
 
   switch (lang) {
     case 'vue':
-      return prettier.format(source, { parser: 'vue' })
+      return source
     case 'yaml':
     case 'yml':
       return prettier.format(source, { parser: 'yaml', tabWidth: 2 })

@@ -6,7 +6,7 @@ exports[`json: /path/to/project1/src/App.vue 1`] = `
 </template>
 
 <script>
-export default {};
+export default {}
 </script>
 
 <i18n>
@@ -18,8 +18,7 @@ export default {};
     \\"title\\": \\"アプリケーション\\"
   }
 }
-</i18n>
-"
+</i18n>"
 `;
 
 exports[`json: /path/to/project1/src/components/Modal.vue 1`] = `
@@ -28,7 +27,7 @@ exports[`json: /path/to/project1/src/components/Modal.vue 1`] = `
 </template>
 
 <script>
-export default {};
+export default {}
 </script>
 
 <i18n locale=\\"en\\">
@@ -43,8 +42,7 @@ export default {};
   \\"ok\\": \\"OK\\",
   \\"cancel\\": \\"キャンセル\\"
 }
-</i18n>
-"
+</i18n>"
 `;
 
 exports[`json: /path/to/project1/src/components/nest/RankingTable.vue 1`] = `
@@ -53,7 +51,7 @@ exports[`json: /path/to/project1/src/components/nest/RankingTable.vue 1`] = `
 </template>
 
 <script>
-export default {};
+export default {}
 </script>
 
 <i18n locale=\\"en\\">
@@ -74,8 +72,7 @@ export default {};
     \\"score\\": \\"スコア\\"
   }
 }
-</i18n>
-"
+</i18n>"
 `;
 
 exports[`json: /path/to/project1/src/pages/Login.vue 1`] = `
@@ -84,7 +81,7 @@ exports[`json: /path/to/project1/src/pages/Login.vue 1`] = `
 </template>
 
 <script>
-export default {};
+export default {}
 </script>
 
 <i18n>
@@ -105,8 +102,7 @@ export default {};
   \\"confirm\\": \\"Confirm Password\\",
   \\"button\\": \\"Login\\"
 }
-</i18n>
-"
+</i18n>"
 `;
 
 exports[`json5: /path/to/project1/src/components/Modal.vue 1`] = `
@@ -115,7 +111,7 @@ exports[`json5: /path/to/project1/src/components/Modal.vue 1`] = `
 </template>
 
 <script>
-export default {};
+export default {}
 </script>
 
 <i18n lang=\\"json5\\" locale=\\"en\\">
@@ -130,8 +126,7 @@ export default {};
   \\"ok\\": \\"OK\\",
   \\"cancel\\": \\"キャンセル\\"
 }
-</i18n>
-"
+</i18n>"
 `;
 
 exports[`not full localitation: /path/to/project1/src/App.vue 1`] = `
@@ -140,7 +135,7 @@ exports[`not full localitation: /path/to/project1/src/App.vue 1`] = `
 </template>
 
 <script>
-export default {};
+export default {}
 </script>
 
 <i18n>
@@ -152,8 +147,7 @@ export default {};
     \\"title\\": \\"アプリケーション\\"
   }
 }
-</i18n>
-"
+</i18n>"
 `;
 
 exports[`not full localitation: /path/to/project1/src/components/Modal.vue 1`] = `
@@ -162,7 +156,7 @@ exports[`not full localitation: /path/to/project1/src/components/Modal.vue 1`] =
 </template>
 
 <script>
-export default {};
+export default {}
 </script>
 
 <i18n locale=\\"en\\">
@@ -177,8 +171,7 @@ export default {};
   \\"ok\\": \\"OK\\",
   \\"cancel\\": \\"キャンセル\\"
 }
-</i18n>
-"
+</i18n>"
 `;
 
 exports[`not full localitation: /path/to/project1/src/components/nest/RankingTable.vue 1`] = `
@@ -187,7 +180,7 @@ exports[`not full localitation: /path/to/project1/src/components/nest/RankingTab
 </template>
 
 <script>
-export default {};
+export default {}
 </script>
 
 <i18n locale=\\"en\\">
@@ -208,8 +201,7 @@ export default {};
     \\"score\\": \\"スコア\\"
   }
 }
-</i18n>
-"
+</i18n>"
 `;
 
 exports[`not full localitation: /path/to/project1/src/pages/Login.vue 1`] = `
@@ -218,7 +210,7 @@ exports[`not full localitation: /path/to/project1/src/pages/Login.vue 1`] = `
 </template>
 
 <script>
-export default {};
+export default {}
 </script>
 
 <i18n>
@@ -230,8 +222,7 @@ export default {};
     \\"button\\": \\"ログイン\\"
   }
 }
-</i18n>
-"
+</i18n>"
 `;
 
 exports[`yaml: /path/to/project1/src/components/Modal.vue 1`] = `
@@ -240,7 +231,7 @@ exports[`yaml: /path/to/project1/src/components/Modal.vue 1`] = `
 </template>
 
 <script>
-export default {};
+export default {}
 </script>
 
 <i18n lang=\\"yaml\\" locale=\\"en\\">
@@ -251,6 +242,5 @@ cancel: Cancel
 <i18n lang=\\"yml\\" locale=\\"ja\\">
 ok: OK
 cancel: キャンセル
-</i18n>
-"
+</i18n>"
 `;

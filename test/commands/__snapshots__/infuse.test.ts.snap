@@ -1,15 +1,16 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`absolute path: /path/to/project1/src/App.vue 1`] = `
-"<template>
-  <p>template</p>
-</template>
+"
+  <template>
+    <p>template</p>
+  </template>
+  
+  <script>
+  export default {}
+  </script>
 
-<script>
-export default {};
-</script>
-
-<i18n>
+  <i18n>
 {
   \\"en\\": {
     \\"title\\": \\"Application\\"
@@ -19,44 +20,46 @@ export default {};
   }
 }
 </i18n>
-"
+  "
 `;
 
 exports[`absolute path: /path/to/project1/src/components/Modal.vue 1`] = `
-"<template>
-  <p>template</p>
-</template>
+"
+  <template>
+    <p>template</p>
+  </template>
+  
+  <script>
+  export default {}
+  </script>
 
-<script>
-export default {};
-</script>
-
-<i18n locale=\\"en\\">
+  <i18n locale=\\"en\\">
 {
   \\"ok\\": \\"OK\\",
   \\"cancel\\": \\"Cancel\\"
 }
 </i18n>
-
-<i18n locale=\\"ja\\">
+  
+  <i18n locale=\\"ja\\">
 {
   \\"ok\\": \\"OK\\",
   \\"cancel\\": \\"キャンセル\\"
 }
 </i18n>
-"
+  "
 `;
 
 exports[`absolute path: /path/to/project1/src/components/nest/RankingTable.vue 1`] = `
-"<template>
-  <p>template</p>
-</template>
+"
+  <template>
+    <p>template</p>
+  </template>
+  
+  <script>
+  export default {}
+  </script>
 
-<script>
-export default {};
-</script>
-
-<i18n locale=\\"en\\">
+  <i18n locale=\\"en\\">
 {
   \\"headers\\": {
     \\"rank\\": \\"Rank\\",
@@ -65,6 +68,7 @@ export default {};
   }
 }
 </i18n>
+  
 
 <i18n locale=\\"ja\\">
 {
@@ -74,20 +78,20 @@ export default {};
     \\"score\\": \\"スコア\\"
   }
 }
-</i18n>
-"
+</i18n>"
 `;
 
 exports[`absolute path: /path/to/project1/src/pages/Login.vue 1`] = `
-"<template>
-  <p>template</p>
-</template>
+"
+  <template>
+    <p>template</p>
+  </template>
+  
+  <script>
+  export default {}
+  </script>
 
-<script>
-export default {};
-</script>
-
-<i18n>
+  <i18n>
 {
   \\"ja\\": {
     \\"id\\": \\"ユーザーID\\",
@@ -97,6 +101,7 @@ export default {};
   }
 }
 </i18n>
+  
 
 <i18n locale=\\"en\\">
 {
@@ -105,20 +110,20 @@ export default {};
   \\"confirm\\": \\"Confirm Password\\",
   \\"button\\": \\"Login\\"
 }
-</i18n>
-"
+</i18n>"
 `;
 
 exports[`relative path: /path/to/project1/src/App.vue 1`] = `
-"<template>
-  <p>template</p>
-</template>
+"
+  <template>
+    <p>template</p>
+  </template>
+  
+  <script>
+  export default {}
+  </script>
 
-<script>
-export default {};
-</script>
-
-<i18n>
+  <i18n>
 {
   \\"en\\": {
     \\"title\\": \\"Application\\"
@@ -128,44 +133,46 @@ export default {};
   }
 }
 </i18n>
-"
+  "
 `;
 
 exports[`relative path: /path/to/project1/src/components/Modal.vue 1`] = `
-"<template>
-  <p>template</p>
-</template>
+"
+  <template>
+    <p>template</p>
+  </template>
+  
+  <script>
+  export default {}
+  </script>
 
-<script>
-export default {};
-</script>
-
-<i18n locale=\\"en\\">
+  <i18n locale=\\"en\\">
 {
   \\"ok\\": \\"OK\\",
   \\"cancel\\": \\"Cancel\\"
 }
 </i18n>
-
-<i18n locale=\\"ja\\">
+  
+  <i18n locale=\\"ja\\">
 {
   \\"ok\\": \\"OK\\",
   \\"cancel\\": \\"キャンセル\\"
 }
 </i18n>
-"
+  "
 `;
 
 exports[`relative path: /path/to/project1/src/components/nest/RankingTable.vue 1`] = `
-"<template>
-  <p>template</p>
-</template>
+"
+  <template>
+    <p>template</p>
+  </template>
+  
+  <script>
+  export default {}
+  </script>
 
-<script>
-export default {};
-</script>
-
-<i18n locale=\\"en\\">
+  <i18n locale=\\"en\\">
 {
   \\"headers\\": {
     \\"rank\\": \\"Rank\\",
@@ -174,6 +181,7 @@ export default {};
   }
 }
 </i18n>
+  
 
 <i18n locale=\\"ja\\">
 {
@@ -183,20 +191,20 @@ export default {};
     \\"score\\": \\"スコア\\"
   }
 }
-</i18n>
-"
+</i18n>"
 `;
 
 exports[`relative path: /path/to/project1/src/pages/Login.vue 1`] = `
-"<template>
-  <p>template</p>
-</template>
+"
+  <template>
+    <p>template</p>
+  </template>
+  
+  <script>
+  export default {}
+  </script>
 
-<script>
-export default {};
-</script>
-
-<i18n>
+  <i18n>
 {
   \\"ja\\": {
     \\"id\\": \\"ユーザーID\\",
@@ -206,6 +214,7 @@ export default {};
   }
 }
 </i18n>
+  
 
 <i18n locale=\\"en\\">
 {
@@ -214,6 +223,5 @@ export default {};
   \\"confirm\\": \\"Confirm Password\\",
   \\"button\\": \\"Login\\"
 }
-</i18n>
-"
+</i18n>"
 `;
