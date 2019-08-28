@@ -1,7 +1,0 @@
-{
-    "eslint.validate": [
-        "javascript",
-        {"language": "typescript", "autoFix": true}
-    ],
-    "eslint.run": "onSave"
-}
