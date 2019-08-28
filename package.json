@@ -1,6 +1,6 @@
 {
   "name": "vue-i18n-locale-message",
-  "description": "i18n locale messages management tool for vue-i18n",
+  "description": "i18n locale messages management tool / library for vue-i18n",
   "version": "0.0.1",
   "author": {
     "name": "kazuya kawaguchi",
@@ -62,7 +62,6 @@
   ],
   "license": "MIT",
   "main": "lib/index.js",
-  "private": true,
   "repository": {
     "type": "git",
     "url": "git+https://github.com/kazupon/vue-i18n-locale-message.git"
