@@ -190,7 +190,7 @@ Details changes for each release are documented in the [CHANGELOG.md](https://gi
 
 
 ## :exclamation: Issues
-Please make sure to read the [Issue Reporting Checklist](https://github.com/kazupon/vue-i18n-locale-mesasge/blob/master/.github/CONTRIBUTING.md#issue-reporting-guidelines) before opening an issue. Issues not conforming to the guidelines may be closed immediately.
+Please make sure to read the [Issue Reporting Checklist](https://github.com/kazupon/vue-i18n-locale-message/blob/master/.github/CONTRIBUTING.md#issue-reporting-guidelines) before opening an issue. Issues not conforming to the guidelines may be closed immediately.
 
 ## :white_check_mark: TODO
 Managed with [GitHub Projects](https://github.com/kazupon/vue-i18n-locale-message/issues?q=is%3Aissue+is%3Aopen+label%3Atodo)
