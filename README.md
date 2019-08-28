@@ -1,5 +1,6 @@
 # :globe_with_meridians: vue-i18n-locale-message
 
+[![npm](https://img.shields.io/npm/v/vue-i18n-locale-message.svg)](https://www.npmjs.com/package/vue-i18n-locale-message)
 [![CircleCI](https://circleci.com/gh/kazupon/vue-i18n-locale-message.svg?style=svg)](https://circleci.com/gh/kazupon/vue-i18n-locale-message)
 [![codecov](https://codecov.io/gh/kazupon/vue-i18n-locale-message/branch/master/graph/badge.svg)](https://codecov.io/gh/kazupon/vue-i18n-locale-message)
 
