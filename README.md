@@ -1,6 +1,10 @@
-# vue-i18n-locale-message
+# :globe_with_meridians: vue-i18n-locale-message
 
 i18n locale messages management tool / library for vue-i18n
+
+<a href="https://www.patreon.com/kazupon" target="_blank">
+  <img src="https://c5.patreon.com/external/logo/become_a_patron_button.png" alt="Become a Patreon">
+</a>
 
 ## :cd: Installation
 
@@ -181,19 +185,15 @@ You will get the following JSON structure (the following output results are comm
 }
 ```
 
+## :scroll: Changelog
+Details changes for each release are documented in the [CHANGELOG.md](https://github.com/kazupon/vue-i18n-locale-message/blob/master/CHANGELOG.md).
+
+
+## :exclamation: Issues
+Please make sure to read the [Issue Reporting Checklist](https://github.com/kazupon/vue-i18n-locale-mesasge/blob/master/.github/CONTRIBUTING.md#issue-reporting-guidelines) before opening an issue. Issues not conforming to the guidelines may be closed immediately.
+
 ## :white_check_mark: TODO
-- [x] API design
-- [x] extract locale messages from SFC
-- [x] infuse to SFC from locale mesasges 
-- [x] CLI tool
-- [ ] integrate vue-cli-plugin-i18n
-- [ ] documentation
-- [ ] duplicate locale message keys checking
-- [ ] rollup duplicate locale messages
-- [ ] delete duplicate locale messages
-- [ ] caml/snake case option of locale messages hierarcy name for squeezer
-- [ ] sort option for locale messages keys for squeezer
-- [ ] locale message yaml outputing
+Managed with [GitHub Projects](https://github.com/kazupon/vue-i18n-locale-message/issues?q=is%3Aissue+is%3Aopen+label%3Atodo)
 
 ## :copyright: License
 
