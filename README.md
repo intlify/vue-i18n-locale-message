@@ -76,7 +76,7 @@ const messages = squeeze('/path/to/src', files)
 fs.writeFileSync('/path/to/src/messages.json')
 
 // after update locale messages with translation service or your code, it read locale messsages
-const translatedMessages = require'/path/to/src/translated')
+const translatedMessages = require('/path/to/src/translated')
 
 // infuse locale message to single-file components
 const updatedFiles = infuse('/path/to/src', files, translatedMessages)
@@ -106,7 +106,7 @@ The big motivation is as follows.
 
 - :tired_face: Hard to integrate locale messages for localization services
 - :tired_face: Hard to maintain consistency of locale message keys (`eslint-plugin-vue-i18n` need it!)
-- :tired_face: Requested by third bender tools (`vue-i18n-ally` and etc ...)
+- :pray: Requested by third bender tools (`vue-i18n-ally` and etc ...)
 
 ## :notebook: Locale message squeezing rules
 
