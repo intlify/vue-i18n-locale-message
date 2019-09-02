@@ -11,6 +11,8 @@ export default function sqeeze (basePath: string, files: SFCFileInfo[]): LocaleM
 
   return descriptors.reduce((messages, descriptor) => {
     const blockMessages = squeezeFromI18nBlock(descriptor.customBlocks)
+    debug('squeezeFromI18nBlock: blockMessages', JSON.stringify(blockMessages, null, 2))
+
     const locales = Object.keys(blockMessages)
     return locales.reduce((messages, locale) => {
       if (!messages[locale]) {
@@ -37,6 +39,7 @@ export default function sqeeze (basePath: string, files: SFCFileInfo[]): LocaleM
 function squeezeFromI18nBlock (blocks: SFCBlock[]): LocaleMessages {
   return blocks.reduce((messages, block) => {
     debug('i18n block attrs', block.attrs)
+    debug('i18n block messages', JSON.stringify(messages, null, 2))
 
     if (block.type === 'i18n') {
       let lang = block.attrs.lang
@@ -45,12 +48,25 @@ function squeezeFromI18nBlock (blocks: SFCBlock[]): LocaleMessages {
 
       const locale = block.attrs.locale
       if (!locale || typeof locale !== 'string') {
-        return Object.assign(messages, obj)
+        const locales = [...new Set([...Object.keys(messages), ...Object.keys(obj)])]
+        locales.forEach(locale => {
+          if (messages[locale] && obj[locale]) {
+            messages[locale] = Object.assign(messages[locale], obj[locale])
+          } else if (!messages[locale] && obj[locale]) {
+            messages = Object.assign(messages, obj)
+          }
+        })
+        return messages
       } else {
-        return Object.assign(messages, { [locale]: obj })
+        if (messages[locale]) {
+          messages[locale] = Object.assign(messages[locale], obj)
+        } else {
+          messages = Object.assign(messages, { [locale]: obj })
+        }
+        return messages
       }
     } else {
       return messages
     }
-  }, {})
+  }, {} as LocaleMessages)
 }

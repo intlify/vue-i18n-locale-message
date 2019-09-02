@@ -33,6 +33,14 @@ Object {
       },
     },
     "pages": Object {
+      "Dashboard1": Object {
+        "loading": "読込中...",
+        "title": "ダッシュボード",
+      },
+      "Dashboard2": Object {
+        "loading": "読込中...",
+        "title": "ダッシュボード",
+      },
       "Login": Object {
         "button": "ログイン",
         "confirm": "パスワードの確認入力",

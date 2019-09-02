@@ -75,6 +75,62 @@ export default {}
 </i18n>"
 `;
 
+exports[`json: /path/to/project1/src/pages/Dashboard1.vue 1`] = `
+"<template>
+  <p>this is the dashboard1</p>
+</template>
+
+<script>
+export default {
+  name: 'Dashboard1'
+}
+</script>
+
+<i18n>
+{
+  \\"ja\\": {
+    \\"title\\": \\"ダッシュボード\\",
+    \\"loading\\": \\"読込中...\\"
+  }
+}
+</i18n>
+
+<i18n>
+{
+  \\"ja\\": {
+    \\"title\\": \\"ダッシュボード\\",
+    \\"loading\\": \\"読込中...\\"
+  }
+}
+</i18n>"
+`;
+
+exports[`json: /path/to/project1/src/pages/Dashboard2.vue 1`] = `
+"<template>
+  <p>this is the dashboard2</p>
+</template>
+
+<script>
+export default {
+  name: 'Dashboard2'
+}
+</script>
+
+<i18n locale=\\"ja\\">
+{
+  \\"title\\": \\"ダッシュボード\\",
+  \\"loading\\": \\"読込中...\\"
+}
+</i18n>
+
+<i18n locale=\\"ja\\">
+{
+  \\"title\\": \\"ダッシュボード\\",
+  \\"loading\\": \\"読込中...\\"
+}
+</i18n>"
+`;
+
 exports[`json: /path/to/project1/src/pages/Login.vue 1`] = `
 "<template>
   <p>template</p>
@@ -200,6 +256,62 @@ export default {}
     \\"name\\": \\"名前\\",
     \\"score\\": \\"スコア\\"
   }
+}
+</i18n>"
+`;
+
+exports[`not full localitation: /path/to/project1/src/pages/Dashboard1.vue 1`] = `
+"<template>
+  <p>this is the dashboard1</p>
+</template>
+
+<script>
+export default {
+  name: 'Dashboard1'
+}
+</script>
+
+<i18n>
+{
+  \\"ja\\": {
+    \\"title\\": \\"ダッシュボード\\",
+    \\"loading\\": \\"読込中...\\"
+  }
+}
+</i18n>
+
+<i18n>
+{
+  \\"ja\\": {
+    \\"title\\": \\"ダッシュボード\\",
+    \\"loading\\": \\"読込中...\\"
+  }
+}
+</i18n>"
+`;
+
+exports[`not full localitation: /path/to/project1/src/pages/Dashboard2.vue 1`] = `
+"<template>
+  <p>this is the dashboard2</p>
+</template>
+
+<script>
+export default {
+  name: 'Dashboard2'
+}
+</script>
+
+<i18n locale=\\"ja\\">
+{
+  \\"title\\": \\"ダッシュボード\\",
+  \\"loading\\": \\"読込中...\\"
+}
+</i18n>
+
+<i18n locale=\\"ja\\">
+{
+  \\"title\\": \\"ダッシュボード\\",
+  \\"loading\\": \\"読込中...\\"
 }
 </i18n>"
 `;
