@@ -1,3 +1,13 @@
+<a name="0.1.1"></a>
+## [0.1.1](https://github.com/kazupon/vue-i18n-locale-message/compare/v0.1.0...v0.1.1) (2019-09-02)
+
+
+### :bug: Bug Fixes
+
+* fix multiple i18n custom blocks ([b226c65](https://github.com/kazupon/vue-i18n-locale-message/commit/b226c65))
+
+
+
 <a name="0.1.0"></a>
 # 0.1.0 (2019-08-28)
 
