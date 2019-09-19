@@ -1,66 +1,36 @@
 import { SFCDescriptor, SFCBlock } from 'vue-template-compiler'
-import { Locale, LocaleMessages, SFCFileInfo } from '../types'
+import { Locale, MetaLocaleMessage, SFCI18nBlock, SFCFileInfo } from '../types'
 
-import { reflectSFCDescriptor, parseContent, stringfyContent } from './utils'
+import { escape, reflectSFCDescriptor, parseContent, stringfyContent } from './utils'
 import prettier from 'prettier'
 
 import { debug as Debug } from 'debug'
 const debug = Debug('vue-i18n-locale-message:infuser')
 
-export default function infuse (basePath: string, sources: SFCFileInfo[], messages: LocaleMessages): SFCFileInfo[] {
+export default function infuse (basePath: string, sources: SFCFileInfo[], meta: MetaLocaleMessage): SFCFileInfo[] {
   const descriptors = reflectSFCDescriptor(basePath, sources)
-  const locales = Object.keys(messages)
 
   return descriptors.map(descriptor => {
     return {
-      content: generate(locales, messages, descriptor),
+      content: generate(meta, descriptor),
       path: descriptor.contentPath
     } as SFCFileInfo
   })
 }
 
-function generate (locales: Locale[], messages: LocaleMessages, descriptor: SFCDescriptor): string {
-  const target = getTargetLocaleMessages(locales, messages, descriptor)
-  debug('target locale messages\n', target)
+function generate (meta: MetaLocaleMessage, descriptor: SFCDescriptor): string {
+  const i18nBlocks = meta.components[descriptor.contentPath]
+  debug('target i18n blocks\n', i18nBlocks)
 
   const blocks: SFCBlock[] = getBlocks(descriptor)
   blocks.forEach(b => debug(`block: type=${b.type}, start=${b.start}, end=${b.end}`))
 
   const { raw } = descriptor
-  const content = buildContent(target, raw, blocks)
+  const content = buildContent(i18nBlocks, raw, blocks)
   debug(`build content:\n${content}`)
   debug(`content size: raw=${raw.length}, content=${content.length}`)
 
   return format(content, 'vue')
-}
-
-function getTargetLocaleMessages (locales: Locale[], messages: LocaleMessages, descriptor: SFCDescriptor): LocaleMessages {
-  return locales.reduce((target, locale) => {
-    debug(`processing curernt: locale=${locale}, target=${target}`)
-
-    const obj = messages[locale]
-    if (obj) {
-      let o: any = obj
-      let prev: any = null
-      const hierarchy = descriptor.hierarchy.concat()
-      while (hierarchy.length > 0) {
-        const key = hierarchy.shift()
-        debug('processing hierarchy key: ', key)
-
-        if (!key || !o) { break }
-        o = o[key]
-        prev = o
-      }
-
-      if (!o && !prev) {
-        return target
-      } else {
-        return Object.assign(target, { [locale]: ((!o && prev) ? prev : o) }) as LocaleMessages
-      }
-    } else {
-      return target
-    }
-  }, {} as LocaleMessages)
 }
 
 function getBlocks (descriptor: SFCDescriptor): SFCBlock[] {
@@ -72,36 +42,36 @@ function getBlocks (descriptor: SFCDescriptor): SFCBlock[] {
   return blocks
 }
 
-function buildContent (target: LocaleMessages, raw: string, blocks: SFCBlock[]): string {
+function buildContent (i18nBlocks: SFCI18nBlock[], raw: string, blocks: SFCBlock[]): string {
   let offset = 0
+  let i18nBlockCounter = 0
   let contents: string[] = []
-  let targetLocales = Object.keys(target) as Locale[]
 
   contents = blocks.reduce((contents, block) => {
     if (block.type === 'i18n') {
       let lang = block.attrs.lang
       lang = (!lang || typeof lang !== 'string') ? 'json' : lang
+      const locale: Locale | undefined = block.attrs.locale
+      const i18nBlock = i18nBlocks[i18nBlockCounter]
+      debug(`meta.lang = ${i18nBlock.lang}, block.lang = ${lang}, meta.locale = ${i18nBlock.locale}, block.locale = ${locale}`)
 
       let messages: any = null
-      const locale = block.attrs.locale as Locale
-      if (!locale || typeof locale !== 'string') {
-        const obj = parseContent(block.content, lang)
-        const locales = Object.keys(obj) as Locale[]
-        messages = locales.reduce((messages, locale) => {
-          return Object.assign(messages, { [locale]: target[locale] })
-        }, {} as LocaleMessages)
-        locales.forEach(locale => {
-          targetLocales = targetLocales.filter(l => l !== locale)
-        })
+      if (lang === i18nBlock.lang && locale === i18nBlock.locale) {
+        if (locale) {
+          messages = i18nBlock.messages[locale]
+        } else {
+          messages = i18nBlock.messages
+        }
       } else {
-        messages = Object.assign({}, target[locale])
-        targetLocales = targetLocales.filter(l => l !== locale)
+        debug(`unmatch meta block and sfc block`)
+        messages = parseContent(block.content, lang)
       }
 
       contents = contents.concat(raw.slice(offset, block.start))
       const serialized = `\n${format(stringfyContent(messages, lang), lang)}`
       contents = contents.concat(serialized)
       offset = block.end as number
+      i18nBlockCounter++
     } else {
       contents = contents.concat(raw.slice(offset, block.end))
       offset = block.end as number
@@ -110,16 +80,30 @@ function buildContent (target: LocaleMessages, raw: string, blocks: SFCBlock[]):
   }, contents)
   contents = contents.concat(raw.slice(offset, raw.length))
 
-  if (targetLocales.length > 0) {
-    contents = targetLocales.reduce((contents, locale) => {
-      contents.push(`\n
-<i18n locale="${locale}">
-${format(stringfyContent(target[locale], 'json'), 'json')}</i18n>`)
+  if (i18nBlocks.length > i18nBlockCounter) {
+    i18nBlocks.slice(i18nBlockCounter).reduce((contents, i18nBlock) => {
+      contents.push(buildI18nTag(i18nBlock))
       return contents
     }, contents)
   }
 
   return contents.join('')
+}
+
+function buildI18nTag (i18nBlock: SFCI18nBlock): string {
+  const { locale, lang, messages } = i18nBlock
+  let tag = '<i18n'
+  if (locale) {
+    tag += ` locale="${escape(locale)}"`
+  }
+  if (lang !== 'json') {
+    tag += ` lang="${escape(lang)}"`
+  }
+  tag += '>'
+
+  return `\n
+${tag}
+${format(stringfyContent(locale ? messages[locale] : messages, lang), lang)}</i18n>`
 }
 
 function format (source: string, lang: string): string {

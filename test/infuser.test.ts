@@ -12,9 +12,12 @@ test('json', () => {
   const messages = squeeze(basePath, jsonFiles as SFCFileInfo[])
 
   // edit locale messages (e.g. translator)
-  Object.assign(messages['en'], {
-    pages: {
-      'Login': {
+  const login = messages['components']['/path/to/project1/src/pages/Login.vue']
+  login.push({
+    lang: 'json',
+    locale: 'en',
+    messages: {
+      en: {
         id: 'User ID',
         password: 'Password',
         confirm: 'Confirm Password',
@@ -22,9 +25,12 @@ test('json', () => {
       }
     }
   })
-  Object.assign(messages['ja']['components'], {
-    nest: {
-      'RankingTable': {
+  const rankingTable = messages['components']['/path/to/project1/src/components/nest/RankingTable.vue']
+  rankingTable.push({
+    lang: 'json',
+    locale: 'ja',
+    messages: {
+      ja: {
         headers: {
           rank: 'ランク',
           name: '名前',
@@ -42,9 +48,12 @@ test('yaml', () => {
   const messages = squeeze(basePath, yamlFiles as SFCFileInfo[])
 
   // edit locale messages (e.g. translator)
-  Object.assign(messages['en'], {
-    pages: {
-      'Login': {
+  const modal = messages['components']['/path/to/project1/src/components/Modal.vue']
+  modal.push({
+    lang: 'yaml',
+    locale: 'en',
+    messages: {
+      en: {
         id: 'User ID',
         password: 'Password',
         confirm: 'Confirm Password',
@@ -52,9 +61,11 @@ test('yaml', () => {
       }
     }
   })
-  Object.assign(messages['ja']['components'], {
-    nest: {
-      'RankingTable': {
+  modal.push({
+    lang: 'yml',
+    locale: 'ja',
+    messages: {
+      ja: {
         headers: {
           rank: 'ランク',
           name: '名前',
@@ -72,9 +83,12 @@ test('json5', () => {
   const messages = squeeze(basePath, json5Files as SFCFileInfo[])
 
   // edit locale messages (e.g. translator)
-  Object.assign(messages['en'], {
-    pages: {
-      'Login': {
+  const modal = messages['components']['/path/to/project1/src/components/Modal.vue']
+  modal.push({
+    lang: 'json5',
+    locale: 'en',
+    messages: {
+      en: {
         id: 'User ID',
         password: 'Password',
         confirm: 'Confirm Password',
@@ -82,9 +96,11 @@ test('json5', () => {
       }
     }
   })
-  Object.assign(messages['ja']['components'], {
-    nest: {
-      'RankingTable': {
+  modal.push({
+    lang: 'json5',
+    locale: 'ja',
+    messages: {
+      ja: {
         headers: {
           rank: 'ランク',
           name: '名前',
@@ -102,9 +118,12 @@ test('not full localitation', () => {
   const messages = squeeze(basePath, jsonFiles as SFCFileInfo[])
 
   // edit locale messages 'ja' only (e.g. translator)
-  Object.assign(messages['ja']['components'], {
-    nest: {
-      'RankingTable': {
+  const modal = messages['components']['/path/to/project1/src/components/Modal.vue']
+  modal.push({
+    lang: 'json5',
+    locale: 'ja',
+    messages: {
+      ja: {
         headers: {
           rank: 'ランク',
           name: '名前',

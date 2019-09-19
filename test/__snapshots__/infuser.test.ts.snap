@@ -89,8 +89,7 @@ export default {
 <i18n>
 {
   \\"ja\\": {
-    \\"title\\": \\"ダッシュボード\\",
-    \\"loading\\": \\"読込中...\\"
+    \\"title\\": \\"ダッシュボード\\"
   }
 }
 </i18n>
@@ -98,7 +97,6 @@ export default {
 <i18n>
 {
   \\"ja\\": {
-    \\"title\\": \\"ダッシュボード\\",
     \\"loading\\": \\"読込中...\\"
   }
 }
@@ -118,14 +116,12 @@ export default {
 
 <i18n locale=\\"ja\\">
 {
-  \\"title\\": \\"ダッシュボード\\",
-  \\"loading\\": \\"読込中...\\"
+  \\"title\\": \\"ダッシュボード\\"
 }
 </i18n>
 
 <i18n locale=\\"ja\\">
 {
-  \\"title\\": \\"ダッシュボード\\",
   \\"loading\\": \\"読込中...\\"
 }
 </i18n>"
@@ -182,6 +178,25 @@ export default {}
   \\"ok\\": \\"OK\\",
   \\"cancel\\": \\"キャンセル\\"
 }
+</i18n>
+
+<i18n locale=\\"en\\" lang=\\"json5\\">
+{
+  id: \\"User ID\\",
+  password: \\"Password\\",
+  confirm: \\"Confirm Password\\",
+  button: \\"Login\\"
+}
+</i18n>
+
+<i18n locale=\\"ja\\" lang=\\"json5\\">
+{
+  headers: {
+    rank: \\"ランク\\",
+    name: \\"名前\\",
+    score: \\"スコア\\"
+  }
+}
 </i18n>"
 `;
 
@@ -227,6 +242,16 @@ export default {}
   \\"ok\\": \\"OK\\",
   \\"cancel\\": \\"キャンセル\\"
 }
+</i18n>
+
+<i18n locale=\\"ja\\" lang=\\"json5\\">
+{
+  headers: {
+    rank: \\"ランク\\",
+    name: \\"名前\\",
+    score: \\"スコア\\"
+  }
+}
 </i18n>"
 `;
 
@@ -247,16 +272,6 @@ export default {}
     \\"score\\": \\"Score\\"
   }
 }
-</i18n>
-
-<i18n locale=\\"ja\\">
-{
-  \\"headers\\": {
-    \\"rank\\": \\"ランク\\",
-    \\"name\\": \\"名前\\",
-    \\"score\\": \\"スコア\\"
-  }
-}
 </i18n>"
 `;
 
@@ -274,8 +289,7 @@ export default {
 <i18n>
 {
   \\"ja\\": {
-    \\"title\\": \\"ダッシュボード\\",
-    \\"loading\\": \\"読込中...\\"
+    \\"title\\": \\"ダッシュボード\\"
   }
 }
 </i18n>
@@ -283,7 +297,6 @@ export default {
 <i18n>
 {
   \\"ja\\": {
-    \\"title\\": \\"ダッシュボード\\",
     \\"loading\\": \\"読込中...\\"
   }
 }
@@ -303,14 +316,12 @@ export default {
 
 <i18n locale=\\"ja\\">
 {
-  \\"title\\": \\"ダッシュボード\\",
-  \\"loading\\": \\"読込中...\\"
+  \\"title\\": \\"ダッシュボード\\"
 }
 </i18n>
 
 <i18n locale=\\"ja\\">
 {
-  \\"title\\": \\"ダッシュボード\\",
   \\"loading\\": \\"読込中...\\"
 }
 </i18n>"
@@ -354,5 +365,19 @@ cancel: Cancel
 <i18n lang=\\"yml\\" locale=\\"ja\\">
 ok: OK
 cancel: キャンセル
+</i18n>
+
+<i18n locale=\\"en\\" lang=\\"yaml\\">
+id: User ID
+password: Password
+confirm: Confirm Password
+button: Login
+</i18n>
+
+<i18n locale=\\"ja\\" lang=\\"yml\\">
+headers:
+  rank: ランク
+  name: 名前
+  score: スコア
 </i18n>"
 `;

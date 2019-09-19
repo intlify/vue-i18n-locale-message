@@ -2,94 +2,169 @@
 
 exports[`basic 1`] = `
 Object {
-  "en": Object {
-    "App": Object {
-      "title": "Application",
-    },
-    "components": Object {
-      "Modal": Object {
-        "cancel": "Cancel",
-        "ok": "OK",
-      },
-      "nest": Object {
-        "RankingTable": Object {
-          "headers": Object {
-            "name": "Name",
-            "rank": "Rank",
-            "score": "Score",
+  "components": Object {
+    "/path/to/project1/src/App.vue": Array [
+      Object {
+        "lang": "json",
+        "messages": Object {
+          "en": Object {
+            "title": "Application",
+          },
+          "ja": Object {
+            "title": "アプリケーション",
           },
         },
       },
-    },
+    ],
+    "/path/to/project1/src/components/Modal.vue": Array [
+      Object {
+        "lang": "json",
+        "locale": "en",
+        "messages": Object {
+          "en": Object {
+            "cancel": "Cancel",
+            "ok": "OK",
+          },
+        },
+      },
+      Object {
+        "lang": "json",
+        "locale": "ja",
+        "messages": Object {
+          "ja": Object {
+            "cancel": "キャンセル",
+            "ok": "OK",
+          },
+        },
+      },
+    ],
+    "/path/to/project1/src/components/nest/RankingTable.vue": Array [
+      Object {
+        "lang": "json",
+        "locale": "en",
+        "messages": Object {
+          "en": Object {
+            "headers": Object {
+              "name": "Name",
+              "rank": "Rank",
+              "score": "Score",
+            },
+          },
+        },
+      },
+    ],
+    "/path/to/project1/src/pages/Dashboard1.vue": Array [
+      Object {
+        "lang": "json",
+        "messages": Object {
+          "ja": Object {
+            "title": "ダッシュボード",
+          },
+        },
+      },
+      Object {
+        "lang": "json",
+        "messages": Object {
+          "ja": Object {
+            "loading": "読込中...",
+          },
+        },
+      },
+    ],
+    "/path/to/project1/src/pages/Dashboard2.vue": Array [
+      Object {
+        "lang": "json",
+        "locale": "ja",
+        "messages": Object {
+          "ja": Object {
+            "title": "ダッシュボード",
+          },
+        },
+      },
+      Object {
+        "lang": "json",
+        "locale": "ja",
+        "messages": Object {
+          "ja": Object {
+            "loading": "読込中...",
+          },
+        },
+      },
+    ],
+    "/path/to/project1/src/pages/Login.vue": Array [
+      Object {
+        "lang": "json",
+        "messages": Object {
+          "ja": Object {
+            "button": "ログイン",
+            "confirm": "パスワードの確認入力",
+            "id": "ユーザーID",
+            "passowrd": "パスワード",
+          },
+        },
+      },
+    ],
   },
-  "ja": Object {
-    "App": Object {
-      "title": "アプリケーション",
-    },
-    "components": Object {
-      "Modal": Object {
-        "cancel": "キャンセル",
-        "ok": "OK",
-      },
-    },
-    "pages": Object {
-      "Dashboard1": Object {
-        "loading": "読込中...",
-        "title": "ダッシュボード",
-      },
-      "Dashboard2": Object {
-        "loading": "読込中...",
-        "title": "ダッシュボード",
-      },
-      "Login": Object {
-        "button": "ログイン",
-        "confirm": "パスワードの確認入力",
-        "id": "ユーザーID",
-        "passowrd": "パスワード",
-      },
-    },
-  },
+  "target": "/path/to/project1/src",
 }
 `;
 
 exports[`json5 1`] = `
 Object {
-  "en": Object {
-    "components": Object {
-      "Modal": Object {
-        "cancel": "Cancel",
-        "ok": "OK",
+  "components": Object {
+    "/path/to/project1/src/components/Modal.vue": Array [
+      Object {
+        "lang": "json5",
+        "locale": "en",
+        "messages": Object {
+          "en": Object {
+            "cancel": "Cancel",
+            "ok": "OK",
+          },
+        },
       },
-    },
-  },
-  "ja": Object {
-    "components": Object {
-      "Modal": Object {
-        "cancel": "キャンセル",
-        "ok": "OK",
+      Object {
+        "lang": "json",
+        "locale": "ja",
+        "messages": Object {
+          "ja": Object {
+            "cancel": "キャンセル",
+            "ok": "OK",
+          },
+        },
       },
-    },
+    ],
   },
+  "target": "/path/to/project1/src",
 }
 `;
 
 exports[`yaml 1`] = `
 Object {
-  "en": Object {
-    "components": Object {
-      "Modal": Object {
-        "cancel": "Cancel",
-        "ok": "OK",
+  "components": Object {
+    "/path/to/project1/src/components/Modal.vue": Array [
+      Object {
+        "lang": "yaml",
+        "locale": "en",
+        "messages": Object {
+          "en": Object {
+            "cancel": "Cancel",
+            "ok": "OK",
+          },
+        },
       },
-    },
-  },
-  "ja": Object {
-    "components": Object {
-      "Modal": Object {
-        "cancel": "キャンセル",
-        "ok": "OK",
+      Object {
+        "lang": "yml",
+        "locale": "ja",
+        "messages": Object {
+          "ja": Object {
+            "cancel": "キャンセル",
+            "ok": "OK",
+          },
+        },
       },
-    },
+    ],
   },
+  "target": "/path/to/project1/src",
 }
 `;

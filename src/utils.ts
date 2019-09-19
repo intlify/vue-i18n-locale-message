@@ -13,6 +13,21 @@ import yaml from 'js-yaml'
 import { debug as Debug } from 'debug'
 const debug = Debug('vue-i18n-locale-message:utils')
 
+const ESC: { [key in string]: string } = {
+  '<': '&lt;',
+  '>': '&gt;',
+  '"': '&quot;',
+  '&': '&amp;'
+}
+
+export function escape (s: string): string {
+  return s.replace(/[<>"&]/g, escapeChar)
+}
+
+function escapeChar (a: string): string {
+  return ESC[a] || a
+}
+
 export function resolve (...paths: string[]): string {
   return path.resolve(...paths)
 }
@@ -35,7 +50,7 @@ export function reflectSFCDescriptor (basePath: string, components: SFCFileInfo[
   })
 }
 
-function parsePath (basePath: string, targetPath: string) {
+export function parsePath (basePath: string, targetPath: string) {
   const { dir, name } = path.parse(targetPath)
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [_, target] = dir.split(basePath)
