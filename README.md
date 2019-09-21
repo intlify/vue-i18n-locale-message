@@ -69,17 +69,18 @@ const files = [
   // ...
 ]
 
-// squeeze locale messages i18n locale messages of from single-file components
-const messages = squeeze('/path/to/src', files)
+// squeeze meta locale message from single-file components
+// NOTE: about scheme of meta locale message, see the `MetaLocaleMessage` type at `types/index.d.ts`
+const meta = squeeze('/path/to/src', files)
 
-// write squeezed locale messages
-fs.writeFileSync('/path/to/src/messages.json')
+// write squeezed meta locale messages
+fs.writeFileSync('/path/to/src/meta.json', JSON.stringify(meta))
 
-// after update locale messages with translation service or your code, it read locale messsages
-const translatedMessages = require('/path/to/src/translated')
+// after update meta locale message with 3rd vendor tools or your code, it read meta locale messsage
+const updatedMeta = require('/path/to/src/updated-meta.json')
 
-// infuse locale message to single-file components
-const updatedFiles = infuse('/path/to/src', files, translatedMessages)
+// infuse meta locale message to single-file components
+const updatedFiles = infuse('/path/to/src', files, updatedMeta)
 
 // write updated single-file component
 updateFiles.forEach(file => {
