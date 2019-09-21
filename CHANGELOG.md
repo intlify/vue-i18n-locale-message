@@ -1,3 +1,13 @@
+<a name="0.2.0"></a>
+# [0.2.0](https://github.com/kazupon/vue-i18n-locale-message/compare/v0.1.1...v0.2.0) (2019-09-21)
+
+
+### :zap: Improvements
+
+* Support meta local message outputting for 3rd vendor tools ([04dee29](https://github.com/kazupon/vue-i18n-locale-message/commit/04dee29)), closes [#13](https://github.com/kazupon/vue-i18n-locale-message/issues/13)
+
+
+
 <a name="0.1.1"></a>
 ## [0.1.1](https://github.com/kazupon/vue-i18n-locale-message/compare/v0.1.0...v0.1.1) (2019-09-02)
 
