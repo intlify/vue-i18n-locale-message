@@ -4,7 +4,9 @@ import { resolve, parsePath, readSFC } from '../utils'
 import infuse from '../infuser'
 import squeeze from '../squeezer'
 import fs from 'fs'
+import path from 'path'
 import { applyDiff } from 'deep-diff'
+import glob from 'glob'
 import { LocaleMessages, SFCFileInfo, MetaLocaleMessage, Locale } from '../../types'
 
 import { debug as Debug } from 'debug'
@@ -13,6 +15,7 @@ const debug = Debug('vue-i18n-locale-message:commands:infuse')
 type InfuseOptions = {
   target: string
   messages: string
+  match?: string
 }
 
 export const command = 'infuse'
@@ -33,23 +36,44 @@ export const builder = (args: Argv): Argv<InfuseOptions> => {
       describe: 'locale messages path to be infused',
       demandOption: true
     })
+    .option('match', {
+      type: 'string',
+      alias: 'r',
+      describe: 'option should be accepted a regex filenames, must be specified together --messages'
+    })
 }
 
 export const handler = (args: Arguments<InfuseOptions>): void => {
   const targetPath = resolve(args.target)
   const messagesPath = resolve(args.messages)
   const sources = readSFC(targetPath)
-  const messages = readLocaleMessages(messagesPath)
+  const messages = readLocaleMessages(messagesPath, args.match)
   const meta = squeeze(targetPath, sources)
   apply(messages, meta)
   const newSources = infuse(targetPath, sources, meta)
   writeSFC(newSources)
 }
 
-function readLocaleMessages (path: string): LocaleMessages {
-  // TODO: async implementation
-  const data = fs.readFileSync(path, { encoding: 'utf8' })
-  return JSON.parse(data) as LocaleMessages
+function readLocaleMessages (targetPath: string, matchRegex?: string): LocaleMessages {
+  debug('readLocaleMessages', targetPath, matchRegex)
+  if (!matchRegex) {
+    const data = fs.readFileSync(targetPath, { encoding: 'utf8' })
+    return JSON.parse(data) as LocaleMessages
+  } else {
+    const globPath = path.normalize(`${targetPath}/*.json`)
+    const paths = glob.sync(globPath)
+    return paths.reduce((messages, p) => {
+      const re = new RegExp(matchRegex, 'ig')
+      const filename = path.basename(p)
+      const match = re.exec(filename)
+      debug('regex match', match)
+      if (match) {
+        const data = fs.readFileSync(p, { encoding: 'utf8' })
+        Object.assign(messages, { [match[1]]: JSON.parse(data) })
+      }
+      return messages
+    }, {} as LocaleMessages)
+  }
 }
 
 function removeItem<T> (item: T, items: T[]): boolean {

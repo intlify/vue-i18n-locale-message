@@ -35,7 +35,8 @@ jest.mock('fs', () => ({
   readFileSync: jest.fn().mockImplementation(path => MOCK_FILES[path as string]),
   writeFileSync: jest.fn().mockImplementation((path, data) => {
     writeFiles[path as string] = data.toString()
-  })
+  }),
+  mkdirSync: jest.fn().mockImplementation(path => {})
 }))
 
 // -------------------
@@ -102,4 +103,19 @@ test('omitted output path', async () => {
   })
 
   expect(mockUtils.resolve.mock.calls[1][0]).toBe(`${TARGET_PATH}/messages.json`)
+})
+
+test('split option', async () => {
+  const mockUtils = utils as jest.Mocked<typeof utils>
+  mockUtils.resolve.mockImplementation((...paths) => paths[0])
+
+  const squeeze = await import('../../src/commands/squeeze')
+  const cmd = yargs.command(squeeze)
+  const output = await new Promise(resolve => {
+    cmd.parse(`squeeze --target=${TARGET_PATH}/src --split --output=${TARGET_PATH}/locales`, () => {
+      resolve(writeFiles)
+    })
+  })
+
+  expect(output).toMatchSnapshot()
 })

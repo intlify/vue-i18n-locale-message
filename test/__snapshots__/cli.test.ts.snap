@@ -10,7 +10,9 @@ Options:
   --help          Show help                                            [boolean]
   --target, -t    target path that single-file components is stored
                                                              [string] [required]
-  --messages, -m  locale messages path to be infused         [string] [required]"
+  --messages, -m  locale messages path to be infused         [string] [required]
+  --match, -r     option should be accepted a regex filenames, must be specified
+                  together --messages                                   [string]"
 `;
 
 exports[`squeeze command output help 1`] = `
@@ -23,6 +25,8 @@ Options:
   --help        Show help                                              [boolean]
   --target, -t  target path that single-file components is stored
                                                              [string] [required]
+  --split, -s   split squeezed locale messages with locale
+                                                      [boolean] [default: false]
   --output, -o  path to output squeezed locale messages
                            [string] [default: \\"/path/to/project1/messages.json\\"]"
 `;

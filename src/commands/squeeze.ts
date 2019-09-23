@@ -10,6 +10,7 @@ const debug = Debug('vue-i18n-locale-message:commands:squeeze')
 
 type SqueezeOptions = {
   target: string
+  split?: boolean
   output: string
 }
 
@@ -26,6 +27,12 @@ export const builder = (args: Argv): Argv<SqueezeOptions> => {
       describe: 'target path that single-file components is stored',
       demandOption: true
     })
+    .option('split', {
+      type: 'boolean',
+      alias: 's',
+      default: false,
+      describe: 'split squeezed locale messages with locale'
+    })
     .option('output', {
       type: 'string',
       alias: 'o',
@@ -38,7 +45,7 @@ export const handler = (args: Arguments<SqueezeOptions>): void => {
   const targetPath = resolve(args.target)
   const meta = squeeze(targetPath, readSFC(targetPath))
   const messages = generate(meta)
-  writeLocaleMessages(resolve(args.output), messages)
+  writeLocaleMessages(messages, args)
 }
 
 function generate (meta: MetaLocaleMessage): LocaleMessages {
@@ -85,9 +92,35 @@ function generate (meta: MetaLocaleMessage): LocaleMessages {
   return messages
 }
 
-function writeLocaleMessages (output: string, messages: LocaleMessages) {
+function writeLocaleMessages (messages: LocaleMessages, args: Arguments<SqueezeOptions>) {
   // TODO: async implementation
-  fs.writeFileSync(output, JSON.stringify(messages, null, 2))
+  const split = args.split
+  const output = resolve(args.output)
+  if (!split) {
+    fs.writeFileSync(output, JSON.stringify(messages, null, 2))
+  } else {
+    splitLocaleMessages(output, messages)
+  }
+}
+
+function splitLocaleMessages (path: string, messages: LocaleMessages) {
+  const locales: Locale[] = Object.keys(messages)
+  const write = () => {
+    locales.forEach(locale => {
+      fs.writeFileSync(`${path}/${locale}.json`, JSON.stringify(messages[locale], null, 2))
+    })
+  }
+  try {
+    fs.mkdirSync(path)
+    write()
+  } catch (err) {
+    if (err.code === 'EEXIST') {
+      write()
+    } else {
+      console.error(err.message)
+      throw err
+    }
+  }
 }
 
 export default {
