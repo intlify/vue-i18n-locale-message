@@ -1,3 +1,18 @@
+<a name="0.3.0"></a>
+# [0.3.0](https://github.com/kazupon/vue-i18n-locale-message/compare/v0.2.0...v0.3.0) (2019-09-23)
+
+
+### :boom: Breaking changes
+
+* **cli:** change infuse command options ([ea812f3](https://github.com/kazupon/vue-i18n-locale-message/commit/ea812f3))
+
+
+### :star: New Features
+
+* locale messages split and match options ([adb69fa](https://github.com/kazupon/vue-i18n-locale-message/commit/adb69fa)), closes [#11](https://github.com/kazupon/vue-i18n-locale-message/issues/11)
+
+
+
 <a name="0.2.0"></a>
 # [0.2.0](https://github.com/kazupon/vue-i18n-locale-message/compare/v0.1.1...v0.2.0) (2019-09-21)
 
