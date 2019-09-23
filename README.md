@@ -98,7 +98,7 @@ vue-i18n-locale-message squeeze --target=./src --output=./messages.json
 #### Infuse
 
 ```sh
-vue-i18n-locale-message infuse --target=./src --messages=./translated.json
+vue-i18n-locale-message infuse --target=./src --locales=./translated.json
 ```
 
 ## :raising_hand: Motivations

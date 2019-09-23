@@ -6,13 +6,13 @@ exports[`infuse command output help 1`] = `
 infuse locale messages to single-file components
 
 Options:
-  --version       Show version number                                  [boolean]
-  --help          Show help                                            [boolean]
-  --target, -t    target path that single-file components is stored
+  --version      Show version number                                   [boolean]
+  --help         Show help                                             [boolean]
+  --target, -t   target path that single-file components is stored
                                                              [string] [required]
-  --messages, -m  locale messages path to be infused         [string] [required]
-  --match, -r     option should be accepted a regex filenames, must be specified
-                  together --messages                                   [string]"
+  --locales, -l  locale messages path to be infused          [string] [required]
+  --match, -m    option should be accepted a regex filenames, must be specified
+                 together --messages                                    [string]"
 `;
 
 exports[`squeeze command output help 1`] = `

@@ -86,7 +86,7 @@ test('absolute path', async () => {
   const infuse = await import('../../src/commands/infuse')
   const cmd = yargs.command(infuse)
   const output = await new Promise(resolve => {
-    cmd.parse(`infuse --target=${TARGET_PATH}/src --messages=${TARGET_PATH}/locales.json`, () => {
+    cmd.parse(`infuse --target=${TARGET_PATH}/src --locales=${TARGET_PATH}/locales.json`, () => {
       resolve(writeFiles)
     })
   })
@@ -120,7 +120,7 @@ test('relative path', async () => {
   const infuse = await import('../../src/commands/infuse')
   const cmd = yargs.command(infuse)
   const output = await new Promise(resolve => {
-    cmd.parse(`infuse --target=./src --messages=locales-2.json`, () => {
+    cmd.parse(`infuse --target=./src --locales=locales-2.json`, () => {
       resolve(writeFiles)
     })
   })
@@ -154,7 +154,7 @@ test('match option', async () => {
   const infuse = await import('../../src/commands/infuse')
   const cmd = yargs.command(infuse)
   const output = await new Promise(resolve => {
-    cmd.parse(`infuse --target=./src --messages=./src/locales --match=^([\\w-]*)\\.json`, () => {
+    cmd.parse(`infuse --target=./src --locales=./src/locales --match=^([\\w-]*)\\.json`, () => {
       resolve(writeFiles)
     })
   })

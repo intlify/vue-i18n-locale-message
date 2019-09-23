@@ -14,7 +14,7 @@ const debug = Debug('vue-i18n-locale-message:commands:infuse')
 
 type InfuseOptions = {
   target: string
-  messages: string
+  locales: string
   match?: string
 }
 
@@ -30,22 +30,22 @@ export const builder = (args: Argv): Argv<InfuseOptions> => {
       describe: 'target path that single-file components is stored',
       demandOption: true
     })
-    .option('messages', {
+    .option('locales', {
       type: 'string',
-      alias: 'm',
+      alias: 'l',
       describe: 'locale messages path to be infused',
       demandOption: true
     })
     .option('match', {
       type: 'string',
-      alias: 'r',
+      alias: 'm',
       describe: 'option should be accepted a regex filenames, must be specified together --messages'
     })
 }
 
 export const handler = (args: Arguments<InfuseOptions>): void => {
   const targetPath = resolve(args.target)
-  const messagesPath = resolve(args.messages)
+  const messagesPath = resolve(args.locales)
   const sources = readSFC(targetPath)
   const messages = readLocaleMessages(messagesPath, args.match)
   const meta = squeeze(targetPath, sources)
