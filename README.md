@@ -107,7 +107,7 @@ The big motivation is as follows.
 
 - :tired_face: Hard to integrate locale messages for localization services
 - :tired_face: Hard to maintain consistency of locale message keys (`eslint-plugin-vue-i18n` need it!)
-- :pray: Requested by third bender tools (`vue-i18n-ally` and etc ...)
+- :pray: Requested by 3rd vendor tools (`vue-i18n-ally` and etc ...)
 
 ## :book: API: Specifications
 
