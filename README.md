@@ -111,7 +111,7 @@ The big motivation is as follows.
 
 ## :book: API: Specifications
 
-<p align="center"><img width="238px" height="272px" src="./assets/vue-i18n-logo.png" alt="Vue I18n logo"></p>
+<p align="center"><img width="476px" height="544px" src="./assets/api-usage-image.png" alt="API Usage Image"></p>
 
 
 ### sqeeze (basePath: string, files: SFCFileInfo[]): MetaLocaleMessage
