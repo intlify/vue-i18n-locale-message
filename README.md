@@ -39,8 +39,8 @@ yarn global vue-i18n-locale-message
 ## :star: Features
 
 - API
-  - squeeze the locale messages from `i18n` custom block
-  - infuse the locale messages to `i18n` custom block
+  - squeeze the meta of locale messages from `i18n` custom block
+  - infuse the meta of locale messages to `i18n` custom block
 - CLI
   - squeeze the locale messages from `i18n` custom block
   - infuse the locale messages to `i18n` custom block
@@ -109,7 +109,35 @@ The big motivation is as follows.
 - :tired_face: Hard to maintain consistency of locale message keys (`eslint-plugin-vue-i18n` need it!)
 - :pray: Requested by third bender tools (`vue-i18n-ally` and etc ...)
 
-## :notebook: Locale message squeezing rules
+## :book: API: Specifications
+
+<p align="center"><img width="238px" height="272px" src="./assets/vue-i18n-logo.png" alt="Vue I18n logo"></p>
+
+
+### sqeeze (basePath: string, files: SFCFileInfo[]): MetaLocaleMessage
+
+  * **Arguments:**
+    * `{string} basePath`: The base path that single-file components are located in project
+    * `{SFCFileInfo[]} files`: The target single-file components information
+  * **Return:** `MetaLocaleMessage`
+
+Squeeze the meta of locale messages from i18n custom block at single-file components. 
+
+In about structure of the meta information that is returned with this function, You can see the [here](https://github.com/kazupon/vue-i18n-locale-message/blob/master/types/index.d.ts#L34-L81).
+
+### infuse (basePath: string, sources: SFCFileInfo[], meta: MetaLocaleMessage): SFCFileInfo[]
+
+  * **Arguments:**
+    * `{string} basePath`: The base path that single-file components are located in project
+    * `{SFCFileInfo[]} sources`: The target single-file components information
+    * `{MetaLocaleMessage}`: The meta of locale message
+  * **Return:** `SFCFileInfo[]`
+
+Infuse the meta of locale messages to i18n custom block at single-file components.
+
+`infuse` function will return new single-file components information that is updated with the single-file components information specified as `sources` and  the meta of locale message as `meta`.
+
+## :notebook: CLI: Locale message squeezing rules
 
 The structure of locale messages to be squeezed is layered with the **directory structure** and **single-file component (`.vue`) filename**.
 
