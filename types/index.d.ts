@@ -33,7 +33,7 @@ export type LocaleMessages = Record<Locale, LocaleMessageObject>
 
 /**
  *  Locale Message Meta Structure
- *    e.g. 
+ *    e.g.
  *    {
  *     "target": "/path/to/project1",
  *     "components": { // flat component paths
@@ -150,6 +150,9 @@ export interface SFCFileInfo {
  *      hierarchy: ['components', 'common', 'Modal']
  *    }
  */
+
+declare function squeeze (basePath: string, files: SFCFileInfo[]): MetaLocaleMessage
+declare function infuse (basePath: string, sources: SFCFileInfo[], meta: MetaLocaleMessage): SFCFileInfo[]
 
 // extend for vue-i18n-locale-message
 declare module 'vue-template-compiler' {
