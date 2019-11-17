@@ -77,11 +77,11 @@ export function parseContent (content: string, lang: string): any {
   }
 }
 
-export function stringfyContent (content: any, lang: string): string {
+export function stringifyContent (content: any, lang: string): string {
   switch (lang) {
     case 'yaml':
     case 'yml':
-      return yaml.safeDump(content)
+      return yaml.safeDump(content, { indent: 2 })
     case 'json5':
       return JSON5.stringify(content, null, 2)
     case 'json':

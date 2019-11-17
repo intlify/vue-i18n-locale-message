@@ -1,8 +1,7 @@
 import { SFCDescriptor, SFCBlock } from 'vue-template-compiler'
 import { Locale, MetaLocaleMessage, SFCI18nBlock, SFCFileInfo } from '../types'
 
-import { escape, reflectSFCDescriptor, parseContent, stringfyContent } from './utils'
-import prettier from 'prettier'
+import { escape, reflectSFCDescriptor, parseContent, stringifyContent } from './utils'
 
 import { debug as Debug } from 'debug'
 const debug = Debug('vue-i18n-locale-message:infuser')
@@ -30,7 +29,7 @@ function generate (meta: MetaLocaleMessage, descriptor: SFCDescriptor): string {
   debug(`build content:\n${content}`)
   debug(`content size: raw=${raw.length}, content=${content.length}`)
 
-  return format(content, 'vue')
+  return content
 }
 
 function getBlocks (descriptor: SFCDescriptor): SFCBlock[] {
@@ -68,7 +67,7 @@ function buildContent (i18nBlocks: SFCI18nBlock[], raw: string, blocks: SFCBlock
       }
 
       contents = contents.concat(raw.slice(offset, block.start))
-      const serialized = `\n${format(stringfyContent(messages, lang), lang)}`
+      const serialized = `\n${stringifyContent(messages, lang), lang}`
       contents = contents.concat(serialized)
       offset = block.end as number
       i18nBlockCounter++
@@ -103,22 +102,5 @@ function buildI18nTag (i18nBlock: SFCI18nBlock): string {
 
   return `\n
 ${tag}
-${format(stringfyContent(locale ? messages[locale] : messages, lang), lang)}</i18n>`
-}
-
-function format (source: string, lang: string): string {
-  debug(`format: lang=${lang}, source=${source}`)
-
-  switch (lang) {
-    case 'vue':
-      return source
-    case 'yaml':
-    case 'yml':
-      return prettier.format(source, { parser: 'yaml', tabWidth: 2 })
-    case 'json5':
-      return prettier.format(source, { parser: 'json5', tabWidth: 2 })
-    case 'json':
-    default:
-      return prettier.format(source, { parser: 'json-stringify', tabWidth: 2 })
-  }
+${stringifyContent(locale ? messages[locale] : messages, lang), lang}</i18n>`
 }
