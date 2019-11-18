@@ -1,3 +1,13 @@
+<a name="0.4.0"></a>
+# [0.4.0](https://github.com/kazupon/vue-i18n-locale-message/compare/v0.3.0...v0.4.0) (2019-11-18)
+
+
+### :zap: Improvements
+
+* expose squeezer and infuse function in typing file ([#15](https://github.com/kazupon/vue-i18n-locale-message/issues/15)) by [@antfu](https://github.com/antfu) ([51f222d](https://github.com/kazupon/vue-i18n-locale-message/commit/51f222d)), closes [#15](https://github.com/kazupon/vue-i18n-locale-message/issues/15)
+
+
+
 <a name="0.3.0"></a>
 # [0.3.0](https://github.com/kazupon/vue-i18n-locale-message/compare/v0.2.0...v0.3.0) (2019-09-23)
 
