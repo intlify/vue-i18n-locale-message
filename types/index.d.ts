@@ -26,10 +26,11 @@ import { SFCDescriptor } from 'vue-template-compiler'
  */
 
 export type Locale = string
-export type LocaleMessage = string | LocaleMessageObject | LocaleMessageArray
-export interface LocaleMessageArray extends Array<LocaleMessage> {}
-export interface LocaleMessageObject { [key: string]: LocaleMessage }
-export type LocaleMessages = Record<Locale, LocaleMessageObject>
+export type LocaleMessage = 
+  | string 
+  | { [property: string]: LocaleMessage }
+  | LocaleMessage[]
+export type LocaleMessages = Record<Locale, LocaleMessage>
 
 /**
  *  Locale Message Meta Structure
