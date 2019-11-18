@@ -6,7 +6,7 @@ import { reflectSFCDescriptor, parseContent } from './utils'
 import { debug as Debug } from 'debug'
 const debug = Debug('vue-i18n-locale-message:squeezer')
 
-export default function sqeeze (basePath: string, files: SFCFileInfo[]): MetaLocaleMessage {
+export default function squeeze (basePath: string, files: SFCFileInfo[]): MetaLocaleMessage {
   const descriptors = reflectSFCDescriptor(basePath, files)
   return descriptors.reduce((meta, descriptor) => {
     descriptor.customBlocks.sort((a, b) => { return (a.start as number) - (b.start as number) })
