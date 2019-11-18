@@ -67,7 +67,7 @@ function buildContent (i18nBlocks: SFCI18nBlock[], raw: string, blocks: SFCBlock
       }
 
       contents = contents.concat(raw.slice(offset, block.start))
-      const serialized = `\n${stringifyContent(messages, lang), lang}`
+      const serialized = `\n${stringifyContent(messages, lang)}`
       contents = contents.concat(serialized)
       offset = block.end as number
       i18nBlockCounter++
@@ -102,5 +102,5 @@ function buildI18nTag (i18nBlock: SFCI18nBlock): string {
 
   return `\n
 ${tag}
-${stringifyContent(locale ? messages[locale] : messages, lang), lang}</i18n>`
+${stringifyContent(locale ? messages[locale] : messages, lang)}</i18n>`
 }

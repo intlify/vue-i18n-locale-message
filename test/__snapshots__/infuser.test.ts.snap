@@ -17,8 +17,7 @@ export default {}
   \\"ja\\": {
     \\"title\\": \\"アプリケーション\\"
   }
-}
-</i18n>"
+}</i18n>"
 `;
 
 exports[`json: /path/to/project1/src/components/Modal.vue 1`] = `
@@ -34,15 +33,13 @@ export default {}
 {
   \\"ok\\": \\"OK\\",
   \\"cancel\\": \\"Cancel\\"
-}
-</i18n>
+}</i18n>
 
 <i18n locale=\\"ja\\">
 {
   \\"ok\\": \\"OK\\",
   \\"cancel\\": \\"キャンセル\\"
-}
-</i18n>"
+}</i18n>"
 `;
 
 exports[`json: /path/to/project1/src/components/nest/RankingTable.vue 1`] = `
@@ -61,8 +58,7 @@ export default {}
     \\"name\\": \\"Name\\",
     \\"score\\": \\"Score\\"
   }
-}
-</i18n>
+}</i18n>
 
 <i18n locale=\\"ja\\">
 {
@@ -71,8 +67,7 @@ export default {}
     \\"name\\": \\"名前\\",
     \\"score\\": \\"スコア\\"
   }
-}
-</i18n>"
+}</i18n>"
 `;
 
 exports[`json: /path/to/project1/src/pages/Dashboard1.vue 1`] = `
@@ -91,16 +86,14 @@ export default {
   \\"ja\\": {
     \\"title\\": \\"ダッシュボード\\"
   }
-}
-</i18n>
+}</i18n>
 
 <i18n>
 {
   \\"ja\\": {
     \\"loading\\": \\"読込中...\\"
   }
-}
-</i18n>"
+}</i18n>"
 `;
 
 exports[`json: /path/to/project1/src/pages/Dashboard2.vue 1`] = `
@@ -117,14 +110,12 @@ export default {
 <i18n locale=\\"ja\\">
 {
   \\"title\\": \\"ダッシュボード\\"
-}
-</i18n>
+}</i18n>
 
 <i18n locale=\\"ja\\">
 {
   \\"loading\\": \\"読込中...\\"
-}
-</i18n>"
+}</i18n>"
 `;
 
 exports[`json: /path/to/project1/src/pages/Login.vue 1`] = `
@@ -144,8 +135,7 @@ export default {}
     \\"confirm\\": \\"パスワードの確認入力\\",
     \\"button\\": \\"ログイン\\"
   }
-}
-</i18n>
+}</i18n>
 
 <i18n locale=\\"en\\">
 {
@@ -153,8 +143,7 @@ export default {}
   \\"password\\": \\"Password\\",
   \\"confirm\\": \\"Confirm Password\\",
   \\"button\\": \\"Login\\"
-}
-</i18n>"
+}</i18n>"
 `;
 
 exports[`json5: /path/to/project1/src/components/Modal.vue 1`] = `
@@ -168,36 +157,32 @@ export default {}
 
 <i18n lang=\\"json5\\" locale=\\"en\\">
 {
-  ok: \\"OK\\",
-  cancel: \\"Cancel\\"
-}
-</i18n>
+  ok: 'OK',
+  cancel: 'Cancel',
+}</i18n>
 
 <i18n locale=\\"ja\\">
 {
   \\"ok\\": \\"OK\\",
   \\"cancel\\": \\"キャンセル\\"
-}
-</i18n>
+}</i18n>
 
 <i18n locale=\\"en\\" lang=\\"json5\\">
 {
-  id: \\"User ID\\",
-  password: \\"Password\\",
-  confirm: \\"Confirm Password\\",
-  button: \\"Login\\"
-}
-</i18n>
+  id: 'User ID',
+  password: 'Password',
+  confirm: 'Confirm Password',
+  button: 'Login',
+}</i18n>
 
 <i18n locale=\\"ja\\" lang=\\"json5\\">
 {
   headers: {
-    rank: \\"ランク\\",
-    name: \\"名前\\",
-    score: \\"スコア\\"
-  }
-}
-</i18n>"
+    rank: 'ランク',
+    name: '名前',
+    score: 'スコア',
+  },
+}</i18n>"
 `;
 
 exports[`not full localitation: /path/to/project1/src/App.vue 1`] = `
@@ -217,8 +202,7 @@ export default {}
   \\"ja\\": {
     \\"title\\": \\"アプリケーション\\"
   }
-}
-</i18n>"
+}</i18n>"
 `;
 
 exports[`not full localitation: /path/to/project1/src/components/Modal.vue 1`] = `
@@ -234,25 +218,22 @@ export default {}
 {
   \\"ok\\": \\"OK\\",
   \\"cancel\\": \\"Cancel\\"
-}
-</i18n>
+}</i18n>
 
 <i18n locale=\\"ja\\">
 {
   \\"ok\\": \\"OK\\",
   \\"cancel\\": \\"キャンセル\\"
-}
-</i18n>
+}</i18n>
 
 <i18n locale=\\"ja\\" lang=\\"json5\\">
 {
   headers: {
-    rank: \\"ランク\\",
-    name: \\"名前\\",
-    score: \\"スコア\\"
-  }
-}
-</i18n>"
+    rank: 'ランク',
+    name: '名前',
+    score: 'スコア',
+  },
+}</i18n>"
 `;
 
 exports[`not full localitation: /path/to/project1/src/components/nest/RankingTable.vue 1`] = `
@@ -271,8 +252,7 @@ export default {}
     \\"name\\": \\"Name\\",
     \\"score\\": \\"Score\\"
   }
-}
-</i18n>"
+}</i18n>"
 `;
 
 exports[`not full localitation: /path/to/project1/src/pages/Dashboard1.vue 1`] = `
@@ -291,16 +271,14 @@ export default {
   \\"ja\\": {
     \\"title\\": \\"ダッシュボード\\"
   }
-}
-</i18n>
+}</i18n>
 
 <i18n>
 {
   \\"ja\\": {
     \\"loading\\": \\"読込中...\\"
   }
-}
-</i18n>"
+}</i18n>"
 `;
 
 exports[`not full localitation: /path/to/project1/src/pages/Dashboard2.vue 1`] = `
@@ -317,14 +295,12 @@ export default {
 <i18n locale=\\"ja\\">
 {
   \\"title\\": \\"ダッシュボード\\"
-}
-</i18n>
+}</i18n>
 
 <i18n locale=\\"ja\\">
 {
   \\"loading\\": \\"読込中...\\"
-}
-</i18n>"
+}</i18n>"
 `;
 
 exports[`not full localitation: /path/to/project1/src/pages/Login.vue 1`] = `
@@ -344,8 +320,7 @@ export default {}
     \\"confirm\\": \\"パスワードの確認入力\\",
     \\"button\\": \\"ログイン\\"
   }
-}
-</i18n>"
+}</i18n>"
 `;
 
 exports[`yaml: /path/to/project1/src/components/Modal.vue 1`] = `
