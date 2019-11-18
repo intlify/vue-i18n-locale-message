@@ -82,7 +82,7 @@ export type MetaLocaleMessage = {
 }
 export type FormatOptions = {
   intend?: number,
-  eol?: string
+  eof?: string
 }
 
 /**

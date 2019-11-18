@@ -79,7 +79,7 @@ export function parseContent (content: string, lang: string): any {
 
 export function stringifyContent (content: any, lang: string, options?: FormatOptions): string {
   const indent = options?.intend || 2
-  const eol = options?.eol || '\n'
+  const eof = options?.eof || '\n'
 
   let result = ''
   switch (lang) {
@@ -96,8 +96,8 @@ export function stringifyContent (content: any, lang: string, options?: FormatOp
       break
   }
 
-  if (!result.endsWith(eol)) {
-    result += eol
+  if (!result.endsWith(eof)) {
+    result += eof
   }
 
   return result
