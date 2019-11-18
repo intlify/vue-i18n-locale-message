@@ -63,6 +63,10 @@
   ],
   "license": "MIT",
   "main": "lib/index.js",
+  "peerDependencies": {
+    "vue": "^2.6",
+    "vue-template-compiler": "^2.6"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/kazupon/vue-i18n-locale-message.git"
