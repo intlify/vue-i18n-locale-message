@@ -1,5 +1,5 @@
 import { SFCDescriptor } from 'vue-template-compiler'
-import { SFCFileInfo } from '../types'
+import { SFCFileInfo, FormatOptions } from '../types'
 import { VueTemplateCompiler } from '@vue/component-compiler-utils/dist/types'
 
 import { parse } from '@vue/component-compiler-utils'
@@ -77,17 +77,30 @@ export function parseContent (content: string, lang: string): any {
   }
 }
 
-export function stringifyContent (content: any, lang: string): string {
+export function stringifyContent (content: any, lang: string, options?: FormatOptions): string {
+  const indent = options?.intend || 2
+  const eol = options?.eol || '\n'
+
+  let result = ''
   switch (lang) {
     case 'yaml':
     case 'yml':
-      return yaml.safeDump(content, { indent: 2 })
+      result = yaml.safeDump(content, { indent })
+      break
     case 'json5':
-      return JSON5.stringify(content, null, 2)
+      result = JSON5.stringify(content, null, indent)
+      break
     case 'json':
     default:
-      return JSON.stringify(content, null, 2)
+      result = JSON.stringify(content, null, indent)
+      break
   }
+
+  if (!result.endsWith(eol)) {
+    result += eol
+  }
+
+  return result
 }
 
 export function readSFC (target: string): SFCFileInfo[] {
