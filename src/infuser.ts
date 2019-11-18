@@ -1,23 +1,23 @@
 import { SFCDescriptor, SFCBlock } from 'vue-template-compiler'
-import { Locale, MetaLocaleMessage, SFCI18nBlock, SFCFileInfo } from '../types'
+import { Locale, MetaLocaleMessage, SFCI18nBlock, SFCFileInfo, FormatOptions } from '../types'
 
 import { escape, reflectSFCDescriptor, parseContent, stringifyContent } from './utils'
 
 import { debug as Debug } from 'debug'
 const debug = Debug('vue-i18n-locale-message:infuser')
 
-export default function infuse (basePath: string, sources: SFCFileInfo[], meta: MetaLocaleMessage): SFCFileInfo[] {
+export default function infuse (basePath: string, sources: SFCFileInfo[], meta: MetaLocaleMessage, options?: FormatOptions): SFCFileInfo[] {
   const descriptors = reflectSFCDescriptor(basePath, sources)
 
   return descriptors.map(descriptor => {
     return {
-      content: generate(meta, descriptor),
+      content: generate(meta, descriptor, options),
       path: descriptor.contentPath
     } as SFCFileInfo
   })
 }
 
-function generate (meta: MetaLocaleMessage, descriptor: SFCDescriptor): string {
+function generate (meta: MetaLocaleMessage, descriptor: SFCDescriptor, options?: FormatOptions): string {
   const i18nBlocks = meta.components[descriptor.contentPath]
   debug('target i18n blocks\n', i18nBlocks)
 
@@ -25,7 +25,7 @@ function generate (meta: MetaLocaleMessage, descriptor: SFCDescriptor): string {
   blocks.forEach(b => debug(`block: type=${b.type}, start=${b.start}, end=${b.end}`))
 
   const { raw } = descriptor
-  const content = buildContent(i18nBlocks, raw, blocks)
+  const content = buildContent(i18nBlocks, raw, blocks, options)
   debug(`build content:\n${content}`)
   debug(`content size: raw=${raw.length}, content=${content.length}`)
 
@@ -41,7 +41,7 @@ function getBlocks (descriptor: SFCDescriptor): SFCBlock[] {
   return blocks
 }
 
-function buildContent (i18nBlocks: SFCI18nBlock[], raw: string, blocks: SFCBlock[]): string {
+function buildContent (i18nBlocks: SFCI18nBlock[], raw: string, blocks: SFCBlock[], options?: FormatOptions): string {
   let offset = 0
   let i18nBlockCounter = 0
   let contents: string[] = []
@@ -67,7 +67,7 @@ function buildContent (i18nBlocks: SFCI18nBlock[], raw: string, blocks: SFCBlock
       }
 
       contents = contents.concat(raw.slice(offset, block.start))
-      const serialized = `\n${stringifyContent(messages, lang)}`
+      const serialized = `\n${stringifyContent(messages, lang, options)}`
       contents = contents.concat(serialized)
       offset = block.end as number
       i18nBlockCounter++
@@ -81,7 +81,7 @@ function buildContent (i18nBlocks: SFCI18nBlock[], raw: string, blocks: SFCBlock
 
   if (i18nBlocks.length > i18nBlockCounter) {
     i18nBlocks.slice(i18nBlockCounter).reduce((contents, i18nBlock) => {
-      contents.push(buildI18nTag(i18nBlock))
+      contents.push(buildI18nTag(i18nBlock, options))
       return contents
     }, contents)
   }
@@ -89,7 +89,7 @@ function buildContent (i18nBlocks: SFCI18nBlock[], raw: string, blocks: SFCBlock
   return contents.join('')
 }
 
-function buildI18nTag (i18nBlock: SFCI18nBlock): string {
+function buildI18nTag (i18nBlock: SFCI18nBlock, options?: FormatOptions): string {
   const { locale, lang, messages } = i18nBlock
   let tag = '<i18n'
   if (locale) {
@@ -102,5 +102,5 @@ function buildI18nTag (i18nBlock: SFCI18nBlock): string {
 
   return `\n
 ${tag}
-${stringifyContent(locale ? messages[locale] : messages, lang)}</i18n>`
+${stringifyContent(locale ? messages[locale] : messages, lang, options)}</i18n>`
 }

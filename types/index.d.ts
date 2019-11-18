@@ -26,8 +26,8 @@ import { SFCDescriptor } from 'vue-template-compiler'
  */
 
 export type Locale = string
-export type LocaleMessage = 
-  | string 
+export type LocaleMessage =
+  | string
   | { [property: string]: LocaleMessage }
   | LocaleMessage[]
 export type LocaleMessages = Record<Locale, LocaleMessage>
@@ -79,6 +79,10 @@ export type SFCI18nBlock = {
 export type MetaLocaleMessage = {
   target: string,
   components: Record<string, SFCI18nBlock[]>
+}
+export type FormatOptions = {
+  intend?: number,
+  eof?: string
 }
 
 /**
@@ -153,7 +157,7 @@ export interface SFCFileInfo {
  */
 
 declare function squeeze (basePath: string, files: SFCFileInfo[]): MetaLocaleMessage
-declare function infuse (basePath: string, sources: SFCFileInfo[], meta: MetaLocaleMessage): SFCFileInfo[]
+declare function infuse (basePath: string, sources: SFCFileInfo[], meta: MetaLocaleMessage, options?: FormatOptions): SFCFileInfo[]
 
 // extend for vue-i18n-locale-message
 declare module 'vue-template-compiler' {
