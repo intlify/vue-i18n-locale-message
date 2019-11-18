@@ -1,3 +1,13 @@
+<a name="0.5.0"></a>
+# [0.5.0](https://github.com/kazupon/vue-i18n-locale-message/compare/v0.4.0...v0.5.0) (2019-11-18)
+
+
+### :star: New Features
+
+* format options for infusing ([#17](https://github.com/kazupon/vue-i18n-locale-message/issues/17)) by [@antfu](https://github.com/antfu) ([c6d1ef3](https://github.com/kazupon/vue-i18n-locale-message/commit/c6d1ef3)), closes [#17](https://github.com/kazupon/vue-i18n-locale-message/issues/17)
+
+
+
 <a name="0.4.0"></a>
 # [0.4.0](https://github.com/kazupon/vue-i18n-locale-message/compare/v0.3.0...v0.4.0) (2019-11-18)
 
