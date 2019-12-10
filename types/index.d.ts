@@ -159,6 +159,14 @@ export interface SFCFileInfo {
 declare function squeeze (basePath: string, files: SFCFileInfo[]): MetaLocaleMessage
 declare function infuse (basePath: string, sources: SFCFileInfo[], meta: MetaLocaleMessage, options?: FormatOptions): SFCFileInfo[]
 
+export interface Provider {
+  push (messages: LocaleMessages, dryRun: boolean): boolean
+}
+
+export interface ProviderConstructor {
+  new (configration?: JSON): Provider
+}
+
 // extend for vue-i18n-locale-message
 declare module 'vue-template-compiler' {
   interface SFCDescriptor {
