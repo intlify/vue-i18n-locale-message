@@ -44,6 +44,7 @@ yarn global vue-i18n-locale-message
 - CLI
   - squeeze the locale messages from `i18n` custom block
   - infuse the locale messages to `i18n` custom block
+  - push the locale messages to localization service
 
 ## :rocket: Usages
 
@@ -101,13 +102,22 @@ vue-i18n-locale-message squeeze --target=./src --output=./messages.json
 vue-i18n-locale-message infuse --target=./src --locales=./translated.json
 ```
 
+#### push
+
+```sh
+vue-i18n-locale-message push --provider=l10n-service-provider \
+  --conf=110n-service-provider-conf.json \
+  --target-paths=./src/locales/*.json \
+  --filename-match=^([\\w]*)\\.json
+```
+
 ## :raising_hand: Motivations
 
 The big motivation is as follows.
 
 - :tired_face: Hard to integrate locale messages for localization services
 - :tired_face: Hard to maintain consistency of locale message keys (`eslint-plugin-vue-i18n` need it!)
-- :pray: Requested by 3rd vendor tools (`vue-i18n-ally` and etc ...)
+- :pray: Requested by 3rd vendor tools (`i18n-ally` and etc ...)
 
 ## :book: API: Specifications
 
