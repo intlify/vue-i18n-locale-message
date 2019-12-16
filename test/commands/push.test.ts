@@ -1,4 +1,5 @@
 import * as yargs from 'yargs'
+import * as path from 'path'
 
 // -------
 // mocking
@@ -57,7 +58,7 @@ test('not specified --target and --targetPaths', async () => {
 
 test('--target option', async () => {
   // setup mocks
-  mockPush.mockImplementation(messages => true)
+  mockPush.mockImplementation(resource => true)
 
   // run
   const push = await import('../../src/commands/push')
@@ -68,12 +69,17 @@ test('--target option', async () => {
     })
   })
 
-  expect(mockPush).toHaveBeenCalledWith({ en: { hello: 'world' }}, false)
+  expect(mockPush).toHaveBeenCalledWith({
+    messages: {
+      en: { hello: 'world' }
+    },
+    mode: 'locale-message'
+  }, false)
 })
 
 test('--locale option', async () => {
   // setup mocks
-  mockPush.mockImplementation(messages => true)
+  mockPush.mockImplementation(resource => true)
 
   // run
   const push = await import('../../src/commands/push')
@@ -84,28 +90,44 @@ test('--locale option', async () => {
     })
   })
 
-  expect(mockPush).toHaveBeenCalledWith({ ja: { hello: '世界' }}, false)
+  expect(mockPush).toHaveBeenCalledWith({
+    messages: {
+      ja: { hello: '世界' }
+    },
+    mode: 'locale-message'
+  }, false)
 })
 
 test('--conf option', async () => {
   // setup mocks
-  mockPush.mockImplementation(messages => true)
+  mockPush.mockImplementation(reosurce => true)
 
   // run
+  const TARGET_LOCALE = './test/fixtures/locales/en.json'
   const push = await import('../../src/commands/push')
   const cmd = yargs.command(push)
   await new Promise((resolve, reject) => {
-    cmd.parse(`push --provider=@scope/l10n-service-provider --conf=./test/fixtures/conf/l10n-service-provider-conf.json --target=./test/fixtures/locales/en.json`, (err, argv, output) => {
+    cmd.parse(`push --provider=@scope/l10n-service-provider --conf=./test/fixtures/conf/l10n-service-provider-conf.json --target=${TARGET_LOCALE}`, (err, argv, output) => {
       err ? reject(err) : resolve(output)
     })
   })
 
-  expect(L10nServiceProvider).toHaveBeenCalledWith({ provider: { token: 'xxx' }})
+  expect(L10nServiceProvider).toHaveBeenCalledWith({
+    provider: { token: 'xxx' },
+    pushMode: 'file-path'
+  })
+  expect(mockPush).toHaveBeenCalledWith({
+    files: [{
+      locale: 'en',
+      path: path.resolve(TARGET_LOCALE)
+    }],
+    mode: 'file-path'
+  }, false)
 })
 
-test('--targetPaths option', async () => {
+test('--target-paths option', async () => {
   // setup mocks
-  mockPush.mockImplementation(messages => true)
+  mockPush.mockImplementation(resource => true)
 
   // run
   const push = await import('../../src/commands/push')
@@ -117,22 +139,25 @@ test('--targetPaths option', async () => {
   })
 
   expect(mockPush).toHaveBeenCalledWith({
-    en: {
-      hello: 'world'
+    messages: {
+      en: {
+        hello: 'world'
+      },
+      lang: {
+        hello: '世界'
+      },
+      ja: {
+        hello: 'こんにちわわわ！',
+        world: 'ザ・ワールド'
+      }
     },
-    lang: {
-      hello: '世界'
-    },
-    ja: {
-      hello: 'こんにちわわわ！',
-      world: 'ザ・ワールド'
-    }
+    mode: 'locale-message'
   }, false)
 })
 
-test('not specified --filenameMatch', async () => {
+test('not specified --filename-match', async () => {
   // setup mocks
-  mockPush.mockImplementation(messages => true)
+  mockPush.mockImplementation(resource => true)
 
   // run
   const push = await import('../../src/commands/push')
@@ -146,9 +171,9 @@ test('not specified --filenameMatch', async () => {
   expect(spyLog).toHaveBeenCalledWith('You need to specify together --filename-match')
 })
 
-test('--dryRun option', async () => {
+test('--dry-run option', async () => {
   // setup mocks
-  mockPush.mockImplementation(messages => false)
+  mockPush.mockImplementation(resource => false)
 
   // run
   const push = await import('../../src/commands/push')
@@ -159,5 +184,10 @@ test('--dryRun option', async () => {
     })
   })
 
-  expect(mockPush).toHaveBeenCalledWith({ ja: { hello: '世界' }}, true)
+  expect(mockPush).toHaveBeenCalledWith({
+    messages: {
+      ja: { hello: '世界' }
+    },
+    mode: 'locale-message'
+  }, true)
 })

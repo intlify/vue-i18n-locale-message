@@ -3,9 +3,16 @@ import { Arguments, Argv } from 'yargs'
 import { resolve } from '../utils'
 import path from 'path'
 import glob from 'glob'
-import { ProviderConstructor, LocaleMessages } from '../../types'
+
 import { debug as Debug } from 'debug'
 const debug = Debug('vue-i18n-locale-message:commands:push')
+
+import {
+  ProviderConstructor,
+  ProviderConfiguration,
+  ProviderPushResource,
+  ProviderPushMode
+} from '../../types'
 
 type PushOptions = {
   provider: string
@@ -16,6 +23,8 @@ type PushOptions = {
   filenameMatch?: string
   dryRun: boolean
 }
+
+const DEFUALT_CONF = { provider: {}, pushMode: 'locale-message' } as ProviderConfiguration
 
 export const command = 'push'
 export const aliases = 'ph'
@@ -62,7 +71,7 @@ export const builder = (args: Argv): Argv<PushOptions> => {
     })
 }
 
-export const handler = (args: Arguments<PushOptions>): void => {
+export const handler = async (args: Arguments<PushOptions>): Promise<unknown> => {
   const ProviderConstructor = loadProvider(args.provider)
 
   if (ProviderConstructor === null) {
@@ -71,7 +80,7 @@ export const handler = (args: Arguments<PushOptions>): void => {
     return
   }
 
-  let conf
+  let conf = DEFUALT_CONF
   if (args.conf) {
     conf = loadProviderConf(resolve(args.conf))
   }
@@ -82,41 +91,17 @@ export const handler = (args: Arguments<PushOptions>): void => {
     return
   }
 
-  let messages: LocaleMessages = {}
-
-  if (args.target) {
-    const targetPath = resolve(args.target)
-    const parsed = path.parse(targetPath)
-    const locale = args.locale ? args.locale : parsed.name
-    messages = Object.assign(messages, { [locale]: require(targetPath) })
-  } else if (args.targetPaths) {
-    const filenameMatch = args.filenameMatch
-    if (!filenameMatch) {
-      // TODO: should refactor console message
-      console.log('You need to specify together --filename-match')
-      return
-    }
-    const targetPaths = args.targetPaths.split(',').filter(p => p)
-    targetPaths.forEach(targetPath => {
-      const globedPaths = glob.sync(targetPath).map(p => resolve(p))
-      globedPaths.forEach(fullPath => {
-        const parsed = path.parse(fullPath)
-        const re = new RegExp(filenameMatch, 'ig')
-        const match = re.exec(parsed.base)
-        debug('regex match', match, fullPath)
-        if (match && match[1]) {
-          const locale = match[1]
-          messages = Object.assign(messages, { [locale]: require(fullPath) })
-        } else {
-          // TODO: should refactor console message
-          console.log(`${fullPath} is not matched with ${filenameMatch}`)
-        }
-      })
-    })
+  let resource
+  try {
+    resource = getProviderPushResource(args, conf.pushMode)
+  } catch (e) {
+    console.log(e.message)
+    return
   }
 
   const provider = new ProviderConstructor(conf)
-  if (provider.push(messages, args.dryRun)) {
+  const ret = await provider.push(resource, args.dryRun)
+  if (ret) {
     // TODO: should refactor console message
     console.log('push success')
   } else {
@@ -134,12 +119,69 @@ function loadProvider (provider: string): ProviderConstructor | null {
   return mod
 }
 
-function loadProviderConf (confPath: string): JSON | undefined {
-  let conf
+function loadProviderConf (confPath: string): ProviderConfiguration {
+  let conf = DEFUALT_CONF
   try {
-    conf = require(confPath) as JSON
+    conf = require(confPath) as ProviderConfiguration
   } catch (e) { }
   return conf
+}
+
+function getProviderPushResource (args: Arguments<PushOptions>, mode: ProviderPushMode): ProviderPushResource {
+  const resource = { mode } as ProviderPushResource
+  debug(`getProviderPushResource: mode=${mode}`)
+
+  if (mode === 'locale-message') {
+    resource.messages = {}
+  } else { // 'raw-file'
+    resource.files = []
+  }
+
+  if (args.target) {
+    const targetPath = resolve(args.target)
+    const parsed = path.parse(targetPath)
+    const locale = args.locale ? args.locale : parsed.name
+    if (mode === 'locale-message') {
+      resource.messages = Object.assign(resource.messages, { [locale]: require(targetPath) })
+    } else { // 'file-path'
+      resource.files?.push({
+        locale,
+        path: targetPath
+      })
+    }
+  } else if (args.targetPaths) {
+    const filenameMatch = args.filenameMatch
+    if (!filenameMatch) {
+      // TODO: should refactor console message
+      throw new Error('You need to specify together --filename-match')
+    }
+    const targetPaths = args.targetPaths.split(',').filter(p => p)
+    targetPaths.forEach(targetPath => {
+      const globedPaths = glob.sync(targetPath).map(p => resolve(p))
+      globedPaths.forEach(fullPath => {
+        const parsed = path.parse(fullPath)
+        const re = new RegExp(filenameMatch, 'ig')
+        const match = re.exec(parsed.base)
+        debug('regex match', match, fullPath)
+        if (match && match[1]) {
+          const locale = match[1]
+          if (mode === 'locale-message') {
+            resource.messages = Object.assign(resource.messages, { [locale]: require(fullPath) })
+          } else { // 'file-path'
+            resource.files?.push({
+              locale,
+              path: fullPath
+            })
+          }
+        } else {
+          // TODO: should refactor console message
+          console.log(`${fullPath} is not matched with ${filenameMatch}`)
+        }
+      })
+    })
+  }
+
+  return resource
 }
 
 export default {

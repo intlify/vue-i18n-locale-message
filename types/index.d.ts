@@ -159,12 +159,41 @@ export interface SFCFileInfo {
 declare function squeeze (basePath: string, files: SFCFileInfo[]): MetaLocaleMessage
 declare function infuse (basePath: string, sources: SFCFileInfo[], meta: MetaLocaleMessage, options?: FormatOptions): SFCFileInfo[]
 
+export type ProviderPushMode = 'file-path' | 'locale-message'
+
+export type ProviderPushFileInfo = {
+  locale: Locale
+  path: string
+}
+
+export type ProviderPushResource = {
+  mode: ProviderPushMode
+  files?: ProviderPushFileInfo[]
+  messages?: LocaleMessages
+}
+
 export interface Provider {
-  push (messages: LocaleMessages, dryRun: boolean): boolean
+  push (resource: ProviderPushResource, dryRun: boolean): Promise<boolean>
 }
 
 export interface ProviderConstructor {
-  new (configration?: JSON): Provider
+  new (configration?: ProviderConfiguration): Provider
+}
+
+/**
+ *  ProviderConfiguration provider fields structure
+ *    e.g.
+ *    {
+ *      "provider": {
+ *        "token": "xxx"
+ *      },
+ *      "pushMode": "file-path"
+ *    }
+ */
+
+export type ProviderConfiguration = {
+  provider: any // TODO: should be reoslve types
+  pushMode: ProviderPushMode
 }
 
 // extend for vue-i18n-locale-message
