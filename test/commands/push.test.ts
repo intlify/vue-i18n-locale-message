@@ -52,7 +52,7 @@ test('not specified --target and --targetPaths', async () => {
       err ? reject(err) : resolve(output)
     })
   })
-  expect(spyLog).toHaveBeenCalledWith('You need to specify either --target or --targetPaths')
+  expect(spyLog).toHaveBeenCalledWith('You need to specify either --target or --target-paths')
 })
 
 test('--target option', async () => {
@@ -111,7 +111,7 @@ test('--targetPaths option', async () => {
   const push = await import('../../src/commands/push')
   const cmd = yargs.command(push)
   await new Promise((resolve, reject) => {
-    cmd.parse(`push --provider=@scope/l10n-service-provider --targetPaths=./test/fixtures/locales/*.json --filenameMatch=^([\\w]*)\\.json`, (err, argv, output) => {
+    cmd.parse(`push --provider=@scope/l10n-service-provider --target-paths=./test/fixtures/locales/*.json --filename-match=^([\\w]*)\\.json`, (err, argv, output) => {
       err ? reject(err) : resolve(output)
     })
   })
@@ -138,12 +138,12 @@ test('not specified --filenameMatch', async () => {
   const push = await import('../../src/commands/push')
   const cmd = yargs.command(push)
   await new Promise((resolve, reject) => {
-    cmd.parse(`push --provider=@scope/l10n-service-provider --targetPaths=./test/fixtures/locales/*.json`, (err, argv, output) => {
+    cmd.parse(`push --provider=@scope/l10n-service-provider --target-paths=./test/fixtures/locales/*.json`, (err, argv, output) => {
       err ? reject(err) : resolve(output)
     })
   })
 
-  expect(spyLog).toHaveBeenCalledWith('You need to specify together --filenameMatch')
+  expect(spyLog).toHaveBeenCalledWith('You need to specify together --filename-match')
 })
 
 test('--dryRun option', async () => {

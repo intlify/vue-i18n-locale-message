@@ -78,7 +78,7 @@ export const handler = (args: Arguments<PushOptions>): void => {
 
   if (!args.target && !args.targetPaths) {
     // TODO: should refactor console message
-    console.log('You need to specify either --target or --targetPaths')
+    console.log('You need to specify either --target or --target-paths')
     return
   }
 
@@ -93,7 +93,7 @@ export const handler = (args: Arguments<PushOptions>): void => {
     const filenameMatch = args.filenameMatch
     if (!filenameMatch) {
       // TODO: should refactor console message
-      console.log('You need to specify together --filenameMatch')
+      console.log('You need to specify together --filename-match')
       return
     }
     const targetPaths = args.targetPaths.split(',').filter(p => p)
