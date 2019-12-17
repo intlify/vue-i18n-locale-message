@@ -8,7 +8,7 @@ import { debug as Debug } from 'debug'
 const debug = Debug('vue-i18n-locale-message:commands:push')
 
 import {
-  ProviderConstructor,
+  ProviderFactory,
   ProviderConfiguration,
   ProviderPushResource,
   ProviderPushMode
@@ -72,9 +72,9 @@ export const builder = (args: Argv): Argv<PushOptions> => {
 }
 
 export const handler = async (args: Arguments<PushOptions>): Promise<unknown> => {
-  const ProviderConstructor = loadProvider(args.provider)
+  const ProviderFactory = loadProvider(args.provider)
 
-  if (ProviderConstructor === null) {
+  if (ProviderFactory === null) {
     // TODO: should refactor console message
     console.log(`Not found ${args.provider} provider`)
     return
@@ -99,22 +99,28 @@ export const handler = async (args: Arguments<PushOptions>): Promise<unknown> =>
     return
   }
 
-  const provider = new ProviderConstructor(conf)
-  const ret = await provider.push(resource, args.dryRun)
-  if (ret) {
+  try {
+    const provider = ProviderFactory(conf)
+    await provider.push(resource, args.dryRun)
     // TODO: should refactor console message
     console.log('push success')
-  } else {
+  } catch (e) {
     // TODO: should refactor console message
-    console.error('push fail')
+    console.error('push fail', e)
   }
 }
 
-function loadProvider (provider: string): ProviderConstructor | null {
-  let mod: ProviderConstructor | null = null
+function loadProvider (provider: string): ProviderFactory | null {
+  let mod: ProviderFactory | null = null
   try {
-    // NOTE: Should we check the interfaces ?
-    mod = require(require.resolve(provider)) as ProviderConstructor
+    // TODO: should validate I/F checking & dynamic importing
+    const m = require(require.resolve(provider))
+    debug('loaderProvider', m)
+    if ('__esModule' in m) {
+      mod = m.default as ProviderFactory
+    } else {
+      mod = m as ProviderFactory
+    }
   } catch (e) { }
   return mod
 }
@@ -122,6 +128,7 @@ function loadProvider (provider: string): ProviderConstructor | null {
 function loadProviderConf (confPath: string): ProviderConfiguration {
   let conf = DEFUALT_CONF
   try {
+    // TODO: should validate I/F checking & dynamic importing
     conf = require(confPath) as ProviderConfiguration
   } catch (e) { }
   return conf
@@ -133,7 +140,7 @@ function getProviderPushResource (args: Arguments<PushOptions>, mode: ProviderPu
 
   if (mode === 'locale-message') {
     resource.messages = {}
-  } else { // 'raw-file'
+  } else { // 'file-path'
     resource.files = []
   }
 

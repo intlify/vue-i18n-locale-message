@@ -4,7 +4,7 @@ class L10nServiceProvider {
   }
 
   async push (resource, dryRun) {
-    return true
+    return
   }
 }
 

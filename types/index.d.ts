@@ -173,12 +173,10 @@ export type ProviderPushResource = {
 }
 
 export interface Provider {
-  push (resource: ProviderPushResource, dryRun: boolean): Promise<boolean>
+  push (resource: ProviderPushResource, dryRun: boolean): Promise<void>
 }
 
-export interface ProviderConstructor {
-  new (configration?: ProviderConfiguration): Provider
-}
+export type ProviderFactory<T = {}> = (configration: ProviderConfiguration<T>) => Provider
 
 /**
  *  ProviderConfiguration provider fields structure
@@ -191,10 +189,12 @@ export interface ProviderConstructor {
  *    }
  */
 
-export type ProviderConfiguration = {
-  provider: any // TODO: should be reoslve types
+export interface ProviderConfiguration<T = {}> {
+  provider: { [key in keyof ProviderConfigurationValue<T>]: ProviderConfigurationValue<T>[key] }
   pushMode: ProviderPushMode
 }
+
+export type ProviderConfigurationValue<T = {}> = T & { [prop: string]: unknown }
 
 // extend for vue-i18n-locale-message
 declare module 'vue-template-compiler' {
