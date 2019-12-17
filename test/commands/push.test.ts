@@ -1,9 +1,6 @@
 import * as yargs from 'yargs'
 import * as path from 'path'
 
-import { debug as Debug } from 'debug'
-const debug = Debug('vue-i18n-locale-message:test')
-
 // -------
 // mocking
 
@@ -14,15 +11,6 @@ jest.mock('@scope/l10n-service-provider', () => {
   })
 })
 import L10nServiceProvider from '@scope/l10n-service-provider'
-
-jest.mock('@scope/poeditor-service-provider', () => {
-  const mod = jest.requireActual('../../src/poeditor-service-provider')
-  debug('modmod', mod)
-  return mod
-  // const ret = { __esModule: true, ...mod }
-  // return ret
-})
-import PoeditorServiceProvider from '@scope/poeditor-service-provider'
 
 // -------------------
 // setup/teadown hooks
