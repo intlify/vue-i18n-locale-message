@@ -65,8 +65,7 @@
   },
   "files": [
     "types",
-    "lib",
-    "src"
+    "lib"
   ],
   "homepage": "https://github.com/kazupon/vue-i18n-locale-message#readme",
   "keywords": [
