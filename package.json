@@ -47,7 +47,7 @@
     "vue-template-compiler": "^2.6.10"
   },
   "engines": {
-    "node": ">= 8"
+    "node": ">= 10"
   },
   "files": [
     "types",
