@@ -1,3 +1,17 @@
+<a name="0.6.0"></a>
+# [0.6.0](https://github.com/kazupon/vue-i18n-locale-message/compare/v0.5.0...v0.6.0) (2019-12-18)
+
+
+### :boom: Breaking changes
+
+* deprecate node v10.x ([#23](https://github.com/kazupon/vue-i18n-locale-message/issues/23)) by [@kazu_pon](https://github.com/kazu_pon) ([490e4d9](https://github.com/kazupon/vue-i18n-locale-message/commit/490e4d9)), closes [#23](https://github.com/kazupon/vue-i18n-locale-message/issues/23)
+
+
+### :star: New Features
+
+* push command ([#21](https://github.com/kazupon/vue-i18n-locale-message/issues/21)) by [@kazupon](https://github.com/kazupon) ([7cdf3f4](https://github.com/kazupon/vue-i18n-locale-message/commit/7cdf3f4)), closes [#21](https://github.com/kazupon/vue-i18n-locale-message/issues/21)
+
+
 <a name="0.5.0"></a>
 # [0.5.0](https://github.com/kazupon/vue-i18n-locale-message/compare/v0.4.0...v0.5.0) (2019-11-18)
 
