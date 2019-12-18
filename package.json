@@ -24,7 +24,7 @@
     "@types/debug": "^4.1.4",
     "@types/deep-diff": "^1.0.0",
     "@types/glob": "^7.1.1",
-    "@types/jest": "^24.0.15",
+    "@types/jest": "^24.0.24",
     "@types/js-yaml": "^3.12.1",
     "@types/json5": "^0.0.30",
     "@types/node": "^12.6.8",
@@ -38,7 +38,8 @@
     "eslint": "^6.6.0",
     "eslint-plugin-vue-libs": "^4.0.0",
     "git-commit-message-convention": "git://github.com/kazupon/git-commit-message-convention.git",
-    "jest": "^24.8.0",
+    "jest": "^24.9.0",
+    "jest-watch-typeahead": "^0.4.2",
     "opener": "^1.5.1",
     "ts-jest": "^24.0.2",
     "typescript": "^3.7.3",
@@ -73,6 +74,7 @@
   },
   "scripts": {
     "build": "tsc -p .",
+    "build:watch": "tsc -p . --watch",
     "changelog": "conventional-changelog -i CHANGELOG.md -s -n ./node_modules/git-commit-message-convention/convention.js",
     "clean": "rm -rf ./coverage && rm -rf ./lib/*.js*",
     "coverage": "opener coverage/lcov-report/index.html",
@@ -81,7 +83,7 @@
     "test": "npm run lint && npm run test:cover",
     "test:cover": "npm run test:unit -- --coverage",
     "test:unit": "jest --env node",
-    "watch": "tsc -p . --watch"
+    "test:watch": "jest --env node --watch"
   },
   "types": "types/index.d.ts"
 }
