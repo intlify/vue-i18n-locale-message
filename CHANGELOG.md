@@ -1,3 +1,13 @@
+<a name="0.6.1"></a>
+## [0.6.1](https://github.com/kazupon/vue-i18n-locale-message/compare/v0.6.0...v0.6.1) (2019-12-18)
+
+
+### :bug: Bug Fixes
+
+* split vue-template-compiler shim definition from index.d.ts ([#24](https://github.com/kazupon/vue-i18n-locale-message/issues/24)) ([92c4dff](https://github.com/kazupon/vue-i18n-locale-message/commit/92c4dff)), closes [#24](https://github.com/kazupon/vue-i18n-locale-message/issues/24)
+
+
+
 <a name="0.6.0"></a>
 # [0.6.0](https://github.com/kazupon/vue-i18n-locale-message/compare/v0.5.0...v0.6.0) (2019-12-18)
 
