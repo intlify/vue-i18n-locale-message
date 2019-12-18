@@ -159,6 +159,43 @@ export interface SFCFileInfo {
 declare function squeeze (basePath: string, files: SFCFileInfo[]): MetaLocaleMessage
 declare function infuse (basePath: string, sources: SFCFileInfo[], meta: MetaLocaleMessage, options?: FormatOptions): SFCFileInfo[]
 
+export type ProviderPushMode = 'file-path' | 'locale-message'
+
+export type ProviderPushFileInfo = {
+  locale: Locale
+  path: string
+}
+
+export type ProviderPushResource = {
+  mode: ProviderPushMode
+  files?: ProviderPushFileInfo[]
+  messages?: LocaleMessages
+}
+
+export interface Provider {
+  push (resource: ProviderPushResource, dryRun: boolean): Promise<void>
+}
+
+export type ProviderFactory<T = {}> = (configration: ProviderConfiguration<T>) => Provider
+
+/**
+ *  ProviderConfiguration provider fields structure
+ *    e.g.
+ *    {
+ *      "provider": {
+ *        "token": "xxx"
+ *      },
+ *      "pushMode": "file-path"
+ *    }
+ */
+
+export interface ProviderConfiguration<T = {}> {
+  provider: { [key in keyof ProviderConfigurationValue<T>]: ProviderConfigurationValue<T>[key] }
+  pushMode: ProviderPushMode
+}
+
+export type ProviderConfigurationValue<T = {}> = T & { [prop: string]: unknown }
+
 // extend for vue-i18n-locale-message
 declare module 'vue-template-compiler' {
   interface SFCDescriptor {
