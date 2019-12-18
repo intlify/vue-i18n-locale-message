@@ -1,4 +1,6 @@
-import { SFCDescriptor, SFCBlock } from 'vue-template-compiler'
+/* eslint-disable-next-line */
+/// <reference path="../types/shims-vue-template-compiler.d.ts"/>
+import { SFCBlock, SFCDescriptor } from 'vue-template-compiler'
 import { Locale, MetaLocaleMessage, SFCI18nBlock, SFCFileInfo, FormatOptions } from '../types'
 
 import { escape, reflectSFCDescriptor, parseContent, stringifyContent } from './utils'

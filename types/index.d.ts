@@ -1,5 +1,3 @@
-import { SFCDescriptor } from 'vue-template-compiler'
-
 /**
  *  Locale Message Recursive Structure
  *    e.g.
@@ -195,13 +193,3 @@ export interface ProviderConfiguration<T = {}> {
 }
 
 export type ProviderConfigurationValue<T = {}> = T & { [prop: string]: unknown }
-
-// extend for vue-i18n-locale-message
-declare module 'vue-template-compiler' {
-  interface SFCDescriptor {
-    raw: string
-    contentPath: string
-    component: string
-    hierarchy: string[]
-  }
-}
