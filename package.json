@@ -87,7 +87,7 @@
   "scripts": {
     "build": "tsc -p .",
     "build:watch": "tsc -p . --watch",
-    "clean": "rm -rf ./coverage && rm -rf ./lib/*.js*",
+    "clean": "rm -rf ./coverage",
     "coverage": "opener coverage/lcov-report/index.html",
     "lint": "eslint ./src ./test --ext .ts",
     "release:prepare": "shipjs prepare",
