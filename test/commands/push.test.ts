@@ -31,10 +31,21 @@ afterEach(() => {
 // ----------
 // test cases
 
-test('--provider: not found', async () => {
-  // setup mocks
+test('require option', async () => {
+  const push = await import('../../src/commands/push')
+  const cmd = yargs.command(push)
+  try {
+    await new Promise((resolve, reject) => {
+      cmd.parse(`push`, (err, argv, output) => {
+        err ? reject(err) : resolve(output)
+      })
+    })
+  } catch (e) {
+    expect(e).toMatchObject({ name: 'YError' })
+  }
+})
 
-  // run
+test('--provider: not found', async () => {
   const push = await import('../../src/commands/push')
   const cmd = yargs.command(push)
   await new Promise((resolve, reject) => {
