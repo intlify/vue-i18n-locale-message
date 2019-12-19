@@ -1,6 +1,6 @@
 import { Arguments, Argv } from 'yargs'
 
-import { resolve } from '../utils'
+import { resolve, loadProvider, loadProviderConf, DEFUALT_CONF } from '../utils'
 import path from 'path'
 import glob from 'glob'
 
@@ -8,8 +8,6 @@ import { debug as Debug } from 'debug'
 const debug = Debug('vue-i18n-locale-message:commands:push')
 
 import {
-  ProviderFactory,
-  ProviderConfiguration,
   ProviderPushResource,
   ProviderPushMode
 } from '../../types'
@@ -23,8 +21,6 @@ type PushOptions = {
   filenameMatch?: string
   dryRun: boolean
 }
-
-const DEFUALT_CONF = { provider: {}, pushMode: 'locale-message' } as ProviderConfiguration
 
 export const command = 'push'
 export const aliases = 'ph'
@@ -108,30 +104,6 @@ export const handler = async (args: Arguments<PushOptions>): Promise<unknown> =>
     // TODO: should refactor console message
     console.error('push fail', e)
   }
-}
-
-function loadProvider (provider: string): ProviderFactory | null {
-  let mod: ProviderFactory | null = null
-  try {
-    // TODO: should validate I/F checking & dynamic importing
-    const m = require(require.resolve(provider))
-    debug('loaderProvider', m)
-    if ('__esModule' in m) {
-      mod = m.default as ProviderFactory
-    } else {
-      mod = m as ProviderFactory
-    }
-  } catch (e) { }
-  return mod
-}
-
-function loadProviderConf (confPath: string): ProviderConfiguration {
-  let conf = DEFUALT_CONF
-  try {
-    // TODO: should validate I/F checking & dynamic importing
-    conf = require(confPath) as ProviderConfiguration
-  } catch (e) { }
-  return conf
 }
 
 function getProviderPushResource (args: Arguments<PushOptions>, mode: ProviderPushMode): ProviderPushResource {

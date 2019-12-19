@@ -6,6 +6,10 @@ class L10nServiceProvider {
   async push (resource, dryRun) {
     return
   }
+
+  async pull (locales, dryRun) {
+    return Promise.resolve({ ja: {}, en: {}})
+  }
 }
 
 module.exports = L10nServiceProvider

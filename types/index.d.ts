@@ -170,8 +170,11 @@ export type ProviderPushResource = {
   messages?: LocaleMessages
 }
 
+export type ProviderPullResource = LocaleMessages
+
 export interface Provider {
   push (resource: ProviderPushResource, dryRun: boolean): Promise<void>
+  pull (locales: Locale[], dryRun: boolean): Promise<ProviderPullResource>
 }
 
 export type ProviderFactory<T = {}> = (configration: ProviderConfiguration<T>) => Provider
