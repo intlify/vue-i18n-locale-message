@@ -1,3 +1,12 @@
+
+## v0.7.0 (2019-12-19)
+
+#### :star: Features
+* [#33](https://github.com/kazupon/vue-i18n-locale-message/pull/33) pull command feature ([@kazupon](https://github.com/kazupon))
+
+#### Committers: 1
+- kazuya kawaguchi ([@kazupon](https://github.com/kazupon))
+
 <a name="0.6.1"></a>
 ## [0.6.1](https://github.com/kazupon/vue-i18n-locale-message/compare/v0.6.0...v0.6.1) (2019-12-18)
 
