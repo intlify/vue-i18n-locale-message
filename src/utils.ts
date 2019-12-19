@@ -1,6 +1,7 @@
 import { SFCDescriptor } from 'vue-template-compiler'
 import { SFCFileInfo, FormatOptions } from '../types'
 import { VueTemplateCompiler } from '@vue/component-compiler-utils/dist/types'
+import { ProviderFactory, ProviderConfiguration } from '../types'
 
 import { parse } from '@vue/component-compiler-utils'
 import * as compiler from 'vue-template-compiler'
@@ -120,4 +121,30 @@ export function readSFC (target: string): SFCFileInfo[] {
 function resolveGlob (target: string) {
   // TODO: async implementation
   return glob.sync(`${target}/**/*.vue`)
+}
+
+export const DEFUALT_CONF = { provider: {}, pushMode: 'locale-message' } as ProviderConfiguration
+
+export function loadProvider (provider: string): ProviderFactory | null {
+  let mod: ProviderFactory | null = null
+  try {
+    // TODO: should validate I/F checking & dynamic importing
+    const m = require(require.resolve(provider))
+    debug('loaderProvider', m)
+    if ('__esModule' in m) {
+      mod = m.default as ProviderFactory
+    } else {
+      mod = m as ProviderFactory
+    }
+  } catch (e) { }
+  return mod
+}
+
+export function loadProviderConf (confPath: string): ProviderConfiguration {
+  let conf = DEFUALT_CONF
+  try {
+    // TODO: should validate I/F checking & dynamic importing
+    conf = require(confPath) as ProviderConfiguration
+  } catch (e) { }
+  return conf
 }
