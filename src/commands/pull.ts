@@ -17,7 +17,7 @@ type PullOptions = {
   conf?: string
   output: string
   locales?: string
-  dryRun?: boolean
+  dryRun: boolean
 }
 
 export const command = 'pull'
