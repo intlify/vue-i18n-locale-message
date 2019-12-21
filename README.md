@@ -10,6 +10,14 @@ i18n locale messages management tool / library for vue-i18n
   <img src="https://c5.patreon.com/external/logo/become_a_patron_button.png" alt="Become a Patreon">
 </a>
 
+## :raising_hand: Motivations
+
+The big motivation is as follows.
+
+- :tired_face: Hard to integrate locale messages for localization services
+- :tired_face: Hard to maintain consistency of locale message keys (`eslint-plugin-vue-i18n` need it!)
+- :pray: Requested by 3rd vendor tools (`i18n-ally` and etc ...)
+
 ## :cd: Installation
 
 ### npm
@@ -45,6 +53,7 @@ yarn global vue-i18n-locale-message
   - squeeze the locale messages from `i18n` custom block
   - infuse the locale messages to `i18n` custom block
   - push the locale messages to localization service
+  - pull the locale mesagees from localization service
 
 ## :rocket: Usages
 
@@ -111,13 +120,13 @@ vue-i18n-locale-message push --provider=l10n-service-provider \
   --filename-match=^([\\w]*)\\.json
 ```
 
-## :raising_hand: Motivations
+#### pull
 
-The big motivation is as follows.
-
-- :tired_face: Hard to integrate locale messages for localization services
-- :tired_face: Hard to maintain consistency of locale message keys (`eslint-plugin-vue-i18n` need it!)
-- :pray: Requested by 3rd vendor tools (`i18n-ally` and etc ...)
+```sh
+vue-i18n-locale-message pull --provider=l10n-service-provider \
+  --conf=110n-service-provider-conf.json \
+  --output=./src/locales
+```
 
 ## :book: API: Specifications
 
