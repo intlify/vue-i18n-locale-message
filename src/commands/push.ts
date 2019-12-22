@@ -1,6 +1,12 @@
 import { Arguments, Argv } from 'yargs'
 
-import { resolve, loadProvider, loadProviderConf, DEFUALT_CONF } from '../utils'
+import {
+  resolve,
+  resolveProviderConf,
+  loadProvider,
+  loadProviderConf,
+  DEFUALT_CONF
+} from '../utils'
 import path from 'path'
 import glob from 'glob'
 
@@ -37,7 +43,7 @@ export const builder = (args: Argv): Argv<PushOptions> => {
     .option('conf', {
       type: 'string',
       alias: 'c',
-      describe: 'the json file configration of localization service provider'
+      describe: 'the json file configration of localization service provider. If omitted, use the suffix file name with `-conf` for provider name of --provider (e.g. <provider>-conf.json).'
     })
     .option('target', {
       type: 'string',
@@ -76,16 +82,14 @@ export const handler = async (args: Arguments<PushOptions>): Promise<unknown> =>
     return
   }
 
-  let conf = DEFUALT_CONF
-  if (args.conf) {
-    conf = loadProviderConf(resolve(args.conf))
-  }
-
   if (!args.target && !args.targetPaths) {
     // TODO: should refactor console message
     console.log('You need to specify either --target or --target-paths')
     return
   }
+
+  const confPath = resolveProviderConf(args.provider, args.conf)
+  const conf = loadProviderConf(confPath) || DEFUALT_CONF
 
   let resource
   try {

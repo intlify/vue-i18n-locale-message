@@ -12,20 +12,33 @@ jest.mock('@scope/l10n-service-provider', () => {
 })
 import L10nServiceProvider from '@scope/l10n-service-provider'
 
+jest.mock('@scope/l10n-omit-service-provider', () => {
+  return jest.fn().mockImplementation(() => {
+    return { push: jest.fn() }
+  })
+})
+import L10nOmitServiceProvider from '@scope/l10n-omit-service-provider'
+
 // -------------------
 // setup/teadown hooks
 
+const PROCESS_CWD_TARGET_PATH = path.resolve(__dirname)
+
+let orgCwd // for process.cwd mock
 let spyLog
 let spyError
 beforeEach(() => {
   spyLog = jest.spyOn(global.console, 'log')
   spyError = jest.spyOn(global.console, 'error')
+  orgCwd = process.cwd
+  process.cwd = jest.fn(() => PROCESS_CWD_TARGET_PATH) // mock: process.cwd
 })
 
 afterEach(() => {
   spyError.mockRestore()
   spyLog.mockRestore()
   jest.clearAllMocks()
+  process.cwd = orgCwd
 })
 
 // ----------
@@ -134,6 +147,23 @@ test('--conf option', async () => {
     }],
     mode: 'file-path'
   }, false)
+})
+
+test('--conf option omit', async () => {
+  // run
+  const TARGET_LOCALE = './test/fixtures/locales/en.json'
+  const push = await import('../../src/commands/push')
+  const cmd = yargs.command(push)
+  await new Promise((resolve, reject) => {
+    cmd.parse(`push --provider=@scope/l10n-omit-service-provider --target=${TARGET_LOCALE}`, (err, argv, output) => {
+      err ? reject(err) : resolve(output)
+    })
+  })
+
+  expect(L10nOmitServiceProvider).toHaveBeenCalledWith({
+    provider: { token: 'yyy' },
+    pushMode: 'file-path'
+  })
 })
 
 test('--target-paths option', async () => {

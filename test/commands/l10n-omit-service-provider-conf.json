@@ -1,0 +1,7 @@
+{
+  "provider": {
+    "token": "yyy"
+  },
+  "pushMode": "file-path"
+}
+  
