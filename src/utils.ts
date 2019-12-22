@@ -125,6 +125,15 @@ function resolveGlob (target: string) {
 
 export const DEFUALT_CONF = { provider: {}, pushMode: 'locale-message' } as ProviderConfiguration
 
+export function resolveProviderConf (provider: string, conf?: string) {
+  if (conf) {
+    return resolve(conf)
+  } else {
+    const parsed = path.parse(provider)
+    return resolve(process.cwd(), `${parsed.base}-conf.json`)
+  }
+}
+
 export function loadProvider (provider: string): ProviderFactory | null {
   let mod: ProviderFactory | null = null
   try {

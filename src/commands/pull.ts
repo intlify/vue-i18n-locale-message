@@ -9,7 +9,12 @@ const debug = Debug('vue-i18n-locale-message:commands:pull')
 const mkdirPromisify = promisify(fs.mkdir)
 const writeFilePromisify = promisify(fs.writeFile)
 
-import { resolve, loadProvider, loadProviderConf, DEFUALT_CONF } from '../utils'
+import {
+  resolveProviderConf,
+  loadProvider,
+  loadProviderConf,
+  DEFUALT_CONF
+} from '../utils'
 import { ProviderPullResource, Locale, LocaleMessage } from '../../types'
 
 type PullOptions = {
@@ -35,7 +40,7 @@ export const builder = (args: Argv): Argv<PullOptions> => {
     .option('conf', {
       type: 'string',
       alias: 'c',
-      describe: 'the json file configration of localization service provider'
+      describe: 'the json file configration of localization service provider. If omitted, use the suffix file name with `-conf` for provider name of --provider (e.g. <provider>-conf.json).'
     })
     .option('output', {
       type: 'string',
@@ -72,10 +77,8 @@ export const handler = async (args: Arguments<PullOptions>): Promise<unknown> =>
     return
   }
 
-  let conf = DEFUALT_CONF
-  if (args.conf) {
-    conf = loadProviderConf(resolve(args.conf))
-  }
+  const confPath = resolveProviderConf(args.provider, args.conf)
+  const conf = loadProviderConf(confPath) || DEFUALT_CONF
 
   try {
     const locales = args.locales?.split(',').filter(p => p) as Locale[] || []

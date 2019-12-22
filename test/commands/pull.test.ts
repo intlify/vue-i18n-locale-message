@@ -13,6 +13,17 @@ jest.mock('@scope/l10n-service-provider', () => {
 })
 import L10nServiceProvider from '@scope/l10n-service-provider'
 
+jest.mock('@scope/l10n-omit-service-provider', () => {
+  return jest.fn().mockImplementation(() => {
+    return { pull: jest.fn()
+      .mockImplementation(locales => {
+        return Promise.resolve({ ja: { hello: 'hello' }, en: { hello: 'こんにちわわわ！' }})
+      })
+    }
+  })
+})
+import L10nOmitServiceProvider from '@scope/l10n-omit-service-provider'
+
 // fs module
 jest.mock('fs', () => ({
   ...jest.requireActual('fs'),
@@ -24,17 +35,23 @@ import fs from 'fs'
 // --------------------
 // setup/teadown hooks
 
+const PROCESS_CWD_TARGET_PATH = path.resolve(__dirname)
+
+let orgCwd // for process.cwd mock
 let spyLog
 let spyError
 beforeEach(() => {
   spyLog = jest.spyOn(global.console, 'log')
   spyError = jest.spyOn(global.console, 'error')
+  orgCwd = process.cwd
+  process.cwd = jest.fn(() => PROCESS_CWD_TARGET_PATH) // mock: process.cwd
 })
 
 afterEach(() => {
   spyError.mockRestore()
   spyLog.mockRestore()
   jest.clearAllMocks()
+  process.cwd = orgCwd
 })
 
 // -----------
@@ -84,6 +101,24 @@ test('--conf option', async () => {
 
   expect(L10nServiceProvider).toHaveBeenCalledWith({
     provider: { token: 'xxx' },
+    pushMode: 'file-path'
+  })
+})
+
+test('--conf option omit', async () => {
+  // run
+  const pull = await import('../../src/commands/pull')
+  const cmd = yargs.command(pull)
+  await new Promise((resolve, reject) => {
+    cmd.parse(`pull --provider=@scope/l10n-omit-service-provider \
+      --output=./test/fixtures/locales \
+      --dry-run`, (err, argv, output) => {
+      err ? reject(err) : resolve(output)
+    })
+  })
+
+  expect(L10nOmitServiceProvider).toHaveBeenCalledWith({
+    provider: { token: 'yyy' },
     pushMode: 'file-path'
   })
 })
