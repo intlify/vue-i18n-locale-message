@@ -116,7 +116,6 @@ export type FormatOptions = {
  *      `,
  *    }
  */
-
 export interface SFCFileInfo {
   path: string
   content: string
@@ -157,6 +156,40 @@ export interface SFCFileInfo {
 declare function squeeze (basePath: string, files: SFCFileInfo[]): MetaLocaleMessage
 declare function infuse (basePath: string, sources: SFCFileInfo[], meta: MetaLocaleMessage, options?: FormatOptions): SFCFileInfo[]
 
+/**
+ *  Provider factory function
+ */
+export type ProviderFactory<T = {}> = (configration: ProviderConfiguration<T>) => Provider
+
+/**
+ *  Provider interface
+ */
+export interface Provider {
+  /**
+   * push the resource to localization service
+   * @param resource the resource that push to localization service
+   * @param dryRun whether the CLI run as dryRun mode
+   */
+  push (resource: ProviderPushResource, dryRun: boolean): Promise<void>
+  /**
+   * pull the resource from localization service
+   * @param locales locales that pull from localization service, if empty, you must pull the all locale messages
+   * @param dryRun whether the CLI run as dryRun mode
+   * @returns the resource of localization service
+   */
+  pull (locales: Locale[], dryRun: boolean): Promise<ProviderPullResource>
+}
+
+/**
+ *  mode that can be processed with provider push  
+ *  - 'file-path': 
+ *    To use when the provider uses the locale message directly from the file.
+ *    for example, used for file uploading.
+ *    When specified that mode, `ProviderPushResource` are passed from the CLI as `files`.
+ *  - 'locale-message':
+ *    To use when the provider uses the locale message.
+ *    When specified that mode, `ProviderPushResource` are passed from the CLI as `messaegs`.
+ */
 export type ProviderPushMode = 'file-path' | 'locale-message'
 
 export type ProviderPushFileInfo = {
@@ -172,13 +205,6 @@ export type ProviderPushResource = {
 
 export type ProviderPullResource = LocaleMessages
 
-export interface Provider {
-  push (resource: ProviderPushResource, dryRun: boolean): Promise<void>
-  pull (locales: Locale[], dryRun: boolean): Promise<ProviderPullResource>
-}
-
-export type ProviderFactory<T = {}> = (configration: ProviderConfiguration<T>) => Provider
-
 /**
  *  ProviderConfiguration provider fields structure
  *    e.g.
@@ -189,7 +215,6 @@ export type ProviderFactory<T = {}> = (configration: ProviderConfiguration<T>) =
  *      "pushMode": "file-path"
  *    }
  */
-
 export interface ProviderConfiguration<T = {}> {
   provider: { [key in keyof ProviderConfigurationValue<T>]: ProviderConfigurationValue<T>[key] }
   pushMode: ProviderPushMode
