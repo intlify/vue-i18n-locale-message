@@ -111,7 +111,7 @@ vue-i18n-locale-message squeeze --target=./src --output=./messages.json
 vue-i18n-locale-message infuse --target=./src --locales=./translated.json
 ```
 
-#### push
+#### Push
 
 ```sh
 vue-i18n-locale-message push --provider=l10n-service-provider \
@@ -120,7 +120,7 @@ vue-i18n-locale-message push --provider=l10n-service-provider \
   --filename-match=^([\\w]*)\\.json
 ```
 
-#### pull
+#### Pull
 
 ```sh
 vue-i18n-locale-message pull --provider=l10n-service-provider \
