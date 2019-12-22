@@ -158,7 +158,7 @@ Infuse the meta of locale messages to i18n custom block at single-file component
 
 ## :book: Provider: Specifications
 
-You can use the `push` or `pull` commands to push the locale message to the l10n service as a resource for that service, and also to pull resources from the l10n service as the locale message.
+You can use the `push` or `pull` commands to push the locale message to the localization service as a resource for that service, and also to pull resources from the l10n service as the locale message.
 
 <p align="center"><img src="./assets/push-pull-command-image.png" alt="Push and Pull Image"></p>
 
