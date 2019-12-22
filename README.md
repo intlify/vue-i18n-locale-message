@@ -156,6 +156,91 @@ Infuse the meta of locale messages to i18n custom block at single-file component
 
 `infuse` function will return new single-file components information that is updated with the single-file components information specified as `sources` and  the meta of locale message as `meta`.
 
+## :book: Provider: Specifications
+
+You can use the `push` or `pull` commands to push the locale message to the l10n service as a resource for that service, and also to pull resources from the l10n service as the locale message.
+
+<p align="center"><img src="./assets/push-pull-command-image.png" alt="Push and Pull Image"></p>
+
+When you run `push` or `pull` commands, you need the provider that implements the following.
+
+- export provider factory function
+- provider factory function must return a provider object that have the following I/F:
+  - `push` method
+  - `pull` method
+
+The type definition with TypeScript is as follows:
+
+```ts
+/**
+ *  Provider factory function
+ */
+type ProviderFactory<T = {}> = (configration: ProviderConfiguration<T>) => Provider
+
+/**
+ *  Provider interface
+ */
+interface Provider {
+  /**
+   * push the resource to localization service
+   * @param resource the resource that push to localization service
+   * @param dryRun whether the CLI run as dryRun mode
+   */
+  push (resource: ProviderPushResource, dryRun: boolean): Promise<void>
+  /**
+   * pull the resource from localization service
+   * @param locales locales that pull from localization service, if empty, you must pull the all locale messages
+   * @param dryRun whether the CLI run as dryRun mode
+   * @returns the resource of localization service
+   */
+  pull (locales: Locale[], dryRun: boolean): Promise<ProviderPullResource>
+}
+
+/**
+ *  mode that can be processed with provider push  
+ *  - 'file-path': 
+ *    To use when the provider uses the locale message directly from the file.
+ *    for example, used for file uploading.
+ *    When specified that mode, `ProviderPushResource` are passed from the CLI as `files`.
+ *  - 'locale-message':
+ *    To use when the provider uses the locale message.
+ *    When specified that mode, `ProviderPushResource` are passed from the CLI as `messaegs`.
+ */
+type ProviderPushMode = 'file-path' | 'locale-message'
+
+type ProviderPushFileInfo = {
+  locale: Locale
+  path: string
+}
+
+type ProviderPushResource = {
+  mode: ProviderPushMode
+  files?: ProviderPushFileInfo[]
+  messages?: LocaleMessages
+}
+
+type ProviderPullResource = LocaleMessages
+
+/**
+ *  ProviderConfiguration provider fields structure
+ *    e.g.
+ *    {
+ *      "provider": {
+ *        "token": "xxx"
+ *      },
+ *      "pushMode": "file-path"
+ *    }
+ */
+interface ProviderConfiguration<T = {}> {
+  provider: { [key in keyof ProviderConfigurationValue<T>]: ProviderConfigurationValue<T>[key] }
+  pushMode: ProviderPushMode
+}
+
+type ProviderConfigurationValue<T = {}> = T & { [prop: string]: unknown }
+```
+
+As an implementation example of Provider, there is [`poeditor-service-provider`](https://github.com/kazupon/poeditor-service-provider) implemented as localization service provider of poeditor.
+
 ## :notebook: CLI: Locale message squeezing rules
 
 The structure of locale messages to be squeezed is layered with the **directory structure** and **single-file component (`.vue`) filename**.
