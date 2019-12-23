@@ -107,7 +107,7 @@ export const handler = async (args: Arguments<PushOptions>): Promise<unknown> =>
 
   try {
     const provider = ProviderFactory(conf)
-    await provider.push(resource, args.dryRun)
+    await provider.push(resource, args.dryRun, args.normalize)
     // TODO: should refactor console message
     console.log('push success')
   } catch (e) {

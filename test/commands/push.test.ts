@@ -98,7 +98,7 @@ test('--target option', async () => {
       en: { hello: 'world' }
     },
     mode: 'locale-message'
-  }, false)
+  }, false, undefined)
 })
 
 test('--locale option', async () => {
@@ -119,7 +119,7 @@ test('--locale option', async () => {
       ja: { hello: '世界' }
     },
     mode: 'locale-message'
-  }, false)
+  }, false, undefined)
 })
 
 test('--conf option', async () => {
@@ -146,7 +146,7 @@ test('--conf option', async () => {
       path: path.resolve(TARGET_LOCALE)
     }],
     mode: 'file-path'
-  }, false)
+  }, false, undefined)
 })
 
 test('--conf option omit', async () => {
@@ -193,7 +193,7 @@ test('--target-paths option', async () => {
       }
     },
     mode: 'locale-message'
-  }, false)
+  }, false, undefined)
 })
 
 test('not specified --filename-match', async () => {
@@ -230,5 +230,26 @@ test('--dry-run option', async () => {
       ja: { hello: '世界' }
     },
     mode: 'locale-message'
-  }, true)
+  }, true, undefined)
+})
+
+test('--normalize option', async () => {
+  // setup mocks
+  mockPush.mockImplementation(resource => false)
+
+  // run
+  const push = await import('../../src/commands/push')
+  const cmd = yargs.command(push)
+  await new Promise((resolve, reject) => {
+    cmd.parse(`push --provider=@scope/l10n-service-provider --target=./test/fixtures/locales/lang.json --locale=ja --normalize=flat`, (err, argv, output) => {
+      err ? reject(err) : resolve(output)
+    })
+  })
+
+  expect(mockPush).toHaveBeenCalledWith({
+    messages: {
+      ja: { hello: '世界' }
+    },
+    mode: 'locale-message'
+  }, false, 'flat')
 })
