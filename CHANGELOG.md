@@ -1,4 +1,19 @@
 
+## v0.8.0 (2019-12-23)
+
+#### :star: Features
+* [#39](https://github.com/kazupon/vue-i18n-locale-message/pull/39) support --normalize option ([@kazupon](https://github.com/kazupon))
+
+#### :zap: Improvement Features
+* [#38](https://github.com/kazupon/vue-i18n-locale-message/pull/38) support default value when --conf is omitted ([@kazupon](https://github.com/kazupon))
+
+#### :boom: Breaking Change
+* [#40](https://github.com/kazupon/vue-i18n-locale-message/pull/40) breaking: change the provider push and pull I/F ([@kazupon](https://github.com/kazupon))
+
+#### Committers: 1
+- kazuya kawaguchi ([@kazupon](https://github.com/kazupon))
+
+
 ## v0.7.0 (2019-12-19)
 
 #### :star: Features
