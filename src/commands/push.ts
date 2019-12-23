@@ -25,6 +25,7 @@ type PushOptions = {
   locale?: string
   targetPaths?: string
   filenameMatch?: string
+  normalize?: string
   dryRun: boolean
 }
 
@@ -65,6 +66,11 @@ export const builder = (args: Argv): Argv<PushOptions> => {
       alias: 'm',
       describe: `option should be accepted a regex filenames, must be specified together --targets if it's directory path of locale messages`
     })
+    .option('normalize', {
+      type: 'string',
+      alias: 'n',
+      describe: 'option for the locale messages structure, you can specify the option, if you hope to normalize for the provider.'
+    })
     .option('dryRun', {
       type: 'boolean',
       alias: 'd',
@@ -101,7 +107,7 @@ export const handler = async (args: Arguments<PushOptions>): Promise<unknown> =>
 
   try {
     const provider = ProviderFactory(conf)
-    await provider.push(resource, args.dryRun)
+    await provider.push(resource, args.dryRun, args.normalize)
     // TODO: should refactor console message
     console.log('push success')
   } catch (e) {

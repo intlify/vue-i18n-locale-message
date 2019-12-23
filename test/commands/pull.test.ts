@@ -139,7 +139,7 @@ test('--locales option', async () => {
     })
   })
 
-  expect(mockPull).toHaveBeenCalledWith(['en', 'ja', 'fr'], true)
+  expect(mockPull).toHaveBeenCalledWith(['en', 'ja', 'fr'], true, undefined)
 })
 
 test('--output option', async () => {
@@ -163,4 +163,22 @@ test('--output option', async () => {
 
   expect(mockFS.mkdir.mock.calls[0][0]).toEqual(OUTPUT_FULL_PATH)
   expect(mockFS.mkdir.mock.calls[0][1]).toEqual({ recursive: true })
+})
+
+test('--normalize option', async () => {
+  // setup mocks
+  mockPull.mockImplementation(locales => Promise.resolve({ ja: {}, en: {}}))
+
+  // run
+  const pull = await import('../../src/commands/pull')
+  const cmd = yargs.command(pull)
+  await new Promise((resolve, reject) => {
+    cmd.parse(`pull --provider=@scope/l10n-service-provider \
+      --output=./test/fixtures/locales \
+      --normalize=hierarchy`, (err, argv, output) => {
+      err ? reject(err) : resolve(output)
+    })
+  })
+
+  expect(mockPull).toHaveBeenCalledWith([], false, 'hierarchy')
 })

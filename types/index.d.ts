@@ -170,19 +170,19 @@ export interface Provider {
    * @param resource the resource that push to localization service
    * @param dryRun whether the CLI run as dryRun mode
    */
-  push (resource: ProviderPushResource, dryRun: boolean): Promise<void>
+  push (resource: ProviderPushResource, dryRun: boolean, normalize?: string): Promise<void>
   /**
    * pull the resource from localization service
    * @param locales locales that pull from localization service, if empty, you must pull the all locale messages
    * @param dryRun whether the CLI run as dryRun mode
    * @returns the resource of localization service
    */
-  pull (locales: Locale[], dryRun: boolean): Promise<ProviderPullResource>
+  pull (locales: Locale[], dryRun: boolean, normalize?: string): Promise<ProviderPullResource>
 }
 
 /**
- *  mode that can be processed with provider push  
- *  - 'file-path': 
+ *  mode that can be processed with provider push
+ *  - 'file-path':
  *    To use when the provider uses the locale message directly from the file.
  *    for example, used for file uploading.
  *    When specified that mode, `ProviderPushResource` are passed from the CLI as `files`.
