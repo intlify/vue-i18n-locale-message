@@ -25,6 +25,7 @@ type PushOptions = {
   locale?: string
   targetPaths?: string
   filenameMatch?: string
+  normalize?: string
   dryRun: boolean
 }
 
@@ -64,6 +65,11 @@ export const builder = (args: Argv): Argv<PushOptions> => {
       type: 'string',
       alias: 'm',
       describe: `option should be accepted a regex filenames, must be specified together --targets if it's directory path of locale messages`
+    })
+    .option('normalize', {
+      type: 'string',
+      alias: 'n',
+      describe: 'option for the locale messages structure, you can specify the option, if you hope to normalize for the provider.'
     })
     .option('dryRun', {
       type: 'boolean',

@@ -22,6 +22,7 @@ type PullOptions = {
   conf?: string
   output: string
   locales?: string
+  normalize?: string
   dryRun: boolean
 }
 
@@ -53,6 +54,11 @@ export const builder = (args: Argv): Argv<PullOptions> => {
       alias: 'l',
       default: '',
       describe: `option for some locales of locale messages, you can also be specified multi locale with comma delimiter. if it's not specified pull all locale messages`
+    })
+    .option('normalize', {
+      type: 'string',
+      alias: 'n',
+      describe: 'option for the locale messages structure, you can specify the option, if you hope to normalize for the provider.'
     })
     .option('dryRun', {
       type: 'boolean',
