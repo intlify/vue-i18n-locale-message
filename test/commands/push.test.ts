@@ -82,7 +82,7 @@ test('not specified --target and --targetPaths', async () => {
 
 test('--target option', async () => {
   // setup mocks
-  mockPush.mockImplementation(resource => true)
+  mockPush.mockImplementation(({ resource }) => true)
 
   // run
   const push = await import('../../src/commands/push')
@@ -94,16 +94,20 @@ test('--target option', async () => {
   })
 
   expect(mockPush).toHaveBeenCalledWith({
-    messages: {
-      en: { hello: 'world' }
+    resource: {
+      messages: {
+        en: { hello: 'world' }
+      },
+      mode: 'locale-message'
     },
-    mode: 'locale-message'
-  }, false, undefined)
+    dryRun: false,
+    normalize: undefined
+  })
 })
 
 test('--locale option', async () => {
   // setup mocks
-  mockPush.mockImplementation(resource => true)
+  mockPush.mockImplementation(({ resource }) => true)
 
   // run
   const push = await import('../../src/commands/push')
@@ -115,16 +119,20 @@ test('--locale option', async () => {
   })
 
   expect(mockPush).toHaveBeenCalledWith({
-    messages: {
-      ja: { hello: '世界' }
+    resource: {
+      messages: {
+        ja: { hello: '世界' }
+      },
+      mode: 'locale-message'
     },
-    mode: 'locale-message'
-  }, false, undefined)
+    dryRun: false,
+    normalize: undefined
+  })
 })
 
 test('--conf option', async () => {
   // setup mocks
-  mockPush.mockImplementation(reosurce => true)
+  mockPush.mockImplementation(({ reosurce }) => true)
 
   // run
   const TARGET_LOCALE = './test/fixtures/locales/en.json'
@@ -141,12 +149,16 @@ test('--conf option', async () => {
     pushMode: 'file-path'
   })
   expect(mockPush).toHaveBeenCalledWith({
-    files: [{
-      locale: 'en',
-      path: path.resolve(TARGET_LOCALE)
-    }],
-    mode: 'file-path'
-  }, false, undefined)
+    resource: {
+      files: [{
+        locale: 'en',
+        path: path.resolve(TARGET_LOCALE)
+      }],
+      mode: 'file-path'
+    },
+    dryRun: false,
+    normalize: undefined
+  })
 })
 
 test('--conf option omit', async () => {
@@ -168,7 +180,7 @@ test('--conf option omit', async () => {
 
 test('--target-paths option', async () => {
   // setup mocks
-  mockPush.mockImplementation(resource => true)
+  mockPush.mockImplementation(({ resource }) => true)
 
   // run
   const push = await import('../../src/commands/push')
@@ -180,25 +192,29 @@ test('--target-paths option', async () => {
   })
 
   expect(mockPush).toHaveBeenCalledWith({
-    messages: {
-      en: {
-        hello: 'world'
+    resource: {
+      messages: {
+        en: {
+          hello: 'world'
+        },
+        lang: {
+          hello: '世界'
+        },
+        ja: {
+          hello: 'こんにちわわわ！',
+          world: 'ザ・ワールド'
+        }
       },
-      lang: {
-        hello: '世界'
-      },
-      ja: {
-        hello: 'こんにちわわわ！',
-        world: 'ザ・ワールド'
-      }
+      mode: 'locale-message'
     },
-    mode: 'locale-message'
-  }, false, undefined)
+    dryRun: false,
+    normalize: undefined
+  })
 })
 
 test('not specified --filename-match', async () => {
   // setup mocks
-  mockPush.mockImplementation(resource => true)
+  mockPush.mockImplementation(({ resource }) => true)
 
   // run
   const push = await import('../../src/commands/push')
@@ -214,7 +230,7 @@ test('not specified --filename-match', async () => {
 
 test('--dry-run option', async () => {
   // setup mocks
-  mockPush.mockImplementation(resource => false)
+  mockPush.mockImplementation(({ resource }) => false)
 
   // run
   const push = await import('../../src/commands/push')
@@ -226,16 +242,20 @@ test('--dry-run option', async () => {
   })
 
   expect(mockPush).toHaveBeenCalledWith({
-    messages: {
-      ja: { hello: '世界' }
+    resource: {
+      messages: {
+        ja: { hello: '世界' }
+      },
+      mode: 'locale-message'
     },
-    mode: 'locale-message'
-  }, true, undefined)
+    dryRun: true,
+    normalize: undefined
+  })
 })
 
 test('--normalize option', async () => {
   // setup mocks
-  mockPush.mockImplementation(resource => false)
+  mockPush.mockImplementation(({ resource }) => false)
 
   // run
   const push = await import('../../src/commands/push')
@@ -247,9 +267,13 @@ test('--normalize option', async () => {
   })
 
   expect(mockPush).toHaveBeenCalledWith({
-    messages: {
-      ja: { hello: '世界' }
+    resource: {
+      messages: {
+        ja: { hello: '世界' }
+      },
+      mode: 'locale-message'
     },
-    mode: 'locale-message'
-  }, false, 'flat')
+    dryRun: false,
+    normalize: 'flat'
+  })
 })

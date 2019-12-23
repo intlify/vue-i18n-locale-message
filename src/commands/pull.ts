@@ -69,6 +69,7 @@ export const builder = (args: Argv): Argv<PullOptions> => {
 }
 
 export const handler = async (args: Arguments<PullOptions>): Promise<unknown> => {
+  const { dryRun, normalize } = args
   const ProviderFactory = loadProvider(args.provider)
 
   if (ProviderFactory === null) {
@@ -89,7 +90,7 @@ export const handler = async (args: Arguments<PullOptions>): Promise<unknown> =>
   try {
     const locales = args.locales?.split(',').filter(p => p) as Locale[] || []
     const provider = ProviderFactory(conf)
-    const resource = await provider.pull(locales, args.dryRun, args.normalize)
+    const resource = await provider.pull({ locales, dryRun, normalize })
     await applyPullResource(args.output, resource, args.dryRun)
     // TODO: should refactor console message
     console.log('pull success')
