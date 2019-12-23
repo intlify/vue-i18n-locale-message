@@ -80,6 +80,7 @@ export const builder = (args: Argv): Argv<PushOptions> => {
 }
 
 export const handler = async (args: Arguments<PushOptions>): Promise<unknown> => {
+  const { dryRun, normalize } = args
   const ProviderFactory = loadProvider(args.provider)
 
   if (ProviderFactory === null) {
@@ -107,7 +108,7 @@ export const handler = async (args: Arguments<PushOptions>): Promise<unknown> =>
 
   try {
     const provider = ProviderFactory(conf)
-    await provider.push(resource, args.dryRun, args.normalize)
+    await provider.push({ resource, dryRun, normalize })
     // TODO: should refactor console message
     console.log('push success')
   } catch (e) {

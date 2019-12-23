@@ -167,18 +167,32 @@ export type ProviderFactory<T = {}> = (configration: ProviderConfiguration<T>) =
 export interface Provider {
   /**
    * push the resource to localization service
-   * @param resource the resource that push to localization service
-   * @param dryRun whether the CLI run as dryRun mode
    */
-  push (resource: ProviderPushResource, dryRun: boolean, normalize?: string): Promise<void>
+  push (args: PushArguments): Promise<void>
   /**
    * pull the resource from localization service
-   * @param locales locales that pull from localization service, if empty, you must pull the all locale messages
-   * @param dryRun whether the CLI run as dryRun mode
-   * @returns the resource of localization service
    */
-  pull (locales: Locale[], dryRun: boolean, normalize?: string): Promise<ProviderPullResource>
+  pull (args: PullArguments): Promise<ProviderPullResource>
 }
+
+type CommonArguments = {
+  dryRun: boolean // whether the CLI run as dryRun mode
+  normalize?: string // normalization ways for locale messages or resource
+}
+
+/**
+ *  Provider Push Arguments
+ */
+export type PushArguments = {
+  resource: ProviderPushResource // the resource that push to localization service
+} & CommonArguments
+
+/**
+ *  Provider Pull Arguments
+ */
+export type PullArguments = {
+  locales: Locale[] // locales that pull from localization service, if empty, you must pull the all locale messages
+} & CommonArguments
 
 /**
  *  mode that can be processed with provider push

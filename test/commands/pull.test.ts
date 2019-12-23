@@ -85,7 +85,7 @@ test('--provider: not found', async () => {
 
 test('--conf option', async () => {
   // setup mocks
-  mockPull.mockImplementation(locales => Promise.resolve({ ja: {}, en: {}}))
+  mockPull.mockImplementation(({ locales }) => Promise.resolve({ ja: {}, en: {}}))
 
   // run
   const pull = await import('../../src/commands/pull')
@@ -125,7 +125,7 @@ test('--conf option omit', async () => {
 
 test('--locales option', async () => {
   // setup mocks
-  mockPull.mockImplementation(locales => Promise.resolve({ ja: {}, en: {}}))
+  mockPull.mockImplementation(({ locales }) => Promise.resolve({ ja: {}, en: {}}))
 
   // run
   const pull = await import('../../src/commands/pull')
@@ -139,12 +139,16 @@ test('--locales option', async () => {
     })
   })
 
-  expect(mockPull).toHaveBeenCalledWith(['en', 'ja', 'fr'], true, undefined)
+  expect(mockPull).toHaveBeenCalledWith({
+    locales: ['en', 'ja', 'fr'],
+    dryRun: true,
+    normalize: undefined
+  })
 })
 
 test('--output option', async () => {
   // setup mocks
-  mockPull.mockImplementation(locales => Promise.resolve({ ja: { hello: 'hello' }, en: { hello: 'こんにちわわわ！' }}))
+  mockPull.mockImplementation(({ locales }) => Promise.resolve({ ja: { hello: 'hello' }, en: { hello: 'こんにちわわわ！' }}))
   const mockFS = fs as jest.Mocked<typeof fs>
   mockFS.mkdir.mockImplementation((p, option, cb) => cb(null))
   mockFS.writeFile.mockImplementation((p, data, cb) => cb(null))
@@ -167,7 +171,7 @@ test('--output option', async () => {
 
 test('--normalize option', async () => {
   // setup mocks
-  mockPull.mockImplementation(locales => Promise.resolve({ ja: {}, en: {}}))
+  mockPull.mockImplementation(({ locales }) => Promise.resolve({ ja: {}, en: {}}))
 
   // run
   const pull = await import('../../src/commands/pull')
@@ -180,5 +184,9 @@ test('--normalize option', async () => {
     })
   })
 
-  expect(mockPull).toHaveBeenCalledWith([], false, 'hierarchy')
+  expect(mockPull).toHaveBeenCalledWith({
+    locales: [],
+    dryRun: false,
+    normalize: 'hierarchy'
+  })
 })
