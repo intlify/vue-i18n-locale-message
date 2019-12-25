@@ -55,6 +55,7 @@
     "opener": "^1.5.1",
     "shipjs": "^0.12.0",
     "ts-jest": "^24.2.0",
+    "tsd": "^0.11.0",
     "typescript": "^3.7.3",
     "typescript-eslint-language-service": "^2.0.0",
     "vue": "^2.6.10",
@@ -64,7 +65,8 @@
     "node": ">= 10"
   },
   "files": [
-    "types",
+    "types/shims-vue-template-compiler.d.ts",
+    "types/index.d.ts",
     "lib"
   ],
   "homepage": "https://github.com/kazupon/vue-i18n-locale-message#readme",
@@ -92,9 +94,10 @@
     "lint": "eslint ./src ./test --ext .ts",
     "release:prepare": "shipjs prepare",
     "release:trigger": "shipjs trigger",
-    "test": "npm run lint && npm run test:cover",
+    "test": "npm run lint && npm run test:types && npm run test:cover",
     "test:cover": "npm run test:unit -- --coverage",
     "test:unit": "jest --env node",
+    "test:types": "tsd",
     "test:watch": "jest --env node --watch"
   },
   "types": "types/index.d.ts"
