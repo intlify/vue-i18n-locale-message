@@ -9,7 +9,7 @@
     "i18n:report": "vue-cli-service i18n:report --src './src/**/*.?(js|vue)' --locales './src/locales/**/*.json'"
   },
   "dependencies": {
-    "core-js": "^2.6.5",
+    "core-js": "^3.0.0",
     "vue": "^2.6.10",
     "vue-i18n": "^8.14.0"
   },
