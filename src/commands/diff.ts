@@ -20,7 +20,7 @@ type DiffOptions = {
 
 export const command = 'diff'
 export const aliases = 'df'
-export const describe = 'Difference between local and service locale messages'
+export const describe = 'Diff locale messages between local and localization service'
 
 export const builder = (args: Argv): Argv<DiffOptions> => {
   return args
