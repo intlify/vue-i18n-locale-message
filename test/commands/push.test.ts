@@ -94,11 +94,8 @@ test('--target option', async () => {
   })
 
   expect(mockPush).toHaveBeenCalledWith({
-    resource: {
-      messages: {
-        en: { hello: 'world' }
-      },
-      mode: 'locale-message'
+    messages: {
+      en: { hello: 'world' }
     },
     dryRun: false,
     normalize: undefined
@@ -119,11 +116,8 @@ test('--locale option', async () => {
   })
 
   expect(mockPush).toHaveBeenCalledWith({
-    resource: {
-      messages: {
-        ja: { hello: '世界' }
-      },
-      mode: 'locale-message'
+    messages: {
+      ja: { hello: '世界' }
     },
     dryRun: false,
     normalize: undefined
@@ -145,16 +139,11 @@ test('--conf option', async () => {
   })
 
   expect(L10nServiceProvider).toHaveBeenCalledWith({
-    provider: { token: 'xxx' },
-    pushMode: 'file-path'
+    provider: { token: 'xxx' }
   })
   expect(mockPush).toHaveBeenCalledWith({
-    resource: {
-      files: [{
-        locale: 'en',
-        path: path.resolve(TARGET_LOCALE)
-      }],
-      mode: 'file-path'
+    messages: {
+      en: { hello: 'world' }
     },
     dryRun: false,
     normalize: undefined
@@ -173,8 +162,7 @@ test('--conf option omit', async () => {
   })
 
   expect(L10nOmitServiceProvider).toHaveBeenCalledWith({
-    provider: { token: 'yyy' },
-    pushMode: 'file-path'
+    provider: { token: 'yyy' }
   })
 })
 
@@ -192,20 +180,17 @@ test('--target-paths option', async () => {
   })
 
   expect(mockPush).toHaveBeenCalledWith({
-    resource: {
-      messages: {
-        en: {
-          hello: 'world'
-        },
-        lang: {
-          hello: '世界'
-        },
-        ja: {
-          hello: 'こんにちわわわ！',
-          world: 'ザ・ワールド'
-        }
+    messages: {
+      en: {
+        hello: 'world'
       },
-      mode: 'locale-message'
+      lang: {
+        hello: '世界'
+      },
+      ja: {
+        hello: 'こんにちわわわ！',
+        world: 'ザ・ワールド'
+      }
     },
     dryRun: false,
     normalize: undefined
@@ -242,11 +227,8 @@ test('--dry-run option', async () => {
   })
 
   expect(mockPush).toHaveBeenCalledWith({
-    resource: {
-      messages: {
-        ja: { hello: '世界' }
-      },
-      mode: 'locale-message'
+    messages: {
+      ja: { hello: '世界' }
     },
     dryRun: true,
     normalize: undefined
@@ -267,11 +249,8 @@ test('--normalize option', async () => {
   })
 
   expect(mockPush).toHaveBeenCalledWith({
-    resource: {
-      messages: {
-        ja: { hello: '世界' }
-      },
-      mode: 'locale-message'
+    messages: {
+      ja: { hello: '世界' }
     },
     dryRun: false,
     normalize: 'flat'

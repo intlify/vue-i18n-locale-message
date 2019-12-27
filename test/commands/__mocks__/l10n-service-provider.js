@@ -3,7 +3,7 @@ class L10nServiceProvider {
     this._options = options
   }
 
-  async push (resource, dryRun) {
+  async push (messsages, dryRun) {
     return
   }
 

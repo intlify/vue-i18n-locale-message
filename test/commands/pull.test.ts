@@ -100,8 +100,7 @@ test('--conf option', async () => {
   })
 
   expect(L10nServiceProvider).toHaveBeenCalledWith({
-    provider: { token: 'xxx' },
-    pushMode: 'file-path'
+    provider: { token: 'xxx' }
   })
 })
 
@@ -118,8 +117,7 @@ test('--conf option omit', async () => {
   })
 
   expect(L10nOmitServiceProvider).toHaveBeenCalledWith({
-    provider: { token: 'yyy' },
-    pushMode: 'file-path'
+    provider: { token: 'yyy' }
   })
 })
 

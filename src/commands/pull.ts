@@ -15,7 +15,7 @@ import {
   loadProviderConf,
   DEFUALT_CONF
 } from '../utils'
-import { ProviderPullResource, Locale, LocaleMessage } from '../../types'
+import { LocaleMessages, Locale, LocaleMessage } from '../../types'
 
 type PullOptions = {
   provider: string
@@ -91,7 +91,7 @@ export const handler = async (args: Arguments<PullOptions>): Promise<unknown> =>
     const locales = args.locales?.split(',').filter(p => p) as Locale[] || []
     const provider = ProviderFactory(conf)
     const resource = await provider.pull({ locales, dryRun, normalize })
-    await applyPullResource(args.output, resource, args.dryRun)
+    await applyPullLocaleMessages(args.output, resource, args.dryRun)
     // TODO: should refactor console message
     console.log('pull success')
   } catch (e) {
@@ -100,9 +100,9 @@ export const handler = async (args: Arguments<PullOptions>): Promise<unknown> =>
   }
 }
 
-async function applyPullResource (output: string, resource: ProviderPullResource, dryRun: boolean) {
-  const locales = Object.keys(resource) as Locale[]
-  debug('applyPullResource', resource, locales, dryRun)
+async function applyPullLocaleMessages (output: string, messages: LocaleMessages, dryRun: boolean) {
+  const locales = Object.keys(messages) as Locale[]
+  debug('applyPullLocaleMessages', messages, locales, dryRun)
   // wrap mkdir with dryRun
   const mkdir = async (output: string) => {
     return !dryRun
@@ -122,7 +122,7 @@ async function applyPullResource (output: string, resource: ProviderPullResource
   // run!
   await mkdir(output)
   for (const locale of locales) {
-    await writeFile(output, locale, resource[locale])
+    await writeFile(output, locale, messages[locale])
   }
 }
 
