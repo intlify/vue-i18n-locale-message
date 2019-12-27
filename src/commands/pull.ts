@@ -90,8 +90,8 @@ export const handler = async (args: Arguments<PullOptions>): Promise<unknown> =>
   try {
     const locales = args.locales?.split(',').filter(p => p) as Locale[] || []
     const provider = ProviderFactory(conf)
-    const resource = await provider.pull({ locales, dryRun, normalize })
-    await applyPullLocaleMessages(args.output, resource, args.dryRun)
+    const messages = await provider.pull({ locales, dryRun, normalize })
+    await applyPullLocaleMessages(args.output, messages, args.dryRun)
     // TODO: should refactor console message
     console.log('pull success')
   } catch (e) {

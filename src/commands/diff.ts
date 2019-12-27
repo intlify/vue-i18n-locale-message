@@ -1,4 +1,5 @@
 import { Arguments, Argv } from 'yargs'
+import { diffString } from 'json-diff'
 
 import {
   resolveProviderConf,
@@ -9,18 +10,19 @@ import {
   PushableOptions
 } from '../utils'
 
-type PushOptions = {
+import { Locale } from '../../types'
+
+type DiffOptions = {
   provider: string
   conf?: string
   normalize?: string
-  dryRun: boolean
 } & PushableOptions
 
-export const command = 'push'
-export const aliases = 'ph'
-export const describe = 'push locale messages to localization service'
+export const command = 'diff'
+export const aliases = 'df'
+export const describe = 'Difference between local and service locale messages'
 
-export const builder = (args: Argv): Argv<PushOptions> => {
+export const builder = (args: Argv): Argv<DiffOptions> => {
   return args
     .option('provider', {
       type: 'string',
@@ -58,16 +60,10 @@ export const builder = (args: Argv): Argv<PushOptions> => {
       alias: 'n',
       describe: 'option for the locale messages structure, you can specify the option, if you hope to normalize for the provider.'
     })
-    .option('dryRun', {
-      type: 'boolean',
-      alias: 'd',
-      default: false,
-      describe: `run the push command, but do not apply to locale messages of localization service`
-    })
 }
 
-export const handler = async (args: Arguments<PushOptions>): Promise<unknown> => {
-  const { dryRun, normalize } = args
+export const handler = async (args: Arguments<DiffOptions>): Promise<unknown> => {
+  const { normalize } = args
   const ProviderFactory = loadProvider(args.provider)
 
   if (ProviderFactory === null) {
@@ -85,9 +81,9 @@ export const handler = async (args: Arguments<PushOptions>): Promise<unknown> =>
   const confPath = resolveProviderConf(args.provider, args.conf)
   const conf = loadProviderConf(confPath) || DEFUALT_CONF
 
-  let messages
+  let localeMessages
   try {
-    messages = getLocaleMessages(args)
+    localeMessages = getLocaleMessages(args)
   } catch (e) {
     console.log(e.message)
     return
@@ -95,12 +91,12 @@ export const handler = async (args: Arguments<PushOptions>): Promise<unknown> =>
 
   try {
     const provider = ProviderFactory(conf)
-    await provider.push({ messages, dryRun, normalize })
-    // TODO: should refactor console message
-    console.log('push success')
+    const locales = Object.keys(localeMessages) as Locale[]
+    const serviceMessages = await provider.pull({ locales, dryRun: false, normalize })
+    console.log(diffString(localeMessages, serviceMessages))
   } catch (e) {
     // TODO: should refactor console message
-    console.error('push fail', e)
+    console.error('diff fail', e)
   }
 }
 
