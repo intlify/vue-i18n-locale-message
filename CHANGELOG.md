@@ -1,4 +1,13 @@
 
+## v0.10.0 (2019-12-27)
+
+#### :star: Features
+* [#46](https://github.com/kazupon/vue-i18n-locale-message/pull/46) diff command feature ([@kazupon](https://github.com/kazupon))
+
+#### Committers: 1
+- kazuya kawaguchi ([@kazupon](https://github.com/kazupon))
+
+
 ## v0.9.0 (2019-12-27)
 
 #### :boom: Breaking Change
