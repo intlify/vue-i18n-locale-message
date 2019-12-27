@@ -13,10 +13,7 @@ import glob from 'glob'
 import { debug as Debug } from 'debug'
 const debug = Debug('vue-i18n-locale-message:commands:push')
 
-import {
-  ProviderPushResource,
-  ProviderPushMode
-} from '../../types'
+import { LocaleMessages } from '../../types'
 
 type PushOptions = {
   provider: string
@@ -98,9 +95,9 @@ export const handler = async (args: Arguments<PushOptions>): Promise<unknown> =>
   const confPath = resolveProviderConf(args.provider, args.conf)
   const conf = loadProviderConf(confPath) || DEFUALT_CONF
 
-  let resource
+  let messages
   try {
-    resource = getProviderPushResource(args, conf.pushMode)
+    messages = getLocaleMessages(args)
   } catch (e) {
     console.log(e.message)
     return
@@ -108,7 +105,7 @@ export const handler = async (args: Arguments<PushOptions>): Promise<unknown> =>
 
   try {
     const provider = ProviderFactory(conf)
-    await provider.push({ resource, dryRun, normalize })
+    await provider.push({ messages, dryRun, normalize })
     // TODO: should refactor console message
     console.log('push success')
   } catch (e) {
@@ -117,28 +114,14 @@ export const handler = async (args: Arguments<PushOptions>): Promise<unknown> =>
   }
 }
 
-function getProviderPushResource (args: Arguments<PushOptions>, mode: ProviderPushMode): ProviderPushResource {
-  const resource = { mode } as ProviderPushResource
-  debug(`getProviderPushResource: mode=${mode}`)
-
-  if (mode === 'locale-message') {
-    resource.messages = {}
-  } else { // 'file-path'
-    resource.files = []
-  }
+function getLocaleMessages (args: Arguments<PushOptions>): LocaleMessages {
+  let messages = {} as LocaleMessages
 
   if (args.target) {
     const targetPath = resolve(args.target)
     const parsed = path.parse(targetPath)
     const locale = args.locale ? args.locale : parsed.name
-    if (mode === 'locale-message') {
-      resource.messages = Object.assign(resource.messages, { [locale]: require(targetPath) })
-    } else { // 'file-path'
-      resource.files?.push({
-        locale,
-        path: targetPath
-      })
-    }
+    messages = Object.assign(messages, { [locale]: require(targetPath) })
   } else if (args.targetPaths) {
     const filenameMatch = args.filenameMatch
     if (!filenameMatch) {
@@ -155,14 +138,7 @@ function getProviderPushResource (args: Arguments<PushOptions>, mode: ProviderPu
         debug('regex match', match, fullPath)
         if (match && match[1]) {
           const locale = match[1]
-          if (mode === 'locale-message') {
-            resource.messages = Object.assign(resource.messages, { [locale]: require(fullPath) })
-          } else { // 'file-path'
-            resource.files?.push({
-              locale,
-              path: fullPath
-            })
-          }
+          messages = Object.assign(messages, { [locale]: require(fullPath) })
         } else {
           // TODO: should refactor console message
           console.log(`${fullPath} is not matched with ${filenameMatch}`)
@@ -171,7 +147,7 @@ function getProviderPushResource (args: Arguments<PushOptions>, mode: ProviderPu
     })
   }
 
-  return resource
+  return messages
 }
 
 export default {

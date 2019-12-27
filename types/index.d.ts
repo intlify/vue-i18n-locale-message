@@ -1,3 +1,5 @@
+export type Locale = string
+
 /**
  *  Locale Message Recursive Structure
  *    e.g.
@@ -22,8 +24,6 @@
  *      }
  *    }
  */
-
-export type Locale = string
 export type LocaleMessage =
   | string
   | { [property: string]: LocaleMessage }
@@ -166,13 +166,13 @@ export type ProviderFactory<T = {}> = (configration: ProviderConfiguration<T>) =
  */
 export interface Provider {
   /**
-   * push the resource to localization service
+   * push the locale messsages to localization service
    */
   push (args: PushArguments): Promise<void>
   /**
-   * pull the resource from localization service
+   * pull the locale messages from localization service
    */
-  pull (args: PullArguments): Promise<ProviderPullResource>
+  pull (args: PullArguments): Promise<LocaleMessages>
 }
 
 type CommonArguments = {
@@ -184,7 +184,7 @@ type CommonArguments = {
  *  Provider Push Arguments
  */
 export type PushArguments = {
-  resource: ProviderPushResource // the resource that push to localization service
+  messages: LocaleMessages // the locale messages that push to localization service
 } & CommonArguments
 
 /**
@@ -195,43 +195,16 @@ export type PullArguments = {
 } & CommonArguments
 
 /**
- *  mode that can be processed with provider push
- *  - 'file-path':
- *    To use when the provider uses the locale message directly from the file.
- *    for example, used for file uploading.
- *    When specified that mode, `ProviderPushResource` are passed from the CLI as `files`.
- *  - 'locale-message':
- *    To use when the provider uses the locale message.
- *    When specified that mode, `ProviderPushResource` are passed from the CLI as `messaegs`.
- */
-export type ProviderPushMode = 'file-path' | 'locale-message'
-
-export type ProviderPushFileInfo = {
-  locale: Locale
-  path: string
-}
-
-export type ProviderPushResource = {
-  mode: ProviderPushMode
-  files?: ProviderPushFileInfo[]
-  messages?: LocaleMessages
-}
-
-export type ProviderPullResource = LocaleMessages
-
-/**
  *  ProviderConfiguration provider fields structure
  *    e.g.
  *    {
  *      "provider": {
  *        "token": "xxx"
- *      },
- *      "pushMode": "file-path"
+ *      }
  *    }
  */
 export interface ProviderConfiguration<T = {}> {
   provider: { [key in keyof ProviderConfigurationValue<T>]: ProviderConfigurationValue<T>[key] }
-  pushMode: ProviderPushMode
 }
 
 export type ProviderConfigurationValue<T = {}> = T & { [prop: string]: unknown }

@@ -182,44 +182,33 @@ type ProviderFactory<T = {}> = (configration: ProviderConfiguration<T>) => Provi
  */
 interface Provider {
   /**
-   * push the resource to localization service
-   * @param resource the resource that push to localization service
-   * @param dryRun whether the CLI run as dryRun mode
+   * push the locale messsages to localization service
    */
-  push (resource: ProviderPushResource, dryRun: boolean): Promise<void>
+  push (args: PushArguments): Promise<void>
   /**
-   * pull the resource from localization service
-   * @param locales locales that pull from localization service, if empty, you must pull the all locale messages
-   * @param dryRun whether the CLI run as dryRun mode
-   * @returns the resource of localization service
+   * pull the locale messages from localization service
    */
-  pull (locales: Locale[], dryRun: boolean): Promise<ProviderPullResource>
+  pull (args: PullArguments): Promise<LocaleMessages>
+}
+
+type CommonArguments = {
+  dryRun: boolean // whether the CLI run as dryRun mode
+  normalize?: string // normalization ways for locale messages or resource
 }
 
 /**
- *  mode that can be processed with provider push  
- *  - 'file-path': 
- *    To use when the provider uses the locale message directly from the file.
- *    for example, used for file uploading.
- *    When specified that mode, `ProviderPushResource` are passed from the CLI as `files`.
- *  - 'locale-message':
- *    To use when the provider uses the locale message.
- *    When specified that mode, `ProviderPushResource` are passed from the CLI as `messaegs`.
+ *  Provider Push Arguments
  */
-type ProviderPushMode = 'file-path' | 'locale-message'
+type PushArguments = {
+  messages: LocaleMessages // the locale messages that push to localization service
+} & CommonArguments
 
-type ProviderPushFileInfo = {
-  locale: Locale
-  path: string
-}
-
-type ProviderPushResource = {
-  mode: ProviderPushMode
-  files?: ProviderPushFileInfo[]
-  messages?: LocaleMessages
-}
-
-type ProviderPullResource = LocaleMessages
+/**
+ *  Provider Pull Arguments
+ */
+type PullArguments = {
+  locales: Locale[] // locales that pull from localization service, if empty, you must pull the all locale messages
+} & CommonArguments
 
 /**
  *  ProviderConfiguration provider fields structure
@@ -227,13 +216,11 @@ type ProviderPullResource = LocaleMessages
  *    {
  *      "provider": {
  *        "token": "xxx"
- *      },
- *      "pushMode": "file-path"
+ *      }
  *    }
  */
 interface ProviderConfiguration<T = {}> {
   provider: { [key in keyof ProviderConfigurationValue<T>]: ProviderConfigurationValue<T>[key] }
-  pushMode: ProviderPushMode
 }
 
 type ProviderConfigurationValue<T = {}> = T & { [prop: string]: unknown }
