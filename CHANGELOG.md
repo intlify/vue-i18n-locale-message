@@ -1,4 +1,13 @@
 
+## v0.9.0 (2019-12-27)
+
+#### :boom: Breaking Change
+* [#44](https://github.com/kazupon/vue-i18n-locale-message/pull/44) breaking: change push interface ([@kazupon](https://github.com/kazupon))
+
+#### Committers: 1
+- kazuya kawaguchi ([@kazupon](https://github.com/kazupon))
+
+
 ## v0.8.0 (2019-12-23)
 
 #### :star: Features
