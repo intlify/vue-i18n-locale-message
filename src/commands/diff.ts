@@ -1,5 +1,5 @@
 import { Arguments, Argv } from 'yargs'
-import { diffString } from 'json-diff'
+const { diffString } = require('json-diff') // NOTE: not provided type definition ...
 
 import {
   resolveProviderConf,
