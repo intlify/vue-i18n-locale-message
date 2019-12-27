@@ -54,6 +54,7 @@ yarn global vue-i18n-locale-message
   - infuse the locale messages to `i18n` custom block
   - push the locale messages to localization service
   - pull the locale mesagees from localization service
+  - diff locale messages between local and localization service
 
 ## :rocket: Usages
 
@@ -128,6 +129,15 @@ vue-i18n-locale-message pull --provider=l10n-service-provider \
   --output=./src/locales
 ```
 
+#### Diff
+
+```sh
+vue-i18n-locale-message diff --provider=l10n-service-provider \
+  --conf=110n-service-provider-conf.json \
+  --target-paths=./src/locales/*.json \
+  --filename-match=^([\\w]*)\\.json
+```
+
 ## :book: API: Specifications
 
 <p align="center"><img width="476px" height="544px" src="./assets/api-usage-image.png" alt="API Usage Image"></p>
@@ -162,7 +172,7 @@ You can use the `push` or `pull` commands to push the locale message to the loca
 
 <p align="center"><img src="./assets/push-pull-command-image.png" alt="Push and Pull Image"></p>
 
-When you run `push` or `pull` commands, you need the provider that implements the following.
+When you run `push`, `pull` and `diff` commands, you need the provider that implements the following.
 
 - export provider factory function
 - provider factory function must return a provider object that have the following I/F:

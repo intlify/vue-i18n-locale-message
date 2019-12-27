@@ -1,7 +1,8 @@
+import { Arguments } from 'yargs'
 import { SFCDescriptor } from 'vue-template-compiler'
 import { SFCFileInfo, FormatOptions } from '../types'
 import { VueTemplateCompiler } from '@vue/component-compiler-utils/dist/types'
-import { ProviderFactory, ProviderConfiguration } from '../types'
+import { LocaleMessages, ProviderFactory, ProviderConfiguration } from '../types'
 
 import { parse } from '@vue/component-compiler-utils'
 import * as compiler from 'vue-template-compiler'
@@ -13,6 +14,13 @@ import yaml from 'js-yaml'
 
 import { debug as Debug } from 'debug'
 const debug = Debug('vue-i18n-locale-message:utils')
+
+export type PushableOptions = {
+  target?: string
+  locale?: string
+  targetPaths?: string
+  filenameMatch?: string
+}
 
 const ESC: { [key in string]: string } = {
   '<': '&lt;',
@@ -123,7 +131,7 @@ function resolveGlob (target: string) {
   return glob.sync(`${target}/**/*.vue`)
 }
 
-export const DEFUALT_CONF = { provider: {}, pushMode: 'locale-message' } as ProviderConfiguration
+export const DEFUALT_CONF = { provider: {}} as ProviderConfiguration
 
 export function resolveProviderConf (provider: string, conf?: string) {
   if (conf) {
@@ -156,4 +164,40 @@ export function loadProviderConf (confPath: string): ProviderConfiguration {
     conf = require(confPath) as ProviderConfiguration
   } catch (e) { }
   return conf
+}
+
+export function getLocaleMessages (args: Arguments<PushableOptions>): LocaleMessages {
+  let messages = {} as LocaleMessages
+
+  if (args.target) {
+    const targetPath = resolve(args.target)
+    const parsed = path.parse(targetPath)
+    const locale = args.locale ? args.locale : parsed.name
+    messages = Object.assign(messages, { [locale]: require(targetPath) })
+  } else if (args.targetPaths) {
+    const filenameMatch = args.filenameMatch
+    if (!filenameMatch) {
+      // TODO: should refactor console message
+      throw new Error('You need to specify together --filename-match')
+    }
+    const targetPaths = args.targetPaths.split(',').filter(p => p)
+    targetPaths.forEach(targetPath => {
+      const globedPaths = glob.sync(targetPath).map(p => resolve(p))
+      globedPaths.forEach(fullPath => {
+        const parsed = path.parse(fullPath)
+        const re = new RegExp(filenameMatch, 'ig')
+        const match = re.exec(parsed.base)
+        debug('regex match', match, fullPath)
+        if (match && match[1]) {
+          const locale = match[1]
+          messages = Object.assign(messages, { [locale]: require(fullPath) })
+        } else {
+          // TODO: should refactor console message
+          console.log(`${fullPath} is not matched with ${filenameMatch}`)
+        }
+      })
+    })
+  }
+
+  return messages
 }
