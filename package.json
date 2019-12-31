@@ -54,7 +54,7 @@
     "jest-watch-typeahead": "^0.4.2",
     "lerna-changelog": "^1.0.0",
     "opener": "^1.5.1",
-    "shipjs": "^0.12.0",
+    "shipjs": "^0.13.0",
     "ts-jest": "^24.2.0",
     "tsd": "^0.11.0",
     "typescript": "^3.7.3",
