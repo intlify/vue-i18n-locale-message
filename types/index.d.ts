@@ -157,6 +157,22 @@ declare function squeeze (basePath: string, files: SFCFileInfo[]): MetaLocaleMes
 declare function infuse (basePath: string, sources: SFCFileInfo[], meta: MetaLocaleMessage, options?: FormatOptions): SFCFileInfo[]
 
 /**
+ *  Translation Status
+ */
+export type TranslationStatus = {
+  locale: Locale  // target locale
+  percentage: number  // translation percentage
+}
+
+export type TranslationStatusOptions = {
+  provider: string
+  conf?: string
+  locales?: string
+}
+
+declare function status (options: TranslationStatusOptions): Promise<TranslationStatus[]>
+
+/**
  *  Provider factory function
  */
 export type ProviderFactory<T = {}> = (configration: ProviderConfiguration<T>) => Provider
@@ -173,6 +189,10 @@ export interface Provider {
    * pull the locale messages from localization service
    */
   pull (args: PullArguments): Promise<LocaleMessages>
+  /**
+   * indicate translation status from localization service
+   */
+  status (args: StatusArguments): Promise<TranslationStatus[]>
 }
 
 type CommonArguments = {
@@ -191,8 +211,15 @@ export type PushArguments = {
  *  Provider Pull Arguments
  */
 export type PullArguments = {
-  locales: Locale[] // locales that pull from localization service, if empty, you must pull the all locale messages
+  locales: Locale[] // locales that pull from localization service, if empty, you must pull all locale messages
 } & CommonArguments
+
+/**
+ *  Provider Status Arguments
+ */
+export type StatusArguments = {
+  locales: Locale[] // locales that indicate translation status from localization service, if empty, you must indicate translation status all locales
+}
 
 /**
  *  ProviderConfiguration provider fields structure

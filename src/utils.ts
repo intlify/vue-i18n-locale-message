@@ -2,7 +2,14 @@ import { Arguments } from 'yargs'
 import { SFCDescriptor } from 'vue-template-compiler'
 import { SFCFileInfo, FormatOptions } from '../types'
 import { VueTemplateCompiler } from '@vue/component-compiler-utils/dist/types'
-import { LocaleMessages, ProviderFactory, ProviderConfiguration } from '../types'
+import {
+  Locale,
+  LocaleMessages,
+  ProviderFactory,
+  ProviderConfiguration,
+  TranslationStatusOptions,
+  TranslationStatus
+} from '../types'
 
 import { parse } from '@vue/component-compiler-utils'
 import * as compiler from 'vue-template-compiler'
@@ -202,4 +209,19 @@ export function getLocaleMessages (args: Arguments<PushableOptions>): LocaleMess
   }
 
   return messages
+}
+
+export async function getTranslationStatus (options: TranslationStatusOptions): Promise<TranslationStatus[]> {
+  const ProviderFactory = loadProvider(options.provider)
+  if (ProviderFactory === null) {
+    return Promise.reject(new Error(`Not found ${options.provider} provider`))
+  }
+
+  const confPath = resolveProviderConf(options.provider, options.conf)
+  const conf = loadProviderConf(confPath) || DEFUALT_CONF
+
+  const locales = options.locales?.split(',').filter(p => p) as Locale[] || []
+  const provider = ProviderFactory(conf)
+  const status = await provider.status({ locales })
+  return Promise.resolve(status)
 }
