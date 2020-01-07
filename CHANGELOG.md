@@ -1,4 +1,13 @@
 
+## v0.11.0 (2020-01-07)
+
+#### :star: Features
+* [#50](https://github.com/kazupon/vue-i18n-locale-message/pull/50) status feature ([@kazupon](https://github.com/kazupon))
+
+#### Committers: 1
+- kazuya kawaguchi ([@kazupon](https://github.com/kazupon))
+
+
 ## v0.10.0 (2019-12-27)
 
 #### :star: Features
