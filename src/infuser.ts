@@ -56,7 +56,7 @@ function buildContent (i18nBlocks: SFCI18nBlock[], raw: string, blocks: SFCBlock
       const i18nBlock = i18nBlocks[i18nBlockCounter]
       debug(`meta.lang = ${i18nBlock.lang}, block.lang = ${lang}, meta.locale = ${i18nBlock.locale}, block.locale = ${locale}`)
 
-      let messages: any = null
+      let messages: any = null // eslint-disable-line
       if (lang === i18nBlock.lang && locale === i18nBlock.locale) {
         if (locale) {
           messages = i18nBlock.messages[locale]

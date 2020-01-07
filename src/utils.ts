@@ -2,7 +2,14 @@ import { Arguments } from 'yargs'
 import { SFCDescriptor } from 'vue-template-compiler'
 import { SFCFileInfo, FormatOptions } from '../types'
 import { VueTemplateCompiler } from '@vue/component-compiler-utils/dist/types'
-import { LocaleMessages, ProviderFactory, ProviderConfiguration } from '../types'
+import {
+  Locale,
+  LocaleMessages,
+  ProviderFactory,
+  ProviderConfiguration,
+  TranslationStatusOptions,
+  TranslationStatus
+} from '../types'
 
 import { parse } from '@vue/component-compiler-utils'
 import * as compiler from 'vue-template-compiler'
@@ -73,6 +80,7 @@ export function parsePath (basePath: string, targetPath: string) {
   }
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function parseContent (content: string, lang: string): any {
   switch (lang) {
     case 'yaml':
@@ -86,6 +94,7 @@ export function parseContent (content: string, lang: string): any {
   }
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function stringifyContent (content: any, lang: string, options?: FormatOptions): string {
   const indent = options?.intend || 2
   const eof = options?.eof || '\n'
@@ -153,7 +162,7 @@ export function loadProvider (provider: string): ProviderFactory | null {
     } else {
       mod = m as ProviderFactory
     }
-  } catch (e) { }
+  } catch (e) { } // eslint-disable-line
   return mod
 }
 
@@ -162,7 +171,7 @@ export function loadProviderConf (confPath: string): ProviderConfiguration {
   try {
     // TODO: should validate I/F checking & dynamic importing
     conf = require(confPath) as ProviderConfiguration
-  } catch (e) { }
+  } catch (e) { } // eslint-disable-line
   return conf
 }
 
@@ -200,4 +209,19 @@ export function getLocaleMessages (args: Arguments<PushableOptions>): LocaleMess
   }
 
   return messages
+}
+
+export async function getTranslationStatus (options: TranslationStatusOptions): Promise<TranslationStatus[]> {
+  const ProviderFactory = loadProvider(options.provider)
+  if (ProviderFactory === null) {
+    return Promise.reject(new Error(`Not found ${options.provider} provider`))
+  }
+
+  const confPath = resolveProviderConf(options.provider, options.conf)
+  const conf = loadProviderConf(confPath) || DEFUALT_CONF
+
+  const locales = options.locales?.split(',').filter(p => p) as Locale[] || []
+  const provider = ProviderFactory(conf)
+  const status = await provider.status({ locales })
+  return Promise.resolve(status)
 }
