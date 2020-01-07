@@ -148,8 +148,8 @@ function getTargetLocaleMessages (messages: LocaleMessages, hierarchy: string[])
 
     const obj = messages[locale]
     if (obj) {
-      let o: any = obj
-      let prev: any = null
+      let o: any = obj // eslint-disable-line
+      let prev: any = null // eslint-disable-line
       const h = hierarchy.concat()
       while (h.length > 0) {
         const key = h.shift()

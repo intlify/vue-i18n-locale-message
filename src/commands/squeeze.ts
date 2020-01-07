@@ -70,7 +70,7 @@ function generate (meta: MetaLocaleMessage): LocaleMessages {
         if (block.messages[locale]) {
           const localeMessages = messages[locale]
           const localeBlockMessages = block.messages[locale]
-          let target: any = localeMessages
+          let target: any = localeMessages // eslint-disable-line
           const hierarchy = parsed.hierarchy.concat()
           while (hierarchy.length >= 0) {
             const key = hierarchy.shift()

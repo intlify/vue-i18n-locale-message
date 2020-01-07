@@ -7,6 +7,9 @@ module.exports = {
     jest: true
   },
   extends: [
+    'eslint:recommended',
+    'plugin:@typescript-eslint/eslint-recommended',
+    'plugin:@typescript-eslint/recommended',
     'plugin:vue-libs/recommended'
   ],
   plugins: [
@@ -18,7 +21,10 @@ module.exports = {
     sourceType: 'module'
   },
   rules: {
-    'no-unused-vars': 'off', // HACK: due to override with @typescript-eslint/no-unused-vars
-    '@typescript-eslint/no-unused-vars': [2, { 'vars': 'all', 'args': 'none' }]
+    '@typescript-eslint/no-var-requires': 'off',
+    '@typescript-eslint/member-delimiter-style': 'off',
+    '@typescript-eslint/no-use-before-define': 'off',
+    '@typescript-eslint/explicit-function-return-type': 'off',
+    'no-unused-vars': 'off' // HACK: due to duplicate with @typescript-eslint/no-unused-vars
   }
 }

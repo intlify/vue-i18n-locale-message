@@ -92,7 +92,7 @@
     "build:watch": "tsc -p . --watch",
     "clean": "rm -rf ./coverage",
     "coverage": "opener coverage/lcov-report/index.html",
-    "lint": "eslint ./src ./test --ext .ts",
+    "lint": "eslint ./src ./test --ext .ts --ignore-pattern \"*.test.*\"",
     "release:prepare": "shipjs prepare",
     "release:trigger": "shipjs trigger",
     "test": "npm run lint && npm run test:types && npm run test:cover",

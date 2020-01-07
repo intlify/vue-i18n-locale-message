@@ -73,6 +73,7 @@ export function parsePath (basePath: string, targetPath: string) {
   }
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function parseContent (content: string, lang: string): any {
   switch (lang) {
     case 'yaml':
@@ -86,6 +87,7 @@ export function parseContent (content: string, lang: string): any {
   }
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function stringifyContent (content: any, lang: string, options?: FormatOptions): string {
   const indent = options?.intend || 2
   const eof = options?.eof || '\n'
@@ -153,7 +155,7 @@ export function loadProvider (provider: string): ProviderFactory | null {
     } else {
       mod = m as ProviderFactory
     }
-  } catch (e) { }
+  } catch (e) { } // eslint-disable-line
   return mod
 }
 
@@ -162,7 +164,7 @@ export function loadProviderConf (confPath: string): ProviderConfiguration {
   try {
     // TODO: should validate I/F checking & dynamic importing
     conf = require(confPath) as ProviderConfiguration
-  } catch (e) { }
+  } catch (e) { } // eslint-disable-line
   return conf
 }
 
