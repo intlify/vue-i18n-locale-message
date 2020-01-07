@@ -49,12 +49,14 @@ yarn global vue-i18n-locale-message
 - API
   - squeeze the meta of locale messages from `i18n` custom block
   - infuse the meta of locale messages to `i18n` custom block
+  - get translation status from localization service
 - CLI
-  - squeeze the locale messages from `i18n` custom block
-  - infuse the locale messages to `i18n` custom block
-  - push the locale messages to localization service
-  - pull the locale mesagees from localization service
-  - diff locale messages between local and localization service
+  - squeeze: squeeze the locale messages from `i18n` custom block
+  - infuse: infuse the locale messages to `i18n` custom block
+  - push: push the locale messages to localization service
+  - pull: pull the locale mesagees from localization service
+  - diff: diff locale messages between local and localization service
+  - status: indicate translation status from localization service
 
 ## :rocket: Usages
 
@@ -138,6 +140,13 @@ vue-i18n-locale-message diff --provider=l10n-service-provider \
   --filename-match=^([\\w]*)\\.json
 ```
 
+#### Status
+```sh
+vue-i18n-locale-message status --provider=l10n-service-provider \
+  --conf=110n-service-provider-conf.json
+```
+
+
 ## :book: API: Specifications
 
 <p align="center"><img width="476px" height="544px" src="./assets/api-usage-image.png" alt="API Usage Image"></p>
@@ -166,18 +175,36 @@ Infuse the meta of locale messages to i18n custom block at single-file component
 
 `infuse` function will return new single-file components information that is updated with the single-file components information specified as `sources` and  the meta of locale message as `meta`.
 
+### status (options: TranslationStatusOptions): Promise<TranslationStatus[]>
+
+  * **Arguments:**
+    * `{options}
+      * `provider`: The target localization service provider, required, same `provider` option of `status` command
+      * `conf`: The json file configration of localization service provider, same `conf` option of `status` command
+      * `locales`: For some locales of translation status, same `locales` option of `status` command
+  * **Return:** `Promise<TranslationStatus[]>`
+
+
 ## :book: Provider: Specifications
 
 You can use the `push` or `pull` commands to push the locale message to the localization service as a resource for that service, and also to pull resources from the l10n service as the locale message.
 
 <p align="center"><img src="./assets/push-pull-command-image.png" alt="Push and Pull Image"></p>
 
-When you run `push`, `pull` and `diff` commands, you need the provider that implements the following.
+When you run the following commands,
+
+  - `push`
+  - `pull`
+  - `diff`
+  - `status`
+
+you need the provider that implements the following.
 
 - export provider factory function
 - provider factory function must return a provider object that have the following I/F:
   - `push` method
   - `pull` method
+  - `status` method
 
 The type definition with TypeScript is as follows:
 
@@ -186,6 +213,14 @@ The type definition with TypeScript is as follows:
  *  Provider factory function
  */
 type ProviderFactory<T = {}> = (configration: ProviderConfiguration<T>) => Provider
+
+/**
+ *  Translation Status
+ */
+export type TranslationStatus = {
+  locale: Locale  // target locale
+  percentage: number  // translation percentage
+}
 
 /**
  *  Provider interface
@@ -199,6 +234,10 @@ interface Provider {
    * pull the locale messages from localization service
    */
   pull (args: PullArguments): Promise<LocaleMessages>
+  /**
+   * indicate translation status from localization service
+   */
+  status (args: StatusArguments): Promise<TranslationStatus[]>
 }
 
 type CommonArguments = {
@@ -219,6 +258,13 @@ type PushArguments = {
 type PullArguments = {
   locales: Locale[] // locales that pull from localization service, if empty, you must pull the all locale messages
 } & CommonArguments
+
+/**
+ *  Provider Status Arguments
+ */
+export type StatusArguments = {
+  locales: Locale[] // locales that indicate translation status from localization service, if empty, you must indicate translation status all locales
+}
 
 /**
  *  ProviderConfiguration provider fields structure
