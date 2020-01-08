@@ -17,6 +17,21 @@ class L10nServiceProvider {
       percentable: 100.0
     }])
   }
+
+  async import (messsages, dryRun) {
+    return
+  }
+
+  async export (locales, format, dryRun) {
+    const data = [{
+      locale: 'ja',
+      data: Buffer.from(JSON.stringify({}))
+    }, {
+      locale: 'en',
+      data: Buffer.from(JSON.stringify({}))
+    }]
+    return Promise.resolve(data)
+  }
 }
 
 module.exports = L10nServiceProvider

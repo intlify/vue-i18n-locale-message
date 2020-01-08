@@ -1,16 +1,20 @@
+// import types
 import { Arguments } from 'yargs'
 import { SFCDescriptor } from 'vue-template-compiler'
-import { SFCFileInfo, FormatOptions } from '../types'
 import { VueTemplateCompiler } from '@vue/component-compiler-utils/dist/types'
 import {
+  SFCFileInfo,
   Locale,
   LocaleMessages,
+  FormatOptions,
   ProviderFactory,
   ProviderConfiguration,
   TranslationStatusOptions,
-  TranslationStatus
+  TranslationStatus,
+  RawLocaleMessage
 } from '../types'
 
+// import modules
 import { parse } from '@vue/component-compiler-utils'
 import * as compiler from 'vue-template-compiler'
 import fs from 'fs'
@@ -22,6 +26,7 @@ import yaml from 'js-yaml'
 import { debug as Debug } from 'debug'
 const debug = Debug('vue-i18n-locale-message:utils')
 
+// define types
 export type PushableOptions = {
   target?: string
   locale?: string
@@ -36,12 +41,12 @@ const ESC: { [key in string]: string } = {
   '&': '&amp;'
 }
 
-export function escape (s: string): string {
-  return s.replace(/[<>"&]/g, escapeChar)
-}
-
 function escapeChar (a: string): string {
   return ESC[a] || a
+}
+
+export function escape (s: string): string {
+  return s.replace(/[<>"&]/g, escapeChar)
 }
 
 export function resolve (...paths: string[]): string {
@@ -200,6 +205,46 @@ export function getLocaleMessages (args: Arguments<PushableOptions>): LocaleMess
         if (match && match[1]) {
           const locale = match[1]
           messages = Object.assign(messages, { [locale]: require(fullPath) })
+        } else {
+          // TODO: should refactor console message
+          console.log(`${fullPath} is not matched with ${filenameMatch}`)
+        }
+      })
+    })
+  }
+
+  return messages
+}
+
+export function getRawLocaleMessages (args: Arguments<PushableOptions>): RawLocaleMessage[] {
+  const messages = [] as RawLocaleMessage[]
+
+  if (args.target) {
+    const targetPath = resolve(args.target)
+    const parsed = path.parse(targetPath)
+    messages.push({
+      locale: args.locale ? args.locale : parsed.name,
+      data: fs.readFileSync(targetPath)
+    })
+  } else if (args.targetPaths) {
+    const filenameMatch = args.filenameMatch
+    if (!filenameMatch) {
+      // TODO: should refactor console message
+      throw new Error('You need to specify together --filename-match')
+    }
+    const targetPaths = args.targetPaths.split(',').filter(p => p)
+    targetPaths.forEach(targetPath => {
+      const globedPaths = glob.sync(targetPath).map(p => resolve(p))
+      globedPaths.forEach(fullPath => {
+        const parsed = path.parse(fullPath)
+        const re = new RegExp(filenameMatch, 'ig')
+        const match = re.exec(parsed.base)
+        debug('regex match', match, fullPath)
+        if (match && match[1]) {
+          messages.push({
+            locale: match[1],
+            data: fs.readFileSync(fullPath)
+          })
         } else {
           // TODO: should refactor console message
           console.log(`${fullPath} is not matched with ${filenameMatch}`)
