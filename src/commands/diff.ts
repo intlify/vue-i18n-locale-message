@@ -64,6 +64,7 @@ export const builder = (args: Argv): Argv<DiffOptions> => {
 
 export const handler = async (args: Arguments<DiffOptions>): Promise<unknown> => {
   const { normalize } = args
+  const format = 'json'
   const ProviderFactory = loadProvider(args.provider)
 
   if (ProviderFactory === null) {
@@ -92,7 +93,7 @@ export const handler = async (args: Arguments<DiffOptions>): Promise<unknown> =>
   try {
     const provider = ProviderFactory(conf)
     const locales = Object.keys(localeMessages) as Locale[]
-    const serviceMessages = await provider.pull({ locales, dryRun: false, normalize })
+    const serviceMessages = await provider.pull({ locales, dryRun: false, normalize, format })
     console.log(diffString(localeMessages, serviceMessages))
   } catch (e) {
     // TODO: should refactor console message
