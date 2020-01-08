@@ -212,6 +212,7 @@ export type PushArguments = {
  */
 export type PullArguments = {
   locales: Locale[] // locales that pull from localization service, if empty, you must pull all locale messages
+  format: string // locale messages format
 } & CommonArguments
 
 /**
