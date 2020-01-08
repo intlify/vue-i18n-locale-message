@@ -1,4 +1,14 @@
 
+## v0.13.0 (2020-01-08)
+
+#### :star: Features
+* [#57](https://github.com/kazupon/vue-i18n-locale-message/pull/57) import command feature ([@kazupon](https://github.com/kazupon))
+* [#56](https://github.com/kazupon/vue-i18n-locale-message/pull/56) export command feature ([@kazupon](https://github.com/kazupon))
+
+#### Committers: 1
+- kazuya kawaguchi ([@kazupon](https://github.com/kazupon))
+
+
 ## v0.12.0 (2020-01-08)
 
 #### :star: Features
