@@ -98,6 +98,7 @@ test('--target option', async () => {
   expect(mockImport).toHaveBeenCalledWith({
     messages: [{
       locale: 'en',
+      format: 'json',
       data: fs.readFileSync('./test/fixtures/locales/en.json')
     }],
     dryRun: false,
@@ -122,6 +123,7 @@ test('--locale option', async () => {
   expect(mockImport).toHaveBeenCalledWith({
     messages: [{
       locale: 'ja',
+      format: 'json',
       data: fs.readFileSync('./test/fixtures/locales/lang.json')
     }],
     dryRun: false,
@@ -151,6 +153,7 @@ test('--conf option', async () => {
   expect(mockImport).toHaveBeenCalledWith({
     messages: [{
       locale: 'en',
+      format: 'json',
       data: fs.readFileSync('./test/fixtures/locales/en.json')
     }],
     dryRun: false,
@@ -193,12 +196,15 @@ test('--target-paths option', async () => {
   expect(mockImport).toHaveBeenCalledWith({
     messages: [{
       locale: 'en',
+      format: 'json',
       data: fs.readFileSync('./test/fixtures/locales/en.json')
     }, {
       locale: 'ja',
+      format: 'json',
       data: fs.readFileSync('./test/fixtures/locales/ja.json')
     }, {
       locale: 'lang',
+      format: 'json',
       data: fs.readFileSync('./test/fixtures/locales/lang.json')
     }],
     dryRun: false,
@@ -240,6 +246,7 @@ test('--dry-run option', async () => {
   expect(mockImport).toHaveBeenCalledWith({
     messages: [{
       locale: 'ja',
+      format: 'json',
       data: fs.readFileSync('./test/fixtures/locales/lang.json')
     }],
     dryRun: true,

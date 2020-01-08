@@ -169,6 +169,7 @@ export type TranslationStatus = {
  */
 export type RawLocaleMessage = {
   locale: Locale  // target locale
+  format: string  // locale message format
   data: Buffer    // data of locale message
 }
 
