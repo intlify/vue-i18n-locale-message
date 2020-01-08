@@ -1,20 +1,21 @@
 import * as yargs from 'yargs'
 import * as path from 'path'
+import * as fs from 'fs'
 
 // -------
 // mocking
 
-const mockPush = jest.fn()
+const mockImport = jest.fn()
 jest.mock('@scope/l10n-service-provider', () => {
   return jest.fn().mockImplementation(() => {
-    return { push: mockPush }
+    return { import: mockImport }
   })
 })
 import L10nServiceProvider from '@scope/l10n-service-provider'
 
 jest.mock('@scope/l10n-omit-service-provider', () => {
   return jest.fn().mockImplementation(() => {
-    return { push: jest.fn() }
+    return { import: jest.fn() }
   })
 })
 import L10nOmitServiceProvider from '@scope/l10n-omit-service-provider'
@@ -45,11 +46,11 @@ afterEach(() => {
 // test cases
 
 test('require option', async () => {
-  const push = await import('../../src/commands/push')
-  const cmd = yargs.command(push)
+  const imp = await import('../../src/commands/import')
+  const cmd = yargs.command(imp)
   try {
     await new Promise((resolve, reject) => {
-      cmd.parse(`push`, (err, argv, output) => {
+      cmd.parse(`import`, (err, argv, output) => {
         err ? reject(err) : resolve(output)
       })
     })
@@ -59,10 +60,10 @@ test('require option', async () => {
 })
 
 test('--provider: not found', async () => {
-  const push = await import('../../src/commands/push')
-  const cmd = yargs.command(push)
+  const imp = await import('../../src/commands/import')
+  const cmd = yargs.command(imp)
   await new Promise((resolve, reject) => {
-    cmd.parse(`push --provider=./404-provider.js`, (err, argv, output) => {
+    cmd.parse(`import --provider=./404-provider.js`, (err, argv, output) => {
       err ? reject(err) : resolve(output)
     })
   })
@@ -70,10 +71,10 @@ test('--provider: not found', async () => {
 })
 
 test('not specified --target and --targetPaths', async () => {
-  const push = await import('../../src/commands/push')
-  const cmd = yargs.command(push)
+  const imp = await import('../../src/commands/import')
+  const cmd = yargs.command(imp)
   await new Promise((resolve, reject) => {
-    cmd.parse(`push --provider=l10n-service-provider`, (err, argv, output) => {
+    cmd.parse(`import --provider=l10n-service-provider`, (err, argv, output) => {
       err ? reject(err) : resolve(output)
     })
   })
@@ -82,22 +83,23 @@ test('not specified --target and --targetPaths', async () => {
 
 test('--target option', async () => {
   // setup mocks
-  mockPush.mockImplementation(({ resource }) => true)
+  mockImport.mockImplementation(({ resource }) => Promise.resolve())
 
   // run
-  const push = await import('../../src/commands/push')
-  const cmd = yargs.command(push)
+  const imp = await import('../../src/commands/import')
+  const cmd = yargs.command(imp)
   await new Promise((resolve, reject) => {
-    cmd.parse(`push --provider=@scope/l10n-service-provider \
+    cmd.parse(`import --provider=@scope/l10n-service-provider \
       --target=./test/fixtures/locales/en.json`, (err, argv, output) => {
       err ? reject(err) : resolve(output)
     })
   })
 
-  expect(mockPush).toHaveBeenCalledWith({
-    messages: {
-      en: { hello: 'world' }
-    },
+  expect(mockImport).toHaveBeenCalledWith({
+    messages: [{
+      locale: 'en',
+      data: fs.readFileSync('./test/fixtures/locales/en.json')
+    }],
     dryRun: false,
     normalize: undefined
   })
@@ -105,22 +107,23 @@ test('--target option', async () => {
 
 test('--locale option', async () => {
   // setup mocks
-  mockPush.mockImplementation(({ resource }) => true)
+  mockImport.mockImplementation(({ resource }) => Promise.resolve())
 
   // run
-  const push = await import('../../src/commands/push')
-  const cmd = yargs.command(push)
+  const imp = await import('../../src/commands/import')
+  const cmd = yargs.command(imp)
   await new Promise((resolve, reject) => {
-    cmd.parse(`push --provider=@scope/l10n-service-provider \
+    cmd.parse(`import --provider=@scope/l10n-service-provider \
       --target=./test/fixtures/locales/lang.json --locale=ja`, (err, argv, output) => {
       err ? reject(err) : resolve(output)
     })
   })
 
-  expect(mockPush).toHaveBeenCalledWith({
-    messages: {
-      ja: { hello: '世界' }
-    },
+  expect(mockImport).toHaveBeenCalledWith({
+    messages: [{
+      locale: 'ja',
+      data: fs.readFileSync('./test/fixtures/locales/lang.json')
+    }],
     dryRun: false,
     normalize: undefined
   })
@@ -128,14 +131,14 @@ test('--locale option', async () => {
 
 test('--conf option', async () => {
   // setup mocks
-  mockPush.mockImplementation(({ reosurce }) => true)
+  mockImport.mockImplementation(({ reosurce }) => Promise.resolve())
 
   // run
   const TARGET_LOCALE = './test/fixtures/locales/en.json'
-  const push = await import('../../src/commands/push')
-  const cmd = yargs.command(push)
+  const imp = await import('../../src/commands/import')
+  const cmd = yargs.command(imp)
   await new Promise((resolve, reject) => {
-    cmd.parse(`push --provider=@scope/l10n-service-provider \
+    cmd.parse(`import --provider=@scope/l10n-service-provider \
       --conf=./test/fixtures/conf/l10n-service-provider-conf.json \
       --target=${TARGET_LOCALE}`, (err, argv, output) => {
       err ? reject(err) : resolve(output)
@@ -145,10 +148,11 @@ test('--conf option', async () => {
   expect(L10nServiceProvider).toHaveBeenCalledWith({
     provider: { token: 'xxx' }
   })
-  expect(mockPush).toHaveBeenCalledWith({
-    messages: {
-      en: { hello: 'world' }
-    },
+  expect(mockImport).toHaveBeenCalledWith({
+    messages: [{
+      locale: 'en',
+      data: fs.readFileSync('./test/fixtures/locales/en.json')
+    }],
     dryRun: false,
     normalize: undefined
   })
@@ -157,10 +161,10 @@ test('--conf option', async () => {
 test('--conf option omit', async () => {
   // run
   const TARGET_LOCALE = './test/fixtures/locales/en.json'
-  const push = await import('../../src/commands/push')
-  const cmd = yargs.command(push)
+  const imp = await import('../../src/commands/import')
+  const cmd = yargs.command(imp)
   await new Promise((resolve, reject) => {
-    cmd.parse(`push --provider=@scope/l10n-omit-service-provider \
+    cmd.parse(`import --provider=@scope/l10n-omit-service-provider \
       --target=${TARGET_LOCALE}`, (err, argv, output) => {
       err ? reject(err) : resolve(output)
     })
@@ -173,32 +177,30 @@ test('--conf option omit', async () => {
 
 test('--target-paths option', async () => {
   // setup mocks
-  mockPush.mockImplementation(({ resource }) => true)
+  mockImport.mockImplementation(({ reosurce }) => Promise.resolve())
 
   // run
-  const push = await import('../../src/commands/push')
-  const cmd = yargs.command(push)
+  const imp = await import('../../src/commands/import')
+  const cmd = yargs.command(imp)
   await new Promise((resolve, reject) => {
-    cmd.parse(`push --provider=@scope/l10n-service-provider \
+    cmd.parse(`import --provider=@scope/l10n-service-provider \
       --target-paths=./test/fixtures/locales/*.json \
       --filename-match=^([\\w]*)\\.json`, (err, argv, output) => {
       err ? reject(err) : resolve(output)
     })
   })
 
-  expect(mockPush).toHaveBeenCalledWith({
-    messages: {
-      en: {
-        hello: 'world'
-      },
-      lang: {
-        hello: '世界'
-      },
-      ja: {
-        hello: 'こんにちわわわ！',
-        world: 'ザ・ワールド'
-      }
-    },
+  expect(mockImport).toHaveBeenCalledWith({
+    messages: [{
+      locale: 'en',
+      data: fs.readFileSync('./test/fixtures/locales/en.json')
+    }, {
+      locale: 'ja',
+      data: fs.readFileSync('./test/fixtures/locales/ja.json')
+    }, {
+      locale: 'lang',
+      data: fs.readFileSync('./test/fixtures/locales/lang.json')
+    }],
     dryRun: false,
     normalize: undefined
   })
@@ -206,63 +208,41 @@ test('--target-paths option', async () => {
 
 test('not specified --filename-match', async () => {
   // setup mocks
-  mockPush.mockImplementation(({ resource }) => true)
+  mockImport.mockImplementation(({ reosurce }) => Promise.resolve())
 
   // run
-  const push = await import('../../src/commands/push')
-  const cmd = yargs.command(push)
+  const imp = await import('../../src/commands/import')
+  const cmd = yargs.command(imp)
   await new Promise((resolve, reject) => {
-    cmd.parse(`push --provider=@scope/l10n-service-provider \
+    cmd.parse(`import --provider=@scope/l10n-service-provider \
       --target-paths=./test/fixtures/locales/*.json`, (err, argv, output) => {
       err ? reject(err) : resolve(output)
     })
   })
 
-  expect(spyError).toHaveBeenCalledWith('push fail:', 'You need to specify together --filename-match')
+  expect(spyError).toHaveBeenCalledWith('import fail:', 'You need to specify together --filename-match')
 })
 
 test('--dry-run option', async () => {
   // setup mocks
-  mockPush.mockImplementation(({ resource }) => false)
+  mockImport.mockImplementation(({ reosurce }) => Promise.resolve())
 
   // run
-  const push = await import('../../src/commands/push')
-  const cmd = yargs.command(push)
+  const imp = await import('../../src/commands/import')
+  const cmd = yargs.command(imp)
   await new Promise((resolve, reject) => {
-    cmd.parse(`push --provider=@scope/l10n-service-provider \
+    cmd.parse(`import --provider=@scope/l10n-service-provider \
       --target=./test/fixtures/locales/lang.json --locale=ja --dryRun`, (err, argv, output) => {
       err ? reject(err) : resolve(output)
     })
   })
 
-  expect(mockPush).toHaveBeenCalledWith({
-    messages: {
-      ja: { hello: '世界' }
-    },
+  expect(mockImport).toHaveBeenCalledWith({
+    messages: [{
+      locale: 'ja',
+      data: fs.readFileSync('./test/fixtures/locales/lang.json')
+    }],
     dryRun: true,
     normalize: undefined
-  })
-})
-
-test('--normalize option', async () => {
-  // setup mocks
-  mockPush.mockImplementation(({ resource }) => false)
-
-  // run
-  const push = await import('../../src/commands/push')
-  const cmd = yargs.command(push)
-  await new Promise((resolve, reject) => {
-    cmd.parse(`push --provider=@scope/l10n-service-provider \
-      --target=./test/fixtures/locales/lang.json --locale=ja --normalize=flat`, (err, argv, output) => {
-      err ? reject(err) : resolve(output)
-    })
-  })
-
-  expect(mockPush).toHaveBeenCalledWith({
-    messages: {
-      ja: { hello: '世界' }
-    },
-    dryRun: false,
-    normalize: 'flat'
   })
 })

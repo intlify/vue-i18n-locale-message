@@ -5,22 +5,21 @@ import {
   loadProvider,
   loadProviderConf,
   DEFUALT_CONF,
-  getLocaleMessages,
+  getRawLocaleMessages,
   PushableOptions
 } from '../utils'
 
-type PushOptions = {
+type ImportOptions = {
   provider: string
   conf?: string
-  normalize?: string
   dryRun: boolean
 } & PushableOptions
 
-export const command = 'push'
-export const aliases = 'ph'
-export const describe = 'push locale messages to localization service'
+export const command = 'import'
+export const aliases = 'imp'
+export const describe = 'import locale messages to localization service'
 
-export const builder = (args: Argv): Argv<PushOptions> => {
+export const builder = (args: Argv): Argv<ImportOptions> => {
   return args
     .option('provider', {
       type: 'string',
@@ -36,7 +35,7 @@ export const builder = (args: Argv): Argv<PushOptions> => {
     .option('target', {
       type: 'string',
       alias: 't',
-      describe: 'target path that locale messages file is stored, default push with the filename of target path as locale'
+      describe: 'target path that locale messages file is stored, default import with the filename of target path as locale'
     })
     .option('locale', {
       type: 'string',
@@ -53,21 +52,16 @@ export const builder = (args: Argv): Argv<PushOptions> => {
       alias: 'm',
       describe: `option should be accepted a regex filenames, must be specified together --targets if it's directory path of locale messages`
     })
-    .option('normalize', {
-      type: 'string',
-      alias: 'n',
-      describe: 'option for the locale messages structure, you can specify the option, if you hope to normalize for the provider.'
-    })
     .option('dryRun', {
       type: 'boolean',
       alias: 'd',
       default: false,
-      describe: `run the push command, but do not apply to locale messages of localization service`
+      describe: `run the import command, but do not apply to locale messages of localization service`
     })
 }
 
-export const handler = async (args: Arguments<PushOptions>): Promise<unknown> => {
-  const { dryRun, normalize } = args
+export const handler = async (args: Arguments<ImportOptions>): Promise<unknown> => {
+  const { dryRun } = args
   const ProviderFactory = loadProvider(args.provider)
 
   if (ProviderFactory === null) {
@@ -86,14 +80,14 @@ export const handler = async (args: Arguments<PushOptions>): Promise<unknown> =>
   const conf = loadProviderConf(confPath) || DEFUALT_CONF
 
   try {
-    const messages = getLocaleMessages(args)
+    const messages = getRawLocaleMessages(args)
     const provider = ProviderFactory(conf)
-    await provider.push({ messages, dryRun, normalize })
+    await provider.import({ messages, dryRun })
     // TODO: should refactor console message
-    console.log('push success')
+    console.log('import success')
   } catch (e) {
     // TODO: should refactor console message
-    console.error('push fail:', e.message)
+    console.error('import fail:', e.message)
   }
 }
 

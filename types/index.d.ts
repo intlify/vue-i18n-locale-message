@@ -202,6 +202,10 @@ export interface Provider {
    */
   status (args: StatusArguments): Promise<TranslationStatus[]>
   /**
+   * import the locale messsages to localization service
+   */
+  import (args: ImportArguments): Promise<void>
+  /**
    * export the locale message buffer from localization service
    */
   export (args: ExportArguments): Promise<RawLocaleMessage[]>
@@ -233,6 +237,13 @@ export type PullArguments = {
 export type StatusArguments = {
   locales: Locale[] // locales that indicate translation status from localization service, if empty, you must indicate translation status all locales
 }
+
+/**
+ *  Provider Import Arguments
+ */
+export type ImportArguments = {
+  messages: RawLocaleMessage[]  // the raw locale messages that import to localization service
+} & CommonArguments
 
 /**
  *  Provider Export Arguments
