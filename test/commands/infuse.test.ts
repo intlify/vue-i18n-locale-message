@@ -137,7 +137,6 @@ test('dryRun option', async () => {
   mockUtils.resolve
     .mockImplementationOnce(() => `${TARGET_PATH}/src`)
     .mockImplementationOnce((...paths) => `${TARGET_PATH}/${paths[0]}`)
-  const writeFiles = {}
   const mockFS = fs as jest.Mocked<typeof fs>
   mockFS.readFileSync.mockImplementation(path => {
     if (MOCK_FILES[path as string]) {
@@ -152,7 +151,7 @@ test('dryRun option', async () => {
   const cmd = yargs.command(infuse)
   await new Promise(resolve => {
     cmd.parse(`infuse --target=./src --locales=locales-2.json --dry-run`, () => {
-      resolve(writeFiles)
+      resolve()
     })
   })
 
