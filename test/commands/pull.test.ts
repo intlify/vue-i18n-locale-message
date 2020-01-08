@@ -139,6 +139,7 @@ test('--locales option', async () => {
 
   expect(mockPull).toHaveBeenCalledWith({
     locales: ['en', 'ja', 'fr'],
+    format: 'json',
     dryRun: true,
     normalize: undefined
   })
@@ -184,7 +185,31 @@ test('--normalize option', async () => {
 
   expect(mockPull).toHaveBeenCalledWith({
     locales: [],
+    format: 'json',
     dryRun: false,
     normalize: 'hierarchy'
+  })
+})
+
+test('--format option', async () => {
+  // setup mocks
+  mockPull.mockImplementation(({ locales }) => Promise.resolve({ ja: {}, en: {}}))
+
+  // run
+  const pull = await import('../../src/commands/pull')
+  const cmd = yargs.command(pull)
+  await new Promise((resolve, reject) => {
+    cmd.parse(`pull --provider=@scope/l10n-service-provider \
+      --output=./test/fixtures/locales \
+      --format=xliff`, (err, argv, output) => {
+      err ? reject(err) : resolve(output)
+    })
+  })
+
+  expect(mockPull).toHaveBeenCalledWith({
+    locales: [],
+    format: 'xliff',
+    dryRun: false,
+    normalize: undefined
   })
 })

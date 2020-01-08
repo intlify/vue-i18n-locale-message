@@ -23,6 +23,7 @@ type PullOptions = {
   output: string
   locales?: string
   normalize?: string
+  format: string
   dryRun: boolean
 }
 
@@ -60,6 +61,12 @@ export const builder = (args: Argv): Argv<PullOptions> => {
       alias: 'n',
       describe: 'option for the locale messages structure, you can specify the option, if you hope to normalize for the provider.'
     })
+    .option('format', {
+      type: 'string',
+      alias: 'f',
+      default: 'json',
+      describe: 'option for the locale messages format, default `json`'
+    })
     .option('dryRun', {
       type: 'boolean',
       alias: 'd',
@@ -69,7 +76,7 @@ export const builder = (args: Argv): Argv<PullOptions> => {
 }
 
 export const handler = async (args: Arguments<PullOptions>): Promise<unknown> => {
-  const { dryRun, normalize } = args
+  const { dryRun, normalize, format } = args
   const ProviderFactory = loadProvider(args.provider)
 
   if (ProviderFactory === null) {
@@ -90,7 +97,7 @@ export const handler = async (args: Arguments<PullOptions>): Promise<unknown> =>
   try {
     const locales = args.locales?.split(',').filter(p => p) as Locale[] || []
     const provider = ProviderFactory(conf)
-    const messages = await provider.pull({ locales, dryRun, normalize })
+    const messages = await provider.pull({ locales, dryRun, normalize, format })
     await applyPullLocaleMessages(args.output, messages, args.dryRun)
     // TODO: should refactor console message
     console.log('pull success')
