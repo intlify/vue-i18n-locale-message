@@ -1,4 +1,13 @@
 
+## v0.12.0 (2020-01-08)
+
+#### :star: Features
+* [#52](https://github.com/kazupon/vue-i18n-locale-message/pull/52) --format option feature ([@kazupon](https://github.com/kazupon))
+
+#### Committers: 1
+- kazuya kawaguchi ([@kazupon](https://github.com/kazupon))
+
+
 ## v0.11.0 (2020-01-07)
 
 #### :star: Features
