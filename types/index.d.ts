@@ -164,6 +164,14 @@ export type TranslationStatus = {
   percentage: number  // translation percentage
 }
 
+/**
+ *  Raw Locale Message
+ */
+export type RawLocaleMessage = {
+  locale: Locale  // target locale
+  data: Buffer    // data of locale message
+}
+
 export type TranslationStatusOptions = {
   provider: string
   conf?: string
@@ -193,6 +201,10 @@ export interface Provider {
    * indicate translation status from localization service
    */
   status (args: StatusArguments): Promise<TranslationStatus[]>
+  /**
+   * export the locale message buffer from localization service
+   */
+  export (args: ExportArguments): Promise<RawLocaleMessage[]>
 }
 
 type CommonArguments = {
@@ -221,6 +233,14 @@ export type PullArguments = {
 export type StatusArguments = {
   locales: Locale[] // locales that indicate translation status from localization service, if empty, you must indicate translation status all locales
 }
+
+/**
+ *  Provider Export Arguments
+ */
+export type ExportArguments = {
+  locales: Locale[] // locales that export from localization service, if empty, you must export all locale messages
+  format: string    // locale messages format
+} & CommonArguments
 
 /**
  *  ProviderConfiguration provider fields structure
