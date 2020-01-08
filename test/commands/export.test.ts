@@ -209,8 +209,7 @@ test('--normalize option', async () => {
   expect(mockExport).toHaveBeenCalledWith({
     locales: [],
     format: 'json',
-    dryRun: false,
-    normalize: 'hierarchy'
+    dryRun: false
   })
 })
 

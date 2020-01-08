@@ -22,7 +22,6 @@ type ExportOptions = {
   conf?: string
   output: string
   locales?: string
-  normalize?: string
   format: string
   dryRun: boolean
 }
@@ -56,11 +55,6 @@ export const builder = (args: Argv): Argv<ExportOptions> => {
       default: '',
       describe: `option for some locales of locale messages, you can also be specified multi locale with comma delimiter. if it's not specified export all locale messages`
     })
-    .option('normalize', {
-      type: 'string',
-      alias: 'n',
-      describe: 'option for the locale messages structure, you can specify the option, if you hope to normalize for the provider.'
-    })
     .option('format', {
       type: 'string',
       alias: 'f',
@@ -76,7 +70,7 @@ export const builder = (args: Argv): Argv<ExportOptions> => {
 }
 
 export const handler = async (args: Arguments<ExportOptions>): Promise<unknown> => {
-  const { dryRun, normalize, format } = args
+  const { dryRun, format } = args
   const ProviderFactory = loadProvider(args.provider)
 
   if (ProviderFactory === null) {
@@ -97,7 +91,7 @@ export const handler = async (args: Arguments<ExportOptions>): Promise<unknown> 
   try {
     const locales = args.locales?.split(',').filter(p => p) as Locale[] || []
     const provider = ProviderFactory(conf)
-    const messages = await provider.export({ locales, dryRun, normalize, format })
+    const messages = await provider.export({ locales, dryRun, format })
     await writeRawLocaleMessages(args.output, format, messages, args.dryRun)
     // TODO: should refactor console message
     console.log('export success')
