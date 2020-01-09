@@ -93,8 +93,8 @@ test('--provider: not found', async () => {
 test('--conf option', async () => {
   // setup mocks
   const data = [
-    { locale: 'ja', data: Buffer.from(JSON.stringify({})) },
-    { locale: 'en', data: Buffer.from(JSON.stringify({})) }
+    { locale: 'ja', format: 'json', data: Buffer.from(JSON.stringify({})) },
+    { locale: 'en', format: 'json', data: Buffer.from(JSON.stringify({})) }
   ]
   mockExport.mockImplementation(({ locales, format }) => Promise.resolve(data))
 
@@ -135,8 +135,8 @@ test('--conf option omit', async () => {
 test('--locales option', async () => {
   // setup mocks
   const data = [
-    { locale: 'ja', data: Buffer.from(JSON.stringify({})) },
-    { locale: 'en', data: Buffer.from(JSON.stringify({})) }
+    { locale: 'ja', format: 'json', data: Buffer.from(JSON.stringify({})) },
+    { locale: 'en', format: 'json', data: Buffer.from(JSON.stringify({})) }
   ]
   mockExport.mockImplementation(({ locales, format }) => Promise.resolve(data))
 
@@ -163,8 +163,8 @@ test('--locales option', async () => {
 test('--output option', async () => {
   // setup mocks
   const data = [
-    { locale: 'ja', data: Buffer.from(JSON.stringify({ hello: 'hello' })) },
-    { locale: 'en', data: Buffer.from(JSON.stringify({ hello: 'こんにちわわわ！' })) }
+    { locale: 'ja', format: 'json', data: Buffer.from(JSON.stringify({ hello: 'hello' })) },
+    { locale: 'en', format: 'json', data: Buffer.from(JSON.stringify({ hello: 'こんにちわわわ！' })) }
   ]
   mockExport.mockImplementation(({ locales, format }) => Promise.resolve(data))
   const mockFS = fs as jest.Mocked<typeof fs>
@@ -190,8 +190,8 @@ test('--output option', async () => {
 test('--normalize option', async () => {
   // setup mocks
   const data = [
-    { locale: 'ja', data: Buffer.from(JSON.stringify({})) },
-    { locale: 'en', data: Buffer.from(JSON.stringify({})) }
+    { locale: 'ja', format: 'json', data: Buffer.from(JSON.stringify({})) },
+    { locale: 'en', format: 'json', data: Buffer.from(JSON.stringify({})) }
   ]
   mockExport.mockImplementation(({ locales, format }) => Promise.resolve(data))
 
@@ -216,8 +216,8 @@ test('--normalize option', async () => {
 test('--format option', async () => {
   // setup mocks
   const data = [
-    { locale: 'ja', data: Buffer.from(JSON.stringify({})) },
-    { locale: 'en', data: Buffer.from(JSON.stringify({})) }
+    { locale: 'ja', format: 'xliff', data: Buffer.from(JSON.stringify({})) },
+    { locale: 'en', format: 'xliff', data: Buffer.from(JSON.stringify({})) }
   ]
   mockExport.mockImplementation(({ locales, format }) => Promise.resolve(data))
 

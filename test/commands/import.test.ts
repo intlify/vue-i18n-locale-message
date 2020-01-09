@@ -60,6 +60,7 @@ test('require option', async () => {
 })
 
 test('--provider: not found', async () => {
+  // run
   const imp = await import('../../src/commands/import')
   const cmd = yargs.command(imp)
   await new Promise((resolve, reject) => {
@@ -67,10 +68,13 @@ test('--provider: not found', async () => {
       err ? reject(err) : resolve(output)
     })
   })
+
+  // verify
   expect(spyLog).toHaveBeenCalledWith('Not found ./404-provider.js provider')
 })
 
 test('not specified --target and --targetPaths', async () => {
+  // run
   const imp = await import('../../src/commands/import')
   const cmd = yargs.command(imp)
   await new Promise((resolve, reject) => {
@@ -78,6 +82,8 @@ test('not specified --target and --targetPaths', async () => {
       err ? reject(err) : resolve(output)
     })
   })
+
+  // verify
   expect(spyLog).toHaveBeenCalledWith('You need to specify either --target or --target-paths')
 })
 
@@ -95,9 +101,11 @@ test('--target option', async () => {
     })
   })
 
+  // verify
   expect(mockImport).toHaveBeenCalledWith({
     messages: [{
       locale: 'en',
+      format: 'json',
       data: fs.readFileSync('./test/fixtures/locales/en.json')
     }],
     dryRun: false,
@@ -119,9 +127,11 @@ test('--locale option', async () => {
     })
   })
 
+  // verify
   expect(mockImport).toHaveBeenCalledWith({
     messages: [{
       locale: 'ja',
+      format: 'json',
       data: fs.readFileSync('./test/fixtures/locales/lang.json')
     }],
     dryRun: false,
@@ -145,12 +155,14 @@ test('--conf option', async () => {
     })
   })
 
+  // verify
   expect(L10nServiceProvider).toHaveBeenCalledWith({
     provider: { token: 'xxx' }
   })
   expect(mockImport).toHaveBeenCalledWith({
     messages: [{
       locale: 'en',
+      format: 'json',
       data: fs.readFileSync('./test/fixtures/locales/en.json')
     }],
     dryRun: false,
@@ -170,6 +182,7 @@ test('--conf option omit', async () => {
     })
   })
 
+  // verify
   expect(L10nOmitServiceProvider).toHaveBeenCalledWith({
     provider: { token: 'yyy' }
   })
@@ -193,12 +206,15 @@ test('--target-paths option', async () => {
   expect(mockImport).toHaveBeenCalledWith({
     messages: [{
       locale: 'en',
+      format: 'json',
       data: fs.readFileSync('./test/fixtures/locales/en.json')
     }, {
       locale: 'ja',
+      format: 'json',
       data: fs.readFileSync('./test/fixtures/locales/ja.json')
     }, {
       locale: 'lang',
+      format: 'json',
       data: fs.readFileSync('./test/fixtures/locales/lang.json')
     }],
     dryRun: false,
@@ -220,6 +236,7 @@ test('not specified --filename-match', async () => {
     })
   })
 
+  // verify
   expect(spyError).toHaveBeenCalledWith('import fail:', 'You need to specify together --filename-match')
 })
 
@@ -237,12 +254,41 @@ test('--dry-run option', async () => {
     })
   })
 
+  // verify
   expect(mockImport).toHaveBeenCalledWith({
     messages: [{
       locale: 'ja',
+      format: 'json',
       data: fs.readFileSync('./test/fixtures/locales/lang.json')
     }],
     dryRun: true,
+    normalize: undefined
+  })
+})
+
+test('--format option', async () => {
+  // setup mocks
+  mockImport.mockImplementation(({ resource }) => Promise.resolve())
+
+  // run
+  const imp = await import('../../src/commands/import')
+  const cmd = yargs.command(imp)
+  await new Promise((resolve, reject) => {
+    cmd.parse(`import --provider=@scope/l10n-service-provider \
+      --target=./test/fixtures/locales/ja \
+      --format=json`, (err, argv, output) => {
+      err ? reject(err) : resolve(output)
+    })
+  })
+
+  // verify
+  expect(mockImport).toHaveBeenCalledWith({
+    messages: [{
+      locale: 'ja',
+      format: 'json',
+      data: fs.readFileSync('./test/fixtures/locales/ja')
+    }],
+    dryRun: false,
     normalize: undefined
   })
 })

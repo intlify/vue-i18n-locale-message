@@ -32,6 +32,7 @@ export type PushableOptions = {
   locale?: string
   targetPaths?: string
   filenameMatch?: string
+  format?: string
 }
 
 const ESC: { [key in string]: string } = {
@@ -222,10 +223,18 @@ export function getRawLocaleMessages (args: Arguments<PushableOptions>): RawLoca
   if (args.target) {
     const targetPath = resolve(args.target)
     const parsed = path.parse(targetPath)
-    messages.push({
-      locale: args.locale ? args.locale : parsed.name,
-      data: fs.readFileSync(targetPath)
-    })
+    const targetFormat = parsed.ext.split('.').pop()
+    const format = targetFormat || args.format
+    if (!format) {
+      // TODO: should refactor console message
+      console.log(`ignore ${targetPath}, due to be not specified with --format`)
+    } else {
+      messages.push({
+        locale: args.locale ? args.locale : parsed.name,
+        format,
+        data: fs.readFileSync(targetPath)
+      })
+    }
   } else if (args.targetPaths) {
     const filenameMatch = args.filenameMatch
     if (!filenameMatch) {
@@ -241,10 +250,18 @@ export function getRawLocaleMessages (args: Arguments<PushableOptions>): RawLoca
         const match = re.exec(parsed.base)
         debug('regex match', match, fullPath)
         if (match && match[1]) {
-          messages.push({
-            locale: match[1],
-            data: fs.readFileSync(fullPath)
-          })
+          const targetFormat = parsed.ext.split('.').pop()
+          const format = targetFormat || args.format
+          if (!format) {
+            // TODO: should refactor console message
+            console.log(`ignore ${fullPath}, due to be not specified with --format`)
+          } else {
+            messages.push({
+              locale: match[1],
+              format,
+              data: fs.readFileSync(fullPath)
+            })
+          }
         } else {
           // TODO: should refactor console message
           console.log(`${fullPath} is not matched with ${filenameMatch}`)

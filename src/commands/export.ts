@@ -92,7 +92,7 @@ export const handler = async (args: Arguments<ExportOptions>): Promise<unknown> 
     const locales = args.locales?.split(',').filter(p => p) as Locale[] || []
     const provider = ProviderFactory(conf)
     const messages = await provider.export({ locales, dryRun, format })
-    await writeRawLocaleMessages(args.output, format, messages, args.dryRun)
+    await writeRawLocaleMessages(args.output, messages, args.dryRun)
     // TODO: should refactor console message
     console.log('export success')
   } catch (e) {
@@ -101,7 +101,7 @@ export const handler = async (args: Arguments<ExportOptions>): Promise<unknown> 
   }
 }
 
-async function writeRawLocaleMessages (output: string, format: string, messages: RawLocaleMessage[], dryRun: boolean) {
+async function writeRawLocaleMessages (output: string, messages: RawLocaleMessage[], dryRun: boolean) {
   debug('writeRawLocaleMessages', messages, dryRun)
 
   // wrap mkdir with dryRun
@@ -112,8 +112,8 @@ async function writeRawLocaleMessages (output: string, format: string, messages:
   }
 
   // wrap writeFile with dryRun
-  const writeFile = async (output: string, format: string, message: RawLocaleMessage) => {
-    const localePath = path.resolve(output, `${message.locale}.${format}`)
+  const writeFile = async (output: string, message: RawLocaleMessage) => {
+    const localePath = path.resolve(output, `${message.locale}.${message.format}`)
     console.log(`write '${message.locale}' messages to ${localePath}`)
     return !dryRun
       ? writeFilePromisify(localePath, message.data)
@@ -123,7 +123,7 @@ async function writeRawLocaleMessages (output: string, format: string, messages:
   // run!
   await mkdir(output)
   for (const message of messages) {
-    await writeFile(output, format, message)
+    await writeFile(output, message)
   }
 }
 

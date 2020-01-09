@@ -52,6 +52,11 @@ export const builder = (args: Argv): Argv<ImportOptions> => {
       alias: 'm',
       describe: `option should be accepted a regex filenames, must be specified together --targets if it's directory path of locale messages`
     })
+    .option('format', {
+      type: 'string',
+      alias: 'f',
+      describe: `the locale messages format option when you want to explicitly specify format to locale message files detected with --target or --targetPaths, you need to specify if these locale message files doesn't have format extension`
+    })
     .option('dryRun', {
       type: 'boolean',
       alias: 'd',
