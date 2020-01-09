@@ -57,6 +57,8 @@ yarn global vue-i18n-locale-message
   - pull: pull the locale mesagees from localization service
   - diff: diff locale messages between local and localization service
   - status: indicate translation status from localization service
+  - import: import locale messages to localization service
+  - export: export locale messages from localization service
 
 ## :rocket: Usages
 
@@ -146,6 +148,23 @@ vue-i18n-locale-message status --provider=l10n-service-provider \
   --conf=110n-service-provider-conf.json
 ```
 
+### Import
+
+```bash
+$ vue-i18n-locale-message import --provider=l10n-service-provider \
+    --conf ./l10n-service-provider-conf.json \
+    --target=./src/locales/ja.json \
+    --format=json
+```
+
+### Export
+
+```bash
+$ vue-i18n-locale-message export --provider=l10n-service-provider \
+    --conf ./l10n-service-provider-conf.json \
+    --output=./src/locales
+```
+
 
 ## :book: API: Specifications
 
@@ -189,7 +208,7 @@ Infuse the meta of locale messages to i18n custom block at single-file component
 
 You can use the `push` or `pull` commands to push the locale message to the localization service as a resource for that service, and also to pull resources from the l10n service as the locale message.
 
-<p align="center"><img src="./assets/push-pull-command-image.png" alt="Push and Pull Image"></p>
+<p align="center"><img src="./assets/command-image.png" alt="Command Image"></p>
 
 When you run the following commands,
 
@@ -197,6 +216,8 @@ When you run the following commands,
   - `pull`
   - `diff`
   - `status`
+  - `import`
+  - `export`
 
 you need the provider that implements the following.
 
@@ -205,6 +226,8 @@ you need the provider that implements the following.
   - `push` method
   - `pull` method
   - `status` method
+  - `import` method
+  - `export` method
 
 The type definition with TypeScript is as follows:
 
@@ -223,6 +246,15 @@ export type TranslationStatus = {
 }
 
 /**
+ *  Raw Locale Message
+ */
+export type RawLocaleMessage = {
+  locale: Locale  // target locale
+  format: string  // locale message format
+  data: Buffer    // data of locale message
+}
+
+/**
  *  Provider interface
  */
 interface Provider {
@@ -238,6 +270,14 @@ interface Provider {
    * indicate translation status from localization service
    */
   status (args: StatusArguments): Promise<TranslationStatus[]>
+  /**
+   * import the locale messsages to localization service
+   */
+  import (args: ImportArguments): Promise<void>
+  /**
+   * export the locale message buffer from localization service
+   */
+  export (args: ExportArguments): Promise<RawLocaleMessage[]>
 }
 
 type CommonArguments = {
@@ -265,6 +305,21 @@ type PullArguments = {
 export type StatusArguments = {
   locales: Locale[] // locales that indicate translation status from localization service, if empty, you must indicate translation status all locales
 }
+
+/**
+ *  Provider Import Arguments
+ */
+export type ImportArguments = {
+  messages: RawLocaleMessage[]  // the raw locale messages that import to localization service
+} & CommonArguments
+
+/**
+ *  Provider Export Arguments
+ */
+export type ExportArguments = {
+  locales: Locale[] // locales that export from localization service, if empty, you must export all locale messages
+  format: string    // locale messages format
+} & CommonArguments
 
 /**
  *  ProviderConfiguration provider fields structure
