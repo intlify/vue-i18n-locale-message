@@ -55,7 +55,7 @@ export const builder = (args: Argv): Argv<ImportOptions> => {
     .option('format', {
       type: 'string',
       alias: 'f',
-      describe: `the locale messages format option when you want to explicitly specify format to locale message files detected with --target or --targetPaths, you need to specify if these locale message files doesn't have format extension1`
+      describe: `the locale messages format option when you want to explicitly specify format to locale message files detected with --target or --targetPaths, you need to specify if these locale message files doesn't have format extension`
     })
     .option('dryRun', {
       type: 'boolean',
