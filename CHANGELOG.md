@@ -1,4 +1,15 @@
 
+## v0.13.1 (2020-01-09)
+
+#### :zap: Improvement Features
+* [#59](https://github.com/kazupon/vue-i18n-locale-message/pull/59) support --format option for import command ([@kazupon](https://github.com/kazupon))
+* [#61](https://github.com/kazupon/vue-i18n-locale-message/pull/61) Add dryRun on infuse command ([@robinsondotnet](https://github.com/robinsondotnet))
+
+#### Committers: 2
+- Kento ([@robinsondotnet](https://github.com/robinsondotnet))
+- kazuya kawaguchi ([@kazupon](https://github.com/kazupon))
+
+
 ## v0.13.0 (2020-01-08)
 
 #### :star: Features
