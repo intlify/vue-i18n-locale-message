@@ -131,6 +131,34 @@ test('relative path', async () => {
   }
 })
 
+test('dryRun option', async () => {
+  // setup mock'
+  const mockUtils = utils as jest.Mocked<typeof utils>
+  mockUtils.resolve
+    .mockImplementationOnce(() => `${TARGET_PATH}/src`)
+    .mockImplementationOnce((...paths) => `${TARGET_PATH}/${paths[0]}`)
+  const mockFS = fs as jest.Mocked<typeof fs>
+  mockFS.readFileSync.mockImplementation(path => {
+    if (MOCK_FILES[path as string]) {
+      return MOCK_FILES[path as string]
+    } else {
+      return JSON.stringify(json)
+    }
+  })
+
+  // run
+  const infuse = await import('../../src/commands/infuse')
+  const cmd = yargs.command(infuse)
+  await new Promise(resolve => {
+    cmd.parse(`infuse --target=./src --locales=locales-2.json --dry-run`, () => {
+      resolve()
+    })
+  })
+
+  // check
+  expect(mockFS.writeFileSync).not.toHaveBeenCalled()
+})
+
 test('match option', async () => {
   // setup mocks
   const mockUtils = utils as jest.Mocked<typeof utils>

@@ -12,7 +12,9 @@ Options:
                                                              [string] [required]
   --locales, -l  locale messages path to be infused          [string] [required]
   --match, -m    option should be accepted a regex filenames, must be specified
-                 together --messages                                    [string]"
+                 together --messages                                    [string]
+  --dryRun, -d   run the infuse command, but do not apply them
+                                                      [boolean] [default: false]"
 `;
 
 exports[`squeeze command output help 1`] = `

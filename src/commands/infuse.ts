@@ -16,6 +16,7 @@ type InfuseOptions = {
   target: string
   locales: string
   match?: string
+  dryRun: boolean
 }
 
 export const command = 'infuse'
@@ -41,6 +42,12 @@ export const builder = (args: Argv): Argv<InfuseOptions> => {
       alias: 'm',
       describe: 'option should be accepted a regex filenames, must be specified together --messages'
     })
+    .option('dryRun', {
+      type: 'boolean',
+      alias: 'd',
+      default: false,
+      describe: 'run the infuse command, but do not apply them'
+    })
 }
 
 export const handler = (args: Arguments<InfuseOptions>): void => {
@@ -51,7 +58,7 @@ export const handler = (args: Arguments<InfuseOptions>): void => {
   const meta = squeeze(targetPath, sources)
   apply(messages, meta)
   const newSources = infuse(targetPath, sources, meta)
-  writeSFC(newSources)
+  if (!args.dryRun) writeSFC(newSources)
 }
 
 function readLocaleMessages (targetPath: string, matchRegex?: string): LocaleMessages {
