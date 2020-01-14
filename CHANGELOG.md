@@ -1,4 +1,13 @@
 
+## v0.13.2 (2020-01-14)
+
+#### :zap: Improvement Features
+* [#63](https://github.com/kazupon/vue-i18n-locale-message/pull/63) improve process.exit(1) when the translation is not finished yet ([@kazupon](https://github.com/kazupon))
+
+#### Committers: 1
+- kazuya kawaguchi ([@kazupon](https://github.com/kazupon))
+
+
 ## v0.13.1 (2020-01-09)
 
 #### :zap: Improvement Features
