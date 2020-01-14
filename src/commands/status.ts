@@ -12,6 +12,8 @@ export const command = 'status'
 export const aliases = 'st'
 export const describe = 'indicate translation status from localization service'
 
+class TranslationStatusError extends Error {}
+
 export const builder = (args: Argv): Argv<StatusOptions> => {
   return args
     .option('provider', {
@@ -31,22 +33,34 @@ export const builder = (args: Argv): Argv<StatusOptions> => {
       default: '',
       describe: `option for some locales of translation status, you can also be specified multi locale with comma delimiter. if it's not specified indicate all locale translation status`
     })
+    .fail((msg, err) => {
+      if (msg) {
+        console.error(msg)
+        process.exit(1)
+      } else {
+        if (err instanceof TranslationStatusError) {
+          console.warn(err.message)
+          process.exit(1)
+        } else {
+          if (err) throw err
+        }
+      }
+    })
 }
 
 export const handler = async (args: Arguments<StatusOptions>): Promise<unknown> => {
-  try {
-    const { provider, conf, locales } = args
-    const status = await getTranslationStatus({ provider, conf, locales })
-    debug('raw status', status)
-    // TODO: should be refactored console outputing!
-    status.forEach(st => {
-      console.log(`${st.locale}: ${st.percentage} %`)
-    })
-  } catch (e) {
-    console.error('status fail', e)
-  }
+  // try {
+  const { provider, conf, locales } = args
+  debug(`status args: provider=${provider}, conf=${conf}, locales=${locales}`)
+  const status = await getTranslationStatus({ provider, conf, locales })
+  debug('raw status', status)
+  console.table(status)
 
-  return Promise.resolve()
+  const completes = status.filter(st => st.percentage < 100)
+
+  return completes.length > 0
+    ? Promise.reject(new TranslationStatusError('Translation work in progress'))
+    : Promise.resolve('Translation done')
 }
 
 export default {

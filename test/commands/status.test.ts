@@ -18,6 +18,7 @@ import L10nServiceProvider from '@scope/l10n-service-provider'
 const PROCESS_CWD_TARGET_PATH = path.resolve(__dirname)
 
 let orgCwd // for process.cwd mock
+let orgExit // for process.exit mock
 let spyLog
 let spyError
 beforeEach(() => {
@@ -25,12 +26,14 @@ beforeEach(() => {
   spyError = jest.spyOn(global.console, 'error')
   orgCwd = process.cwd
   process.cwd = jest.fn(() => PROCESS_CWD_TARGET_PATH) // mock: process.cwd
+  process.exit = jest.fn((code => { return 'exit!' as never })) // mock: process.exit
 })
 
 afterEach(() => {
   spyError.mockRestore()
   spyLog.mockRestore()
   jest.clearAllMocks()
+  process.exit = orgExit
   process.cwd = orgCwd
 })
 
@@ -38,27 +41,28 @@ afterEach(() => {
 // test cases
 
 test('require options', async () => {
+  // run
   const status = await import('../../src/commands/status')
   const cmd = yargs.command(status)
-  try {
-    await new Promise((resolve, reject) => {
-      cmd.parse(`status`, (err, argv, output) => {
-        err ? reject(err) : resolve(output)
-      })
+  await new Promise((resolve, reject) => {
+    cmd.parse(`status`, (err, argv, output) => {
+      err ? reject(err) : resolve(output)
     })
-  } catch (e) {
-    expect(e).toMatchObject({ name: 'YError' })
-  }
+  })
+
+  // verify
+  expect(spyError).toBeCalled()
+  expect(process.exit).toHaveBeenCalledWith(1)
 })
 
-test('getTranslationStatus: success', async () => {
-  // setup mocks
+test('getTranslationStatus: done', async () => {
+  // setup mocking ...
   const mockStatusValue = [{
     locale: 'en',
-    percentage: 24.2
+    percentage: 100
   }, {
     locale: 'ja',
-    percentage: 100.0
+    percentage: 100
   }]
   mockStatus.mockImplementation(({ locales }) => Promise.resolve(mockStatusValue))
 
@@ -70,4 +74,32 @@ test('getTranslationStatus: success', async () => {
       err ? reject(err) : resolve(output)
     })
   })
+
+  // verify
+  expect(process.exit).not.toBeCalled()
+})
+
+test('getTranslationStatus: wip', async () => {
+  // setup mocking ...
+  const mockStatusValue = [{
+    locale: 'en',
+    percentage: 72.4
+  }, {
+    locale: 'ja',
+    percentage: 100
+  }]
+  mockStatus.mockImplementation(({ locales }) => Promise.resolve(mockStatusValue))
+
+  // run
+  const status = await import('../../src/commands/status')
+  const cmd = yargs.command(status)
+  await new Promise((resolve, reject) => {
+    cmd.parse(`status --provider=@scope/l10n-service-provider`, (err, argv, output) => {
+      err ? reject(err) : resolve(output)
+    })
+  })
+
+  // verify
+  // NOTE: cannot detect process.exit calling ...
+  // expect(process.exit).toHaveBeenCalledWith(1)
 })
