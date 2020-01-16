@@ -64,14 +64,18 @@ export const builder = (args: Argv): Argv<DiffOptions> => {
     })
     .fail((msg, err) => {
       if (msg) {
+        // TODO: should refactor console message
         console.error(msg)
         process.exit(1)
       } else {
         if (err instanceof DiffError) {
+          // TODO: should refactor console message
           console.warn(err.message)
-          process.exit(1)
+          process.exit(64)
         } else {
-          if (err) throw err
+          // TODO: should refactor console message
+          console.error(err.message)
+          process.exit(1)
         }
       }
     })
@@ -83,37 +87,31 @@ export const handler = async (args: Arguments<DiffOptions>): Promise<unknown> =>
   const ProviderFactory = loadProvider(args.provider)
 
   if (ProviderFactory === null) {
-    // TODO: should refactor console message
-    console.log(`Not found ${args.provider} provider`)
-    return
+    throw new Error(`Not found ${args.provider} provider`)
   }
 
   if (!args.target && !args.targetPaths) {
     // TODO: should refactor console message
-    console.log('You need to specify either --target or --target-paths')
-    return
+    throw new Error('You need to specify either --target or --target-paths')
   }
 
   const confPath = resolveProviderConf(args.provider, args.conf)
   const conf = loadProviderConf(confPath) || DEFUALT_CONF
 
-  let localeMessages
-  try {
-    localeMessages = getLocaleMessages(args)
-  } catch (e) {
-    console.log(e.message)
-    return
-  }
+  const localeMessages = getLocaleMessages(args)
 
   const provider = ProviderFactory(conf)
   const locales = Object.keys(localeMessages) as Locale[]
   const serviceMessages = await provider.pull({ locales, dryRun: false, normalize, format })
+
   const ret = diffString(localeMessages, serviceMessages)
   console.log(ret)
 
-  return !ret
-    ? Promise.reject(new DiffError('There are differences!'))
-    : Promise.resolve('No difference!')
+  if (ret) {
+    throw new DiffError('There are differences!')
+  }
+
+  return Promise.resolve()
 }
 
 export default {
