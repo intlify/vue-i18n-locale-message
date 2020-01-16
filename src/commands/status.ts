@@ -49,7 +49,6 @@ export const builder = (args: Argv): Argv<StatusOptions> => {
 }
 
 export const handler = async (args: Arguments<StatusOptions>): Promise<unknown> => {
-  // try {
   const { provider, conf, locales } = args
   debug(`status args: provider=${provider}, conf=${conf}, locales=${locales}`)
   const status = await getTranslationStatus({ provider, conf, locales })

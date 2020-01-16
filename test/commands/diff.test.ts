@@ -25,6 +25,7 @@ import L10nOmitServiceProvider from '@scope/l10n-omit-service-provider' // eslin
 const PROCESS_CWD_TARGET_PATH = path.resolve(__dirname)
 
 let orgCwd // for process.cwd mock
+let orgExit // for process.exit mock
 let spyLog
 let spyError
 beforeEach(() => {
@@ -32,12 +33,14 @@ beforeEach(() => {
   spyError = jest.spyOn(global.console, 'error')
   orgCwd = process.cwd
   process.cwd = jest.fn(() => PROCESS_CWD_TARGET_PATH) // mock: process.cwd
+  process.exit = jest.fn((code => { return 'exit!' as never })) // mock: process.exit
 })
 
 afterEach(() => {
   spyError.mockRestore()
   spyLog.mockRestore()
   jest.clearAllMocks()
+  process.exit = orgExit
   process.cwd = orgCwd
 })
 

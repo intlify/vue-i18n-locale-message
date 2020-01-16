@@ -22,6 +22,8 @@ export const command = 'diff'
 export const aliases = 'df'
 export const describe = 'Diff locale messages between local and localization service'
 
+class DiffError extends Error {}
+
 export const builder = (args: Argv): Argv<DiffOptions> => {
   return args
     .option('provider', {
@@ -60,6 +62,19 @@ export const builder = (args: Argv): Argv<DiffOptions> => {
       alias: 'n',
       describe: 'option for the locale messages structure, you can specify the option, if you hope to normalize for the provider.'
     })
+    .fail((msg, err) => {
+      if (msg) {
+        console.error(msg)
+        process.exit(1)
+      } else {
+        if (err instanceof DiffError) {
+          console.warn(err.message)
+          process.exit(1)
+        } else {
+          if (err) throw err
+        }
+      }
+    })
 }
 
 export const handler = async (args: Arguments<DiffOptions>): Promise<unknown> => {
@@ -90,15 +105,15 @@ export const handler = async (args: Arguments<DiffOptions>): Promise<unknown> =>
     return
   }
 
-  try {
-    const provider = ProviderFactory(conf)
-    const locales = Object.keys(localeMessages) as Locale[]
-    const serviceMessages = await provider.pull({ locales, dryRun: false, normalize, format })
-    console.log(diffString(localeMessages, serviceMessages))
-  } catch (e) {
-    // TODO: should refactor console message
-    console.error('diff fail', e)
-  }
+  const provider = ProviderFactory(conf)
+  const locales = Object.keys(localeMessages) as Locale[]
+  const serviceMessages = await provider.pull({ locales, dryRun: false, normalize, format })
+  const ret = diffString(localeMessages, serviceMessages)
+  console.log(ret)
+
+  return !ret
+    ? Promise.reject(new DiffError('There are differences!'))
+    : Promise.resolve('No difference!')
 }
 
 export default {
