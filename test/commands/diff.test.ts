@@ -27,9 +27,11 @@ const PROCESS_CWD_TARGET_PATH = path.resolve(__dirname)
 let orgCwd // for process.cwd mock
 let orgExit // for process.exit mock
 let spyLog
+let spyWarn
 let spyError
 beforeEach(() => {
   spyLog = jest.spyOn(global.console, 'log')
+  spyWarn = jest.spyOn(global.console, 'warn')
   spyError = jest.spyOn(global.console, 'error')
   orgCwd = process.cwd
   process.cwd = jest.fn(() => PROCESS_CWD_TARGET_PATH) // mock: process.cwd
@@ -38,6 +40,7 @@ beforeEach(() => {
 
 afterEach(() => {
   spyError.mockRestore()
+  spyWarn.mockRestore()
   spyLog.mockRestore()
   jest.clearAllMocks()
   process.exit = orgExit
@@ -72,7 +75,7 @@ test('--provider: not found', async () => {
   })
 
   // verify
-  expect(spyLog).toHaveBeenCalledWith('Not found ./404-provider.js provider')
+  expect(spyError).toHaveBeenCalledWith('Not found ./404-provider.js provider')
 })
 
 test('not specified --target and --targetPaths', async () => {
@@ -86,7 +89,7 @@ test('not specified --target and --targetPaths', async () => {
   })
 
   // verify
-  expect(spyLog).toHaveBeenCalledWith('You need to specify either --target or --target-paths')
+  expect(spyError).toHaveBeenCalledWith('You need to specify either --target or --target-paths')
 })
 
 test('--target option', async () => {
@@ -111,6 +114,9 @@ test('--target option', async () => {
 
   // verify with snapshot
   expect(spyLog.mock.calls[0][0]).toMatchSnapshot()
+  // NOTE: cannot detect process.exit calling in `fail` ...
+  // expect(spyWarn).toHaveBeenCalledWith('There are differences!')
+  // expect(process.exit).toHaveBeenCalledWith(64)
 })
 
 test('--locale option', async () => {
@@ -135,6 +141,9 @@ test('--locale option', async () => {
 
   // verify with snapshot
   expect(spyLog.mock.calls[0][0]).toMatchSnapshot()
+  // NOTE: cannot detect process.exit calling in `fail` ...
+  // expect(spyWarn).toHaveBeenCalledWith('There are differences!')
+  // expect(process.exit).toHaveBeenCalledWith(64)
 })
 
 test('--target-paths option', async () => {
@@ -159,4 +168,7 @@ test('--target-paths option', async () => {
 
   // verify with snapshot
   expect(spyLog.mock.calls[1][0]).toMatchSnapshot()
+  // NOTE: cannot detect process.exit calling in `fail` ...
+  // expect(spyWarn).toHaveBeenCalledWith('There are differences!')
+  // expect(process.exit).toHaveBeenCalledWith(64)
 })
