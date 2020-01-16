@@ -1,4 +1,13 @@
 
+## v0.13.3 (2020-01-16)
+
+#### :zap: Improvement Features
+* [#66](https://github.com/kazupon/vue-i18n-locale-message/pull/66) process.exit(1) for detect difference with diff command ([@kazupon](https://github.com/kazupon))
+
+#### Committers: 1
+- kazuya kawaguchi ([@kazupon](https://github.com/kazupon))
+
+
 ## v0.13.2 (2020-01-14)
 
 #### :zap: Improvement Features
