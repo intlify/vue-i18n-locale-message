@@ -1,7 +1,7 @@
 {
   "name": "vue-i18n-locale-message",
   "description": "i18n locale messages management tool / library for vue-i18n",
-  "version": "0.13.3",
+  "version": "0.13.4",
   "author": {
     "name": "kazuya kawaguchi",
     "email": "kawakazu80@gmail.com"
