@@ -104,7 +104,7 @@ export const handler = async (args: Arguments<DiffOptions>): Promise<unknown> =>
   const locales = Object.keys(localeMessages) as Locale[]
   const serviceMessages = await provider.pull({ locales, dryRun: false, normalize, format })
 
-  const ret = diffString(localeMessages, serviceMessages)
+  const ret = diffString(serviceMessages, localeMessages)
   console.log(ret)
 
   if (ret) {
