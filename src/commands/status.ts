@@ -40,7 +40,7 @@ export const builder = (args: Argv): Argv<StatusOptions> => {
       } else {
         if (err instanceof TranslationStatusError) {
           console.warn(err.message)
-          process.exit(1)
+          process.exit(4)
         } else {
           if (err) throw err
         }

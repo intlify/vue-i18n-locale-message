@@ -101,5 +101,5 @@ test('getTranslationStatus: wip', async () => {
 
   // verify
   // NOTE: cannot detect process.exit calling ...
-  // expect(process.exit).toHaveBeenCalledWith(1)
+  // expect(process.exit).toHaveBeenCalledWith(4)
 })
