@@ -1,4 +1,16 @@
 
+## v0.13.5 (2020-01-19)
+
+#### :bug: Bug Fixes
+* [#71](https://github.com/kazupon/vue-i18n-locale-message/pull/71) fix reverse diff ([@kazupon](https://github.com/kazupon))
+
+#### :zap: Improvement Features
+* [#72](https://github.com/kazupon/vue-i18n-locale-message/pull/72) change status command exit code ([@kazupon](https://github.com/kazupon))
+
+#### Committers: 1
+- kazuya kawaguchi ([@kazupon](https://github.com/kazupon))
+
+
 ## v0.13.4 (2020-01-16)
 
 #### :zap: Improvement Features
