@@ -10,6 +10,14 @@ i18n locale messages management tool / library for vue-i18n
   <img src="https://c5.patreon.com/external/logo/become_a_patron_button.png" alt="Become a Patreon">
 </a>
 
+## :loudspeaker: Notice
+
+vue-i18n-locale-message will soon be transferred to [intlify organaization](https://github.com/intlify). After that, it will be developed and maintained on intlify.
+
+The `vue-i18n-locale-message` that has been released on npm will be released as `@intlify/vue-i18n-locale-message` in near future.
+
+Intlify is a new i18n project kickoff by @kazupon. 😉 
+
 ## :raising_hand: Motivations
 
 The big motivation is as follows.
