@@ -174,6 +174,14 @@ $ vue-i18n-locale-message export --provider=l10n-service-provider \
 ```
 
 
+## :red_car: Exit codes
+
+| Codes | Description                                        |
+|-------|----------------------------------------------------|
+| 4     | Not completed translation                          |
+| 64    | difference between local and localization services |
+
+
 ## :book: API: Specifications
 
 <p align="center"><img width="476px" height="544px" src="./assets/api-usage-image.png" alt="API Usage Image"></p>
