@@ -103,7 +103,7 @@ export const handler = async (args: Arguments<ListOptions>): Promise<unknown> =>
   }
 
   const localeMessages = getLocaleMessages(args)
-  const flattedLocaleMessages = {}
+  const flattedLocaleMessages = {} as LocaleMessages
   Object.keys(localeMessages).forEach(locale => {
     flattedLocaleMessages[locale] = flatten(localeMessages[locale])
   })
@@ -116,7 +116,7 @@ export const handler = async (args: Arguments<ListOptions>): Promise<unknown> =>
 
   let valid = true
   Object.keys(flattedLocaleMessages).forEach(l => {
-    const message = flattedLocaleMessages[l]
+    const message = flattedLocaleMessages[l] as { [prop: string]: LocaleMessage }
     if (!message) {
       console.log(`Not found '${l}' locale messages`)
       valid = false
@@ -137,7 +137,7 @@ export const handler = async (args: Arguments<ListOptions>): Promise<unknown> =>
     return Promise.reject(new LocaleMessageUndefindError('there are undefined fields in the target locale messages, you can define with --define option'))
   }
 
-  const unflattedLocaleMessages = {}
+  const unflattedLocaleMessages = {} as LocaleMessages
   Object.keys(flattedLocaleMessages).forEach(locale => {
     unflattedLocaleMessages[locale] = unflatten(flattedLocaleMessages[locale])
   })
