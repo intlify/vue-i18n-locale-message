@@ -1,4 +1,13 @@
 
+## v0.14.0 (2020-01-21)
+
+#### :star: Features
+* [#74](https://github.com/kazupon/vue-i18n-locale-message/pull/74) list command feature ([@kazupon](https://github.com/kazupon))
+
+#### Committers: 1
+- kazuya kawaguchi ([@kazupon](https://github.com/kazupon))
+
+
 ## v0.13.5 (2020-01-19)
 
 #### :bug: Bug Fixes
