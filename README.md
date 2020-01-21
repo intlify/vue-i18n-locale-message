@@ -67,6 +67,7 @@ yarn global vue-i18n-locale-message
   - status: indicate translation status from localization service
   - import: import locale messages to localization service
   - export: export locale messages from localization service
+  - list: list undefined fields in locale messages
 
 ## :rocket: Usages
 
@@ -173,13 +174,22 @@ $ vue-i18n-locale-message export --provider=l10n-service-provider \
     --output=./src/locales
 ```
 
+#### list
+
+```sh
+vue-i18n-locale-message list --locale=en \
+  --target-paths=./src/locales/*.json \
+  --filename-match=^([\\w]*)\\.json
+```
+
 
 ## :red_car: Exit codes
 
-| Codes | Description                                        |
-|-------|----------------------------------------------------|
-| 4     | Not completed translation                          |
-| 64    | difference between local and localization services |
+| Codes | Description                                                          |
+|-------|----------------------------------------------------------------------|
+| 4     | Not completed localization                                           |
+| 5     | There are undefined fields in locale messages                        |
+| 64    | difference between local and localization services                   |
 
 
 ## :book: API: Specifications
