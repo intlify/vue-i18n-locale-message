@@ -1,9 +1,11 @@
 import { Arguments, Argv } from 'yargs'
 
+import { TranslationStatusError, fail } from './fails/status'
+import { getTranslationStatus } from '../utils'
+
 import { debug as Debug } from 'debug'
 const debug = Debug('vue-i18n-locale-message:commands:status')
 
-import { getTranslationStatus } from '../utils'
 import { TranslationStatusOptions } from '../../types'
 
 type StatusOptions = TranslationStatusOptions
@@ -11,8 +13,6 @@ type StatusOptions = TranslationStatusOptions
 export const command = 'status'
 export const aliases = 'st'
 export const describe = 'indicate translation status from localization service'
-
-class TranslationStatusError extends Error {}
 
 export const builder = (args: Argv): Argv<StatusOptions> => {
   return args
@@ -33,19 +33,7 @@ export const builder = (args: Argv): Argv<StatusOptions> => {
       default: '',
       describe: `option for some locales of translation status, you can also be specified multi locale with comma delimiter. if it's not specified indicate all locale translation status`
     })
-    .fail((msg, err) => {
-      if (msg) {
-        console.error(msg)
-        process.exit(1)
-      } else {
-        if (err instanceof TranslationStatusError) {
-          console.warn(err.message)
-          process.exit(4)
-        } else {
-          if (err) throw err
-        }
-      }
-    })
+    .fail(fail)
 }
 
 export const handler = async (args: Arguments<StatusOptions>): Promise<unknown> => {

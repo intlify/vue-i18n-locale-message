@@ -1,0 +1,19 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`getTranslationStatus: done 1`] = `
+"┌─────────┬────────┬────────────┐
+│ (index) │ locale │ percentage │
+├─────────┼────────┼────────────┤
+│    0    │  'en'  │    100     │
+│    1    │  'ja'  │    100     │
+└─────────┴────────┴────────────┘"
+`;
+
+exports[`getTranslationStatus: wip 1`] = `
+"┌─────────┬────────┬────────────┐
+│ (index) │ locale │ percentage │
+├─────────┼────────┼────────────┤
+│    0    │  'en'  │    72.4    │
+│    1    │  'ja'  │    100     │
+└─────────┴────────┴────────────┘"
+`;

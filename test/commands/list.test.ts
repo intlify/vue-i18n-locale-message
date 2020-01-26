@@ -1,5 +1,6 @@
 import * as yargs from 'yargs'
 import * as path from 'path'
+import { flash, runCommand } from '../helper'
 
 // -------
 // mocking
@@ -17,6 +18,12 @@ jest.mock('fs', () => ({
   writeFile: jest.fn()
 }))
 import fs from 'fs'
+
+jest.mock('../../src/commands/fails/list', () => ({
+  ...jest.requireActual('../../src/commands/fails/list'),
+  fail: jest.fn()
+}))
+import listFail from '../../src/commands/fails/list'
 
 // -------------------
 // setup/teadown hooks
@@ -41,35 +48,35 @@ afterEach(() => {
 // test cases
 
 test('require option', async () => {
-  const list = await import('../../src/commands/list')
-  const cmd = yargs.command(list)
-  try {
-    await new Promise((resolve, reject) => {
-      cmd.parse(`list`, (err, argv, output) => {
-        err ? reject(err) : resolve(output)
-      })
-    })
-  } catch (e) {
-    expect(e).toMatchObject({ name: 'YError' })
-  }
-})
+  // mocking ...
+  const mockListFail = listFail as jest.Mocked<typeof listFail>
+  mockListFail.fail.mockImplementation(() => {})
 
-test('not specified --target and --targetPaths', async () => {
   // run
-  const list = await import('../../src/commands/list')
-  const cmd = yargs.command(list)
-  await new Promise((resolve, reject) => {
-    cmd.parse(`list --locale=en`, (err, argv, output) => {
-      err ? reject(err) : resolve(output)
-    })
-  })
+  await runCommand('src/commands/list', `list`)
+  await flash()
 
   // verify
-  expect(spyError).toHaveBeenCalledWith('You need to specify either --target or --target-paths')
+  expect(mockListFail.fail).toHaveBeenCalled()
+})
+
+test('not specified --target and --target-paths', async () => {
+  // mocking ...
+  const mockListFail = listFail as jest.Mocked<typeof listFail>
+  mockListFail.fail.mockImplementation(() => {})
+
+  // run
+  await runCommand('src/commands/list', `list --locale=en`)
+  await flash()
+
+  // verify
+  expect(mockListFail.fail.mock.calls[0][1].message).toEqual('You need to specify either --target or --target-paths')
 })
 
 test('--target option', async () => {
-  // setup mocks
+  // mocking ...
+  const mockListFail = listFail as jest.Mocked<typeof listFail>
+  mockListFail.fail.mockImplementation(() => {})
   const mockUtils = utils as jest.Mocked<typeof utils>
   mockUtils.getLocaleMessages.mockImplementation((...args) => ({
     en: {
@@ -85,24 +92,20 @@ test('--target option', async () => {
   })
 
   // run
-  const list = await import('../../src/commands/list')
-  const cmd = yargs.command(list)
-  await new Promise((resolve, reject) => {
-    cmd.parse(`list --locale=en --target=./test/fixtures/locales/ja.json`, (err, argv, output) => {
-      err ? reject(err) : resolve(output)
-    })
-  })
+  await runCommand('src/commands/list', `list --locale=en --target=./test/fixtures/locales/ja.json`)
+  await flash()
 
   expect(spyLog).toHaveBeenCalledTimes(2)
   expect(spyLog.mock.calls[0]).toEqual([`ja: 'foo' undefined`])
   expect(spyLog.mock.calls[1]).toEqual([`ja: 'bar.buz' undefined`])
   expect(mockFS.writeFile).not.toHaveBeenCalled()
-  // NOTE: cannot detect process.exit calling ...
-  // expect(process.exit).toHaveBeenCalledWith(5)
+  expect(mockListFail.fail.mock.calls[0][1].message).toEqual('There are undefined fields in the target locale messages, you can define with --define option')
 })
 
 test('--target-paths option', async () => {
-  // setup mocks
+  // mocking ...
+  const mockListFail = listFail as jest.Mocked<typeof listFail>
+  mockListFail.fail.mockImplementation(() => {})
   const mockUtils = utils as jest.Mocked<typeof utils>
   mockUtils.getLocaleMessages.mockImplementation((...args) => ({
     en: {
@@ -118,26 +121,25 @@ test('--target-paths option', async () => {
   })
 
   // run
-  const list = await import('../../src/commands/list')
-  const cmd = yargs.command(list)
-  await new Promise((resolve, reject) => {
-    cmd.parse(`list --locale=en \
-      --target-paths=./test/fixtures/locales/*.json \
-      --filename-match=^([\\w]*)\\.json`, (err, argv, output) => {
-      err ? reject(err) : resolve(output)
-    })
-  })
+  await runCommand(
+    'src/commands/list',
+    `list --locale=en --target=./test/fixtures/locales/*.json \
+      --filename-match=^([\\w]*)\\.json`
+  )
+  await flash()
 
+  // verify
   expect(spyLog).toHaveBeenCalledTimes(2)
   expect(spyLog.mock.calls[0]).toEqual([`ja: 'foo' undefined`])
   expect(spyLog.mock.calls[1]).toEqual([`ja: 'bar.buz' undefined`])
   expect(mockFS.writeFile).not.toHaveBeenCalled()
-  // NOTE: cannot detect process.exit calling ...
-  // expect(process.exit).toHaveBeenCalledWith(5)
+  expect(mockListFail.fail.mock.calls[0][1].message).toEqual('There are undefined fields in the target locale messages, you can define with --define option')
 })
 
 test('--define option', async () => {
-  // setup mocks
+  // mocking ...
+  const mockListFail = listFail as jest.Mocked<typeof listFail>
+  mockListFail.fail.mockImplementation(() => {})
   const mockUtils = utils as jest.Mocked<typeof utils>
   mockUtils.getLocaleMessages.mockImplementation((...args) => ({
     en: {
@@ -153,17 +155,16 @@ test('--define option', async () => {
   })
 
   // run
-  const list = await import('../../src/commands/list')
-  const cmd = yargs.command(list)
-  await new Promise((resolve, reject) => {
-    cmd.parse(`list --locale=en \
+  await runCommand(
+    'src/commands/list',
+    `list --locale=en \
       --target-paths=./test/fixtures/locales/*.json \
       --filename-match=^([\\w]*)\\.json \
-      --define`, (err, argv, output) => {
-      err ? reject(err) : resolve(output)
-    })
-  })
+      --define`
+  )
+  await flash()
 
+  // verify
   expect(spyLog).toHaveBeenCalledTimes(3)
   expect(spyLog.mock.calls[0]).toEqual([`ja: 'foo' undefined`])
   expect(spyLog.mock.calls[1]).toEqual([`ja: 'bar.buz' undefined`])
@@ -174,7 +175,9 @@ test('--define option', async () => {
 })
 
 test('--indent option', async () => {
-  // setup mocks
+  // mocking ...
+  const mockListFail = listFail as jest.Mocked<typeof listFail>
+  mockListFail.fail.mockImplementation(() => {})
   const mockUtils = utils as jest.Mocked<typeof utils>
   mockUtils.getLocaleMessages.mockImplementation((...args) => ({
     en: {
@@ -190,16 +193,14 @@ test('--indent option', async () => {
   })
 
   // run
-  const list = await import('../../src/commands/list')
-  const cmd = yargs.command(list)
-  await new Promise((resolve, reject) => {
-    cmd.parse(`list --locale=en \
+  await runCommand(
+    'src/commands/list',
+    `list --locale=en \
       --target-paths=./test/fixtures/locales/*.json \
       --filename-match=^([\\w]*)\\.json \
-      --define --indent=4`, (err, argv, output) => {
-      err ? reject(err) : resolve(output)
-    })
-  })
+      --define --indent=4`
+  )
+  await flash()
 
   expect(writeFiles).toMatchSnapshot()
 })

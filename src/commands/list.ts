@@ -5,6 +5,8 @@ import fs from 'fs'
 import { promisify } from 'util'
 import { Arguments, Argv } from 'yargs'
 
+import { LocaleMessageUndefindError, fail } from './fails/list'
+
 import {
   resolve,
   getLocaleMessages
@@ -35,8 +37,6 @@ import { debug as Debug } from 'debug'
 const debug = Debug('vue-i18n-locale-message:commands:list')
 
 const writeFile = promisify(fs.writeFile)
-
-class LocaleMessageUndefindError extends Error {}
 
 export const command = 'list'
 export const aliases = 'lt'
@@ -77,29 +77,14 @@ export const builder = (args: Argv): Argv<ListOptions> => {
       default: 2,
       describe: `option for indent of locale message, if you need to adjust with --define option`
     })
-    .fail((msg, err) => {
-      if (msg) {
-        // TODO: should refactor console message
-        console.error(msg)
-        process.exit(1)
-      } else {
-        if (err instanceof LocaleMessageUndefindError) {
-          // TODO: should refactor console message
-          console.warn(err.message)
-          process.exit(5)
-        } else {
-          if (err) throw err
-        }
-      }
-    })
+    .fail(fail)
 }
 
 export const handler = async (args: Arguments<ListOptions>): Promise<unknown> => {
   const { locale, define } = args
   if (!args.target && !args.targetPaths) {
     // TODO: should refactor console message
-    console.error('You need to specify either --target or --target-paths')
-    return
+    return Promise.reject(new Error('You need to specify either --target or --target-paths'))
   }
 
   const localeMessages = getLocaleMessages(args)
@@ -134,7 +119,7 @@ export const handler = async (args: Arguments<ListOptions>): Promise<unknown> =>
   })
 
   if (!define && !valid) {
-    return Promise.reject(new LocaleMessageUndefindError('there are undefined fields in the target locale messages, you can define with --define option'))
+    return Promise.reject(new LocaleMessageUndefindError('There are undefined fields in the target locale messages, you can define with --define option'))
   }
 
   const unflattedLocaleMessages = {} as LocaleMessages
