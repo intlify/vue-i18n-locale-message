@@ -22,9 +22,12 @@ import glob from 'glob'
 import path from 'path'
 import JSON5 from 'json5'
 import yaml from 'js-yaml'
+import { promisify } from 'util'
 
 import { debug as Debug } from 'debug'
+import { worker } from 'cluster'
 const debug = Debug('vue-i18n-locale-message:utils')
+const readFile = promisify(fs.readFile)
 
 // define types
 export type PushableOptions = {
@@ -34,6 +37,7 @@ export type PushableOptions = {
   filenameMatch?: string
   format?: string
 }
+export type NamespaceDictionary = { [path: string]: string }
 
 const ESC: { [key in string]: string } = {
   '<': '&lt;',
@@ -286,4 +290,71 @@ export async function getTranslationStatus (options: TranslationStatusOptions): 
   const provider = ProviderFactory(conf)
   const status = await provider.status({ locales })
   return Promise.resolve(status)
+}
+
+export async function loadNamespaceDictionary (path: string) {
+  const raw = await readFile(resolve(path))
+  return new Promise<NamespaceDictionary>((resolv, reject) => {
+    try {
+      // TODO: should be checked more strongly
+      resolv(JSON.parse(raw.toString()) as NamespaceDictionary)
+    } catch (e) {
+      reject(e)
+    }
+  })
+}
+
+type ParsedLocaleMessagePathInfo = {
+  locale: Locale
+  filename?: string
+}
+
+export function getExternalLocaleMessages (
+  dictionary: NamespaceDictionary, withBundle?: string, withBundleMatch?: string
+) {
+  if (!withBundle) { return {} }
+
+  const getLocaleMessagePathInfo = (fullPath: string, bundleMatch?: string): ParsedLocaleMessagePathInfo => {
+    const parsed = path.parse(fullPath)
+    debug('getExternalLocaleMessages: parsed', parsed)
+    if (bundleMatch) {
+      const re = new RegExp(bundleMatch, 'ig')
+      const match = re.exec(fullPath)
+      debug('getExternalLocaleMessages: regex match', match)
+      return {
+        locale: (match && match[1]) ? match[1] : '',
+        filename: (match && match[2]) ? match[2] : undefined
+      }
+    } else {
+      return {
+        locale: parsed.ext.split('.').pop() || ''
+      }
+    }
+  }
+
+  const bundleTargetPaths = withBundle.split(',').filter(p => p)
+  return bundleTargetPaths.reduce((messages, targetPath) => {
+    const namespace = dictionary[targetPath] || ''
+    const globedPaths = glob.sync(targetPath).map(p => resolve(p))
+    return globedPaths.reduce((messages, fullPath) => {
+      const { locale, filename } = getLocaleMessagePathInfo(fullPath, withBundleMatch)
+      if (!locale) { return messages }
+      const externalMessages = JSON.parse(fs.readFileSync(fullPath).toString())
+      let workMessags = externalMessages
+      if (filename) {
+        workMessags = Object.assign({}, { [filename]: workMessags })
+      }
+      if (namespace) {
+        workMessags = Object.assign({}, { [namespace]: workMessags })
+      }
+      debug('getExternalLocaleMessages: workMessages', workMessags)
+      if (messages[locale]) {
+        messages[locale] = Object.assign(messages[locale], workMessags)
+      } else {
+        messages = Object.assign(messages, { [locale]: workMessags })
+      }
+      debug('getExternalLocaleMessages: messages (processing)', messages)
+      return messages
+    }, messages)
+  }, {} as LocaleMessages)
 }

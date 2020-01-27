@@ -2,7 +2,7 @@ import { SFCFileInfo } from '../types'
 
 import jsonFiles from './fixtures/file/json'
 import jsonMetaInfo from './fixtures/meta/json'
-import { reflectSFCDescriptor, getTranslationStatus } from '../src/utils'
+import { reflectSFCDescriptor, getTranslationStatus, NamespaceDictionary, getExternalLocaleMessages } from '../src/utils'
 
 // ------
 // mocks
@@ -45,4 +45,42 @@ test('getTranslationStatus: provider not found', async () => {
   await expect(getTranslationStatus({
     provider: './404-provider.js'
   })).rejects.toThrow('Not found ./404-provider.js provider')
+})
+
+test('getExternalLocaleMessages: basic usage', async () => {
+  const namespaces: NamespaceDictionary = {
+    './test/fixtures/packages/package1/locales/**/*.json': 'package1',
+    './test/fixtures/packages/package2/locales/**/*.json': 'package2'
+  }
+  const withBundle = './test/fixtures/packages/package1/locales/**/*.json,./test/fixtures/packages/package2/locales/**/*.json'
+  const withBundleMatch = '([\\w]*)/([\\w]*)\\.json$'
+  const messages = getExternalLocaleMessages(namespaces, withBundle, withBundleMatch)
+
+  expect(messages).toMatchSnapshot()
+})
+
+test('getExternalLocaleMessages: no namespace', async () => {
+  const withBundle = './test/fixtures/packages/package1/locales/**/*.json,./test/fixtures/packages/package2/locales/**/*.json'
+  const withBundleMatch = '([\\w]*)/([\\w]*)\\.json$'
+  const messages = getExternalLocaleMessages({}, withBundle, withBundleMatch)
+
+  expect(messages).toMatchSnapshot()
+})
+
+test('getExternalLocaleMessages: no filename', async () => {
+  const withBundle = './test/fixtures/packages/package1/locales/**/*.json,./test/fixtures/packages/package2/locales/**/*.json'
+  const withBundleMatch = '([\\w]*)/[\\w]*\\.json$'
+  const messages = getExternalLocaleMessages({}, withBundle, withBundleMatch)
+
+  expect(messages).toMatchSnapshot()
+})
+
+test('getExternalLocaleMessages: no bundle', async () => {
+  const namespaces: NamespaceDictionary = {
+    './test/fixtures/packages/package1/locales/**/*.json': 'package1',
+    './test/fixtures/packages/package2/locales/**/*.json': 'package2'
+  }
+  const messages = getExternalLocaleMessages(namespaces)
+
+  expect(messages).toMatchObject({})
 })
