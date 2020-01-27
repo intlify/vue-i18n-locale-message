@@ -1,4 +1,4 @@
-import { SFCFileInfo } from '../types'
+import { SFCFileInfo, NamespaceDictionary } from '../types'
 import deepmerge from 'deepmerge'
 
 import jsonFiles from './fixtures/file/json'
@@ -9,7 +9,6 @@ import squeezeLocaleMessages from './fixtures/squeeze.json'
 import {
   reflectSFCDescriptor,
   getTranslationStatus,
-  NamespaceDictionary,
   getExternalLocaleMessages,
   splitLocaleMessages
 } from '../src/utils'

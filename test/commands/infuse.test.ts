@@ -18,12 +18,7 @@ const SFC_FILES = [
 ]
 const LOCALE_FILES = [
   `${TARGET_PATH}/src/locales/ja.json`,
-  `${TARGET_PATH}/src/locales/en.json`/*,
-  path.resolve('test/fixtures/packages/package1/locales/en/common.json'),
-  path.resolve('test/fixtures/packages/package1/locales/ja/common.json'),
-  path.resolve('test/fixtures/packages/package2/locales/en/profile.json'),
-  path.resolve('test/fixtures/packages/package2/locales/ja/profile.json')
-  */
+  `${TARGET_PATH}/src/locales/en.json`
 ]
 const MOCK_FILES = SFC_FILES.reduce((files, file) => {
   const meta = jsonMetaInfo.find(meta => meta.contentPath === file)

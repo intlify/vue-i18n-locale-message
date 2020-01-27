@@ -9,7 +9,8 @@ export default {
     },
     package2: {
       profile: {
-        display_name: 'Display Name', // eslint-disable-line @typescript-eslint/camelcase
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        display_name: 'Display Name',
         email: 'E-Mail'
       }
     }

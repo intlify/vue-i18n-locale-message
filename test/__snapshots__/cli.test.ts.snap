@@ -31,22 +31,21 @@ exports[`squeeze command output help 1`] = `
 squeeze locale messages from single-file components
 
 Options:
-  --version              Show version number                           [boolean]
-  --help                 Show help                                     [boolean]
-  --target, -t           target path that single-file components is stored
+  --version          Show version number                               [boolean]
+  --help             Show help                                         [boolean]
+  --target, -t       target path that single-file components is stored
                                                              [string] [required]
-  --split, -s            split squeezed locale messages with locale
+  --split, -s        split squeezed locale messages with locale
                                                       [boolean] [default: false]
-  --withBundle, -b       target path of external locale messages that it will
-                         bundle together, can also be specified multi paths with
-                         comma delimiter                                [string]
-  --withBundleMatch, -m  option should be accepted regex filename of external
-                         locale messages, must be specified if it's directory
-                         path of external locale messages with --with-bundle
-                                                                        [string]
-  --namespace, -n        file path that defines the namespace for external
-                         locale messages bundled together               [string]
-  --output, -o           path to output squeezed locale messages
+  --bundleWith, -b   target path of external locale messages that it will bundle
+                     together, can also be specified multi paths with comma
+                     delimiter                                          [string]
+  --bundleMatch, -m  option should be accepted regex filename of external locale
+                     messages, must be specified if it's directory path of
+                     external locale messages with --with-bundle        [string]
+  --namespace, -n    file path that defines the namespace for external locale
+                     messages bundled together                          [string]
+  --output, -o       path to output squeezed locale messages
                            [string] [default: \\"/path/to/project1/messages.json\\"]"
 `;
 
