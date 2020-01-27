@@ -1,4 +1,13 @@
 
+## v0.16.0 (2020-01-27)
+
+#### :boom: Breaking Change
+* [#80](https://github.com/kazupon/vue-i18n-locale-message/pull/80) breaking: change squeeze bundle related option name ([@kazupon](https://github.com/kazupon))
+
+#### Committers: 1
+- kazuya kawaguchi ([@kazupon](https://github.com/kazupon))
+
+
 ## v0.15.0 (2020-01-27)
 
 #### :star: Features
