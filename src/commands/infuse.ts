@@ -4,7 +4,6 @@ import {
   resolve,
   parsePath,
   readSFC,
-  NamespaceDictionary,
   loadNamespaceDictionary,
   splitLocaleMessages
 } from '../utils'
@@ -20,6 +19,7 @@ import {
   LocaleMessages,
   SFCFileInfo,
   MetaLocaleMessage,
+  NamespaceDictionary,
   MetaExternalLocaleMessages
 } from '../../types'
 

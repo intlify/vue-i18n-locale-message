@@ -4,14 +4,18 @@ import {
   parsePath,
   readSFC,
   loadNamespaceDictionary,
-  getExternalLocaleMessages,
-  NamespaceDictionary
+  getExternalLocaleMessages
 } from '../utils'
 import squeeze from '../squeezer'
 import fs from 'fs'
 import deepmerge from 'deepmerge'
 
-import { LocaleMessages, MetaLocaleMessage, Locale } from '../../types'
+import {
+  Locale,
+  LocaleMessages,
+  MetaLocaleMessage,
+  NamespaceDictionary
+} from '../../types'
 
 import { debug as Debug } from 'debug'
 const debug = Debug('vue-i18n-locale-message:commands:squeeze')

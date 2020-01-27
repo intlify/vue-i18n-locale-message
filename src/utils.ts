@@ -12,7 +12,8 @@ import {
   ProviderConfiguration,
   TranslationStatusOptions,
   TranslationStatus,
-  RawLocaleMessage
+  RawLocaleMessage,
+  NamespaceDictionary
 } from '../types'
 
 // import modules
@@ -39,7 +40,6 @@ export type PushableOptions = {
   filenameMatch?: string
   format?: string
 }
-export type NamespaceDictionary = { [path: string]: string }
 
 const ESC: { [key in string]: string } = {
   '<': '&lt;',
@@ -342,18 +342,19 @@ export function getExternalLocaleMessages (
       const { locale, filename } = getLocaleMessagePathInfo(fullPath, withBundleMatch)
       if (!locale) { return messages }
       const externalMessages = JSON.parse(fs.readFileSync(fullPath).toString())
-      let workMessags = externalMessages
+      let workMessages = externalMessages
       if (filename) {
-        workMessags = Object.assign({}, { [filename]: workMessags })
+        workMessages = Object.assign({}, { [filename]: workMessages })
       }
       if (namespace) {
-        workMessags = Object.assign({}, { [namespace]: workMessags })
+        workMessages = Object.assign({}, { [namespace]: workMessages })
       }
-      debug('getExternalLocaleMessages: workMessages', workMessags)
+      debug('getExternalLocaleMessages: workMessages', workMessages)
       if (messages[locale]) {
-        messages[locale] = deepmerge(messages[locale] as any, workMessags) // eslint-disable-line @typescript-eslint/no-explicit-any
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        messages[locale] = deepmerge(messages[locale] as any, workMessages)
       } else {
-        messages = Object.assign(messages, { [locale]: workMessags })
+        messages = Object.assign(messages, { [locale]: workMessages })
       }
       debug('getExternalLocaleMessages: messages (processing)', messages)
       return messages
@@ -369,7 +370,8 @@ type ExternalLocaleMessagesParseInfo = {
 }
 
 // TODO: should be selected more other library ...
-function deepCopy (obj: any): any { // eslint-disable-line @typescript-eslint/no-explicit-any
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function deepCopy (obj: any): any {
   return JSON.parse(JSON.stringify(obj))
 }
 
