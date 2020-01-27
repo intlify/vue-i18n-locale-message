@@ -1,4 +1,13 @@
 
+## v0.15.0 (2020-01-27)
+
+#### :star: Features
+* [#78](https://github.com/kazupon/vue-i18n-locale-message/pull/78) feat: bundle and namespace features ([@kazupon](https://github.com/kazupon))
+
+#### Committers: 1
+- kazuya kawaguchi ([@kazupon](https://github.com/kazupon))
+
+
 ## v0.14.0 (2020-01-21)
 
 #### :star: Features
