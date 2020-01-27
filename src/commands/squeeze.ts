@@ -23,8 +23,8 @@ const debug = Debug('vue-i18n-locale-message:commands:squeeze')
 type SqueezeOptions = {
   target: string
   split?: boolean
-  withBundle?: string
-  withBundleMatch?: string
+  bundleWith?: string
+  bundleMatch?: string
   namespace?: string
   output: string
 }
@@ -48,12 +48,12 @@ export const builder = (args: Argv): Argv<SqueezeOptions> => {
       default: false,
       describe: 'split squeezed locale messages with locale'
     })
-    .option('withBundle', {
+    .option('bundleWith', {
       type: 'string',
       alias: 'b',
       describe: 'target path of external locale messages that it will bundle together, can also be specified multi paths with comma delimiter'
     })
-    .option('withBundleMatch', {
+    .option('bundleMatch', {
       type: 'string',
       alias: 'm',
       describe: `option should be accepted regex filename of external locale messages, must be specified if it's directory path of external locale messages with --with-bundle`
@@ -80,7 +80,7 @@ export const handler = async (args: Arguments<SqueezeOptions>) => {
     if (args.namespace) {
       nsDictionary = await loadNamespaceDictionary(args.namespace)
     }
-    externalMessages = getExternalLocaleMessages(nsDictionary, args.withBundle, args.withBundleMatch)
+    externalMessages = getExternalLocaleMessages(nsDictionary, args.bundleWith, args.bundleMatch)
   } catch (e) {
     console.warn('cannot load external locale messages failed')
   }

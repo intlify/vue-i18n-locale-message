@@ -330,16 +330,16 @@ function getLocaleMessagePathInfo (fullPath: string, bundleMatch?: string): Pars
 }
 
 export function getExternalLocaleMessages (
-  dictionary: NamespaceDictionary, withBundle?: string, withBundleMatch?: string
+  dictionary: NamespaceDictionary, bundleWith?: string, bundleMatch?: string
 ) {
-  if (!withBundle) { return {} }
+  if (!bundleWith) { return {} }
 
-  const bundleTargetPaths = withBundle.split(',').filter(p => p)
+  const bundleTargetPaths = bundleWith.split(',').filter(p => p)
   return bundleTargetPaths.reduce((messages, targetPath) => {
     const namespace = dictionary[targetPath] || ''
     const globedPaths = glob.sync(targetPath).map(p => resolve(p))
     return globedPaths.reduce((messages, fullPath) => {
-      const { locale, filename } = getLocaleMessagePathInfo(fullPath, withBundleMatch)
+      const { locale, filename } = getLocaleMessagePathInfo(fullPath, bundleMatch)
       if (!locale) { return messages }
       const externalMessages = JSON.parse(fs.readFileSync(fullPath).toString())
       let workMessages = externalMessages
@@ -399,8 +399,10 @@ export function splitLocaleMessages (
 
   debug(`splitLocaleMessages: messages (before) = ${JSON.stringify(messages)}`)
   const metaExternalLocaleMessages = externalLocaleMessagesParseInfo.reduce((meta, { path, locale, namespace, filename }) => {
-    const stack = [] as { key: string, ref: any }[] // eslint-disable-line @typescript-eslint/no-explicit-any
-    let targetLocaleMessage = messages[locale] as any // eslint-disable-line @typescript-eslint/no-explicit-any
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const stack = [] as { key: string, ref: any }[]
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    let targetLocaleMessage = messages[locale] as any
     if (namespace && targetLocaleMessage[namespace]) {
       const ref1 = targetLocaleMessage
       targetLocaleMessage = targetLocaleMessage[namespace]
