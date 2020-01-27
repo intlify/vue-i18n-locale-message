@@ -1,13 +1,27 @@
 import { Arguments, Argv } from 'yargs'
 
-import { resolve, parsePath, readSFC } from '../utils'
+import {
+  resolve,
+  parsePath,
+  readSFC,
+  NamespaceDictionary,
+  loadNamespaceDictionary,
+  splitLocaleMessages
+} from '../utils'
+
 import infuse from '../infuser'
 import squeeze from '../squeezer'
 import fs from 'fs'
 import path from 'path'
 import { applyDiff } from 'deep-diff'
 import glob from 'glob'
-import { LocaleMessages, SFCFileInfo, MetaLocaleMessage, Locale } from '../../types'
+import {
+  Locale,
+  LocaleMessages,
+  SFCFileInfo,
+  MetaLocaleMessage,
+  MetaExternalLocaleMessages
+} from '../../types'
 
 import { debug as Debug } from 'debug'
 const debug = Debug('vue-i18n-locale-message:commands:infuse')
@@ -16,6 +30,9 @@ type InfuseOptions = {
   target: string
   locales: string
   match?: string
+  unbundleTo?: string
+  unbundleMatch?: string
+  namespace?: string
   dryRun: boolean
 }
 
@@ -42,6 +59,21 @@ export const builder = (args: Argv): Argv<InfuseOptions> => {
       alias: 'm',
       describe: 'option should be accepted a regex filenames, must be specified together --messages'
     })
+    .option('unbundleTo', {
+      type: 'string',
+      alias: 'u',
+      describe: `target path of external locale messages bundled with 'squeeze' command, can also be specified multi paths with comma delimiter`
+    })
+    .option('unbundleMatch', {
+      type: 'string',
+      alias: 'M',
+      describe: `option should be accepted regex filename of external locale messages, must be specified if it's directory path of external locale messages with --unbundle-to`
+    })
+    .option('namespace', {
+      type: 'string',
+      alias: 'n',
+      describe: 'file path that defines the namespace for external locale messages bundled together'
+    })
     .option('dryRun', {
       type: 'boolean',
       alias: 'd',
@@ -50,15 +82,38 @@ export const builder = (args: Argv): Argv<InfuseOptions> => {
     })
 }
 
-export const handler = (args: Arguments<InfuseOptions>): void => {
+export const handler = async (args: Arguments<InfuseOptions>) => {
   const targetPath = resolve(args.target)
   const messagesPath = resolve(args.locales)
+
+  let nsDictionary = {} as NamespaceDictionary
+  try {
+    if (args.namespace) {
+      nsDictionary = await loadNamespaceDictionary(args.namespace)
+    }
+  } catch (e) {
+    console.warn('cannot load namespace dictionary')
+  }
+  debug('namespace dictionary:', nsDictionary)
+
   const sources = readSFC(targetPath)
   const messages = readLocaleMessages(messagesPath, args.match)
+
+  const { sfc, external } = splitLocaleMessages(messages, nsDictionary, args.unbundleTo, args.unbundleMatch)
+  debug('sfc', sfc)
+  debug('external', external)
+
   const meta = squeeze(targetPath, sources)
-  apply(messages, meta)
+  apply(sfc, meta)
   const newSources = infuse(targetPath, sources, meta)
-  if (!args.dryRun) writeSFC(newSources)
+
+  if (!args.dryRun) {
+    writeSFC(newSources)
+  }
+
+  if (!args.dryRun && external) {
+    writeExternalLocaleMessages(external)
+  }
 }
 
 function readLocaleMessages (targetPath: string, matchRegex?: string): LocaleMessages {
@@ -183,6 +238,13 @@ function writeSFC (sources: SFCFileInfo[]) {
   // TODO: async implementation
   sources.forEach(({ path, content }) => {
     fs.writeFileSync(path, content)
+  })
+}
+
+function writeExternalLocaleMessages (meta: MetaExternalLocaleMessages[]) {
+  // TODO: async implementation
+  meta.forEach(({ path, messages }) => {
+    fs.writeFileSync(path, JSON.stringify(messages, null, 2))
   })
 }
 

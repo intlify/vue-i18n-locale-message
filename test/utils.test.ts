@@ -1,8 +1,18 @@
 import { SFCFileInfo } from '../types'
+import deepmerge from 'deepmerge'
 
 import jsonFiles from './fixtures/file/json'
 import jsonMetaInfo from './fixtures/meta/json'
-import { reflectSFCDescriptor, getTranslationStatus, NamespaceDictionary, getExternalLocaleMessages } from '../src/utils'
+import externalLocaleMessages from './fixtures/external'
+import squeezeLocaleMessages from './fixtures/squeeze.json'
+
+import {
+  reflectSFCDescriptor,
+  getTranslationStatus,
+  NamespaceDictionary,
+  getExternalLocaleMessages,
+  splitLocaleMessages
+} from '../src/utils'
 
 // ------
 // mocks
@@ -75,7 +85,7 @@ test('getExternalLocaleMessages: no filename', async () => {
   expect(messages).toMatchSnapshot()
 })
 
-test('getExternalLocaleMessages: no bundle', async () => {
+test('getExternalLocaleMessages: no bundle option', async () => {
   const namespaces: NamespaceDictionary = {
     './test/fixtures/packages/package1/locales/**/*.json': 'package1',
     './test/fixtures/packages/package2/locales/**/*.json': 'package2'
@@ -83,4 +93,41 @@ test('getExternalLocaleMessages: no bundle', async () => {
   const messages = getExternalLocaleMessages(namespaces)
 
   expect(messages).toMatchObject({})
+})
+
+test('splitLocaleMessages: basic usage', async () => {
+  const messages = deepmerge(squeezeLocaleMessages, externalLocaleMessages)
+  const namespaces: NamespaceDictionary = {
+    './test/fixtures/packages/package1/locales/**/*.json': 'package1',
+    './test/fixtures/packages/package2/locales/**/*.json': 'package2'
+  }
+  const unbundleTo = './test/fixtures/packages/package1/locales/**/*.json,./test/fixtures/packages/package2/locales/**/*.json'
+  const unbundleMatch = '([\\w]*)/([\\w]*)\\.json$'
+  const { sfc, external } = splitLocaleMessages(messages, namespaces, unbundleTo, unbundleMatch)
+
+  expect(sfc).toEqual(squeezeLocaleMessages)
+  external.forEach(ex => {
+    expect(ex.messages).toMatchSnapshot()
+  })
+})
+
+test('splitLocaleMessages: no bundle option', async () => {
+  const messages = deepmerge(squeezeLocaleMessages, externalLocaleMessages)
+  const namespaces: NamespaceDictionary = {
+    './test/fixtures/packages/package1/locales/**/*.json': 'package1',
+    './test/fixtures/packages/package2/locales/**/*.json': 'package2'
+  }
+  const { sfc, external } = splitLocaleMessages(messages, namespaces)
+
+  expect(sfc).toEqual(messages)
+  expect(external).toBeUndefined()
+})
+
+test('splitLocaleMessages: no namespace', async () => {
+  const messages = deepmerge(squeezeLocaleMessages, externalLocaleMessages)
+  const namespaces: NamespaceDictionary = {}
+  const { sfc, external } = splitLocaleMessages(messages, namespaces)
+
+  expect(sfc).toEqual(messages)
+  expect(external).toBeUndefined()
 })

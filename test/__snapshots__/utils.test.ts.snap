@@ -72,3 +72,28 @@ Object {
   },
 }
 `;
+
+exports[`splitLocaleMessages: basic usage 1`] = `
+Object {
+  "navigation": Object {
+    "title": "title",
+  },
+}
+`;
+
+exports[`splitLocaleMessages: basic usage 2`] = `
+Object {
+  "navigation": Object {
+    "title": "タイトル",
+  },
+}
+`;
+
+exports[`splitLocaleMessages: basic usage 3`] = `
+Object {
+  "display_name": "Display Name",
+  "email": "E-Mail",
+}
+`;
+
+exports[`splitLocaleMessages: basic usage 4`] = `Object {}`;

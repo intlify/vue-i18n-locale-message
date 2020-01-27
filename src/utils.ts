@@ -5,6 +5,7 @@ import { VueTemplateCompiler } from '@vue/component-compiler-utils/dist/types'
 import {
   SFCFileInfo,
   Locale,
+  MetaExternalLocaleMessages,
   LocaleMessages,
   FormatOptions,
   ProviderFactory,
@@ -22,11 +23,12 @@ import glob from 'glob'
 import path from 'path'
 import JSON5 from 'json5'
 import yaml from 'js-yaml'
+import deepmerge from 'deepmerge'
 import { promisify } from 'util'
 
 import { debug as Debug } from 'debug'
-import { worker } from 'cluster'
 const debug = Debug('vue-i18n-locale-message:utils')
+
 const readFile = promisify(fs.readFile)
 
 // define types
@@ -309,28 +311,28 @@ type ParsedLocaleMessagePathInfo = {
   filename?: string
 }
 
+function getLocaleMessagePathInfo (fullPath: string, bundleMatch?: string): ParsedLocaleMessagePathInfo {
+  const parsed = path.parse(fullPath)
+  debug('getLocaleMessagePathInfo: parsed', parsed)
+  if (bundleMatch) {
+    const re = new RegExp(bundleMatch, 'ig')
+    const match = re.exec(fullPath)
+    debug('getLocaleMessagePathInfo: regex match', match)
+    return {
+      locale: (match && match[1]) ? match[1] : '',
+      filename: (match && match[2]) ? match[2] : ''
+    }
+  } else {
+    return {
+      locale: parsed.ext.split('.').pop() || ''
+    }
+  }
+}
+
 export function getExternalLocaleMessages (
   dictionary: NamespaceDictionary, withBundle?: string, withBundleMatch?: string
 ) {
   if (!withBundle) { return {} }
-
-  const getLocaleMessagePathInfo = (fullPath: string, bundleMatch?: string): ParsedLocaleMessagePathInfo => {
-    const parsed = path.parse(fullPath)
-    debug('getExternalLocaleMessages: parsed', parsed)
-    if (bundleMatch) {
-      const re = new RegExp(bundleMatch, 'ig')
-      const match = re.exec(fullPath)
-      debug('getExternalLocaleMessages: regex match', match)
-      return {
-        locale: (match && match[1]) ? match[1] : '',
-        filename: (match && match[2]) ? match[2] : undefined
-      }
-    } else {
-      return {
-        locale: parsed.ext.split('.').pop() || ''
-      }
-    }
-  }
 
   const bundleTargetPaths = withBundle.split(',').filter(p => p)
   return bundleTargetPaths.reduce((messages, targetPath) => {
@@ -349,7 +351,7 @@ export function getExternalLocaleMessages (
       }
       debug('getExternalLocaleMessages: workMessages', workMessags)
       if (messages[locale]) {
-        messages[locale] = Object.assign(messages[locale], workMessags)
+        messages[locale] = deepmerge(messages[locale] as any, workMessags) // eslint-disable-line @typescript-eslint/no-explicit-any
       } else {
         messages = Object.assign(messages, { [locale]: workMessags })
       }
@@ -357,4 +359,74 @@ export function getExternalLocaleMessages (
       return messages
     }, messages)
   }, {} as LocaleMessages)
+}
+
+type ExternalLocaleMessagesParseInfo = {
+  path: string
+  namespace: string
+  locale: Locale
+  filename?: string
+}
+
+// TODO: should be selected more other library ...
+function deepCopy (obj: any): any { // eslint-disable-line @typescript-eslint/no-explicit-any
+  return JSON.parse(JSON.stringify(obj))
+}
+
+export function splitLocaleMessages (
+  messages: LocaleMessages,
+  dictionary: NamespaceDictionary,
+  bundle?: string,
+  bundleMatch?: string
+) {
+  if (!bundle) { return { sfc: messages } }
+
+  const bundleTargetPaths = bundle.split(',').filter(p => p)
+  const externalLocaleMessagesParseInfo = bundleTargetPaths.reduce((info, targetPath) => {
+    const namespace = dictionary[targetPath] || ''
+    const globedPaths = glob.sync(targetPath).map(p => resolve(p))
+    debug('splitLocaleMessages globedPaths', globedPaths)
+    return globedPaths.reduce((info, fullPath) => {
+      const { locale, filename } = getLocaleMessagePathInfo(fullPath, bundleMatch)
+      if (!locale) { return info }
+      info.push({ path: fullPath, locale, namespace, filename })
+      return info
+    }, info)
+  }, [] as ExternalLocaleMessagesParseInfo[])
+  debug(`splitLocaleMessages: externalLocaleMessagesParseInfo = ${JSON.stringify(externalLocaleMessagesParseInfo)}`)
+
+  debug(`splitLocaleMessages: messages (before) = ${JSON.stringify(messages)}`)
+  const metaExternalLocaleMessages = externalLocaleMessagesParseInfo.reduce((meta, { path, locale, namespace, filename }) => {
+    const stack = [] as { key: string, ref: any }[] // eslint-disable-line @typescript-eslint/no-explicit-any
+    let targetLocaleMessage = messages[locale] as any // eslint-disable-line @typescript-eslint/no-explicit-any
+    if (namespace && targetLocaleMessage[namespace]) {
+      const ref1 = targetLocaleMessage
+      targetLocaleMessage = targetLocaleMessage[namespace]
+      stack.push({ key: namespace, ref: ref1 })
+    }
+    if (filename && targetLocaleMessage[filename]) {
+      const ref2 = targetLocaleMessage
+      targetLocaleMessage = targetLocaleMessage[filename]
+      stack.push({ key: filename, ref: ref2 })
+    }
+    meta.push({ path, messages: deepCopy(targetLocaleMessage) })
+
+    // remove properties from messages
+    let item = stack.shift()
+    while (item) {
+      const { ref: obj, key } = item
+      delete obj[key]
+      item.ref = null // remove reference
+      item = stack.shift()
+    }
+    if (Object.keys(messages[locale]).length === 0) {
+      delete messages[locale]
+    }
+
+    return meta
+  }, [] as MetaExternalLocaleMessages[])
+  debug(`splitLocaleMessages: messages (after) = ${JSON.stringify(messages)}`)
+  debug(`splitLocaleMessages: metaExternalLocaleMessages = ${JSON.stringify(metaExternalLocaleMessages)}`)
+
+  return { sfc: messages, external: metaExternalLocaleMessages }
 }

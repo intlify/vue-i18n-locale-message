@@ -1,7 +1,10 @@
 import * as yargs from 'yargs'
+import deepmerge from 'deepmerge'
+import path from 'path'
+
 import jsonMetaInfo from '../fixtures/meta/json'
 import json from '../fixtures/squeeze'
-import path from 'path'
+import external from '../fixtures/external'
 
 // -------
 // mocking
@@ -15,7 +18,12 @@ const SFC_FILES = [
 ]
 const LOCALE_FILES = [
   `${TARGET_PATH}/src/locales/ja.json`,
-  `${TARGET_PATH}/src/locales/en.json`
+  `${TARGET_PATH}/src/locales/en.json`/*,
+  path.resolve('test/fixtures/packages/package1/locales/en/common.json'),
+  path.resolve('test/fixtures/packages/package1/locales/ja/common.json'),
+  path.resolve('test/fixtures/packages/package2/locales/en/profile.json'),
+  path.resolve('test/fixtures/packages/package2/locales/ja/profile.json')
+  */
 ]
 const MOCK_FILES = SFC_FILES.reduce((files, file) => {
   const meta = jsonMetaInfo.find(meta => meta.contentPath === file)
@@ -28,6 +36,8 @@ let orgCwd // for process.cwd mock
 jest.mock('../../src/utils', () => ({
   __esModule: true,
   ...jest.requireActual('../../src/utils'),
+  loadNamespaceDictionary: jest.fn(),
+  splitLocaleMessages: jest.fn(),
   resolve: jest.fn()
 }))
 import * as utils from '../../src/utils'
@@ -69,6 +79,8 @@ test('absolute path', async () => {
   // setup mocks
   const mockUtils = utils as jest.Mocked<typeof utils>
   mockUtils.resolve.mockImplementation((...paths) => paths[0])
+  mockUtils.loadNamespaceDictionary.mockImplementation(async () => ({}))
+  mockUtils.splitLocaleMessages.mockImplementation((messages) => ({ sfc: messages }))
   const writeFiles = {}
   const mockFS = fs as jest.Mocked<typeof fs>
   mockFS.readFileSync.mockImplementation(path => {
@@ -103,6 +115,8 @@ test('relative path', async () => {
   mockUtils.resolve
     .mockImplementationOnce(() => `${TARGET_PATH}/src`)
     .mockImplementationOnce((...paths) => `${TARGET_PATH}/${paths[0]}`)
+  mockUtils.loadNamespaceDictionary.mockImplementation(async () => ({}))
+  mockUtils.splitLocaleMessages.mockImplementation((messages) => ({ sfc: messages }))
   const writeFiles = {}
   const mockFS = fs as jest.Mocked<typeof fs>
   mockFS.readFileSync.mockImplementation(path => {
@@ -137,6 +151,8 @@ test('dryRun option', async () => {
   mockUtils.resolve
     .mockImplementationOnce(() => `${TARGET_PATH}/src`)
     .mockImplementationOnce((...paths) => `${TARGET_PATH}/${paths[0]}`)
+  mockUtils.loadNamespaceDictionary.mockImplementation(async () => ({}))
+  mockUtils.splitLocaleMessages.mockImplementation((messages) => ({ sfc: messages }))
   const mockFS = fs as jest.Mocked<typeof fs>
   mockFS.readFileSync.mockImplementation(path => {
     if (MOCK_FILES[path as string]) {
@@ -165,6 +181,8 @@ test('match option', async () => {
   mockUtils.resolve
     .mockImplementationOnce(() => `${TARGET_PATH}/src`)
     .mockImplementationOnce((...paths) => `${TARGET_PATH}/${paths[0]}`)
+  mockUtils.loadNamespaceDictionary.mockImplementation(async () => ({}))
+  mockUtils.splitLocaleMessages.mockImplementation((messages) => ({ sfc: messages }))
   const writeFiles = {}
   const mockFS = fs as jest.Mocked<typeof fs>
   mockFS.readFileSync.mockImplementation(p => {
@@ -191,4 +209,69 @@ test('match option', async () => {
   for (const [key, value] of Object.entries(output)) {
     expect(value).toMatchSnapshot(key)
   }
+})
+
+test('bundle option', async () => {
+  // setup mocks
+  const mockUtils = utils as jest.Mocked<typeof utils>
+  mockUtils.resolve
+    .mockImplementationOnce(() => `${TARGET_PATH}/src`)
+    .mockImplementationOnce((...paths) => `${TARGET_PATH}/${paths[0]}`)
+  mockUtils.loadNamespaceDictionary.mockImplementation(async () => ({
+    './test/fixtures/packages/package1/locales/**/*.json': 'package1',
+    './test/fixtures/packages/package2/locales/**/*.json': 'package2'
+  }))
+  mockUtils.splitLocaleMessages.mockImplementation((messages) => ({
+    sfc: deepmerge(messages, external),
+    external: [{
+      path: './test/fixtures/packages/package1/locales/en/common.json',
+      messages: {
+        package1: { common: { navigation: { title: 'title' }}}
+      }
+    }, {
+      path: './test/fixtures/packages/package1/locales/ja/common.json',
+      messages: {
+        package1: { common: { navigation: { title: 'タイトル' }}}
+      }
+    }, {
+      path: './test/fixtures/packages/package2/locales/en/profile.json',
+      messages: {
+        package2: {
+          // eslint-disable-next-line @typescript-eslint/camelcase
+          profile: { display_name: 'Display Name', email: 'E-Mail' }
+        }
+      }
+    }, {
+      path: './test/fixtures/packages/package2/locales/ja/profile.json',
+      messages: {
+        package2: { profile: {}}
+      }
+    }]
+  }))
+  const writeFiles = {}
+  const mockFS = fs as jest.Mocked<typeof fs>
+  mockFS.readFileSync.mockImplementation(p => {
+    if (MOCK_FILES[p as string]) {
+      return MOCK_FILES[p as string]
+    } else {
+      return JSON.stringify(json[path.basename(p as string, '.json')])
+    }
+  })
+  mockFS.writeFileSync.mockImplementation((path, data) => {
+    writeFiles[path as string] = data.toString()
+  })
+
+  // run
+  const infuse = await import('../../src/commands/infuse')
+  const cmd = yargs.command(infuse)
+  const output = await new Promise(resolve => {
+    cmd.parse(`infuse --target=./src --locales=./src/locales --match=^([\\w-]*)\\.json \
+      --unbundleTo=./test/fixtures/packages/package1/locales/**/*.json,./test/fixtures/packages/package2/locales/**/*.json \
+      --unbundleMatch=([\\w]*)/([\\w]*)\\.json$ \
+      --namespace=./test/fixtures/namespace.json`, () => {
+      resolve(writeFiles)
+    })
+  })
+
+  expect(output).toMatchSnapshot()
 })

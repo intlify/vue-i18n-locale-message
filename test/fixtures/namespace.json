@@ -1,0 +1,4 @@
+{
+  "./test/fixtures/packages/package1/locales/**/*.json": "package1",
+  "./test/fixtures/packages/package2/locales/**/*.json": "package2"
+}

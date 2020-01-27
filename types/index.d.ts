@@ -156,6 +156,11 @@ export interface SFCFileInfo {
 declare function squeeze (basePath: string, files: SFCFileInfo[]): MetaLocaleMessage
 declare function infuse (basePath: string, sources: SFCFileInfo[], meta: MetaLocaleMessage, options?: FormatOptions): SFCFileInfo[]
 
+export type MetaExternalLocaleMessages = {
+  path: string
+  messages?: LocaleMessages
+}
+
 /**
  *  Translation Status
  */

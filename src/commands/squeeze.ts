@@ -1,9 +1,17 @@
 import { Arguments, Argv } from 'yargs'
-import { LocaleMessages, MetaLocaleMessage, Locale } from '../../types'
-
-import { resolve, parsePath, readSFC } from '../utils'
+import {
+  resolve,
+  parsePath,
+  readSFC,
+  loadNamespaceDictionary,
+  getExternalLocaleMessages,
+  NamespaceDictionary
+} from '../utils'
 import squeeze from '../squeezer'
 import fs from 'fs'
+import deepmerge from 'deepmerge'
+
+import { LocaleMessages, MetaLocaleMessage, Locale } from '../../types'
 
 import { debug as Debug } from 'debug'
 const debug = Debug('vue-i18n-locale-message:commands:squeeze')
@@ -11,6 +19,9 @@ const debug = Debug('vue-i18n-locale-message:commands:squeeze')
 type SqueezeOptions = {
   target: string
   split?: boolean
+  withBundle?: string
+  withBundleMatch?: string
+  namespace?: string
   output: string
 }
 
@@ -33,6 +44,21 @@ export const builder = (args: Argv): Argv<SqueezeOptions> => {
       default: false,
       describe: 'split squeezed locale messages with locale'
     })
+    .option('withBundle', {
+      type: 'string',
+      alias: 'b',
+      describe: 'target path of external locale messages that it will bundle together, can also be specified multi paths with comma delimiter'
+    })
+    .option('withBundleMatch', {
+      type: 'string',
+      alias: 'm',
+      describe: `option should be accepted regex filename of external locale messages, must be specified if it's directory path of external locale messages with --with-bundle`
+    })
+    .option('namespace', {
+      type: 'string',
+      alias: 'n',
+      describe: 'file path that defines the namespace for external locale messages bundled together'
+    })
     .option('output', {
       type: 'string',
       alias: 'o',
@@ -41,10 +67,23 @@ export const builder = (args: Argv): Argv<SqueezeOptions> => {
     })
 }
 
-export const handler = (args: Arguments<SqueezeOptions>): void => {
+export const handler = async (args: Arguments<SqueezeOptions>) => {
   const targetPath = resolve(args.target)
+
+  let nsDictionary = {} as NamespaceDictionary
+  let externalMessages = {} as LocaleMessages
+  try {
+    if (args.namespace) {
+      nsDictionary = await loadNamespaceDictionary(args.namespace)
+    }
+    externalMessages = getExternalLocaleMessages(nsDictionary, args.withBundle, args.withBundleMatch)
+  } catch (e) {
+    console.warn('cannot load external locale messages failed')
+  }
+
   const meta = squeeze(targetPath, readSFC(targetPath))
-  const messages = generate(meta)
+  const messages = deepmerge(generate(meta), externalMessages)
+
   writeLocaleMessages(messages, args)
 }
 

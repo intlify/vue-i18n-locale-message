@@ -46,6 +46,73 @@ Object {
 }
 `;
 
+exports[`bundle options 1`] = `
+Object {
+  "/path/to/project1/locales/en.json": "{
+  \\"App\\": {
+    \\"title\\": \\"Application\\"
+  },
+  \\"components\\": {
+    \\"Modal\\": {
+      \\"ok\\": \\"OK\\",
+      \\"cancel\\": \\"Cancel\\"
+    },
+    \\"nest\\": {
+      \\"RankingTable\\": {
+        \\"headers\\": {
+          \\"rank\\": \\"Rank\\",
+          \\"name\\": \\"Name\\",
+          \\"score\\": \\"Score\\"
+        }
+      }
+    }
+  },
+  \\"package1\\": {
+    \\"common\\": {
+      \\"navigation\\": {
+        \\"title\\": \\"title\\"
+      }
+    }
+  },
+  \\"package2\\": {
+    \\"profile\\": {
+      \\"display_name\\": \\"Display Name\\",
+      \\"email\\": \\"E-Mail\\"
+    }
+  }
+}",
+  "/path/to/project1/locales/ja.json": "{
+  \\"App\\": {
+    \\"title\\": \\"アプリケーション\\"
+  },
+  \\"components\\": {
+    \\"Modal\\": {
+      \\"ok\\": \\"OK\\",
+      \\"cancel\\": \\"キャンセル\\"
+    }
+  },
+  \\"pages\\": {
+    \\"Login\\": {
+      \\"id\\": \\"ユーザーID\\",
+      \\"passowrd\\": \\"パスワード\\",
+      \\"confirm\\": \\"パスワードの確認入力\\",
+      \\"button\\": \\"ログイン\\"
+    }
+  },
+  \\"package1\\": {
+    \\"common\\": {
+      \\"navigation\\": {
+        \\"title\\": \\"タイトル\\"
+      }
+    }
+  },
+  \\"package2\\": {
+    \\"profile\\": {}
+  }
+}",
+}
+`;
+
 exports[`relative path 1`] = `
 Object {
   "/path/to/project1/locales-1.json": "{

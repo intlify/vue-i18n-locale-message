@@ -1,4 +1,3 @@
-import * as yargs from 'yargs'
 import * as path from 'path'
 import { flash, runCommand } from '../helper'
 
