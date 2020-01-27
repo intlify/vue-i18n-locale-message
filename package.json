@@ -28,17 +28,19 @@
     "@vue/component-compiler-utils": "^3.0.0",
     "debug": "^4.1.1",
     "deep-diff": "^1.0.2",
+    "deepmerge": "^4.2.2",
     "flat": "^5.0.0",
     "glob": "^7.1.4",
     "js-yaml": "^3.13.1",
     "json-diff": "^0.5.4",
     "json5": "^2.1.0",
     "vue-template-compiler": "^2.6.10",
-    "yargs": "^15.0.0"
+    "yargs": "^15.1.0"
   },
   "devDependencies": {
     "@types/debug": "^4.1.4",
     "@types/deep-diff": "^1.0.0",
+    "@types/deepmerge": "^2.2.0",
     "@types/flat": "^0.0.28",
     "@types/glob": "^7.1.1",
     "@types/jest": "^24.0.24",

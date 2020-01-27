@@ -1,0 +1,99 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`getExternalLocaleMessages: basic usage 1`] = `
+Object {
+  "en": Object {
+    "package1": Object {
+      "common": Object {
+        "navigation": Object {
+          "title": "title",
+        },
+      },
+    },
+    "package2": Object {
+      "profile": Object {
+        "display_name": "Display Name",
+        "email": "E-Mail",
+      },
+    },
+  },
+  "ja": Object {
+    "package1": Object {
+      "common": Object {
+        "navigation": Object {
+          "title": "タイトル",
+        },
+      },
+    },
+    "package2": Object {
+      "profile": Object {},
+    },
+  },
+}
+`;
+
+exports[`getExternalLocaleMessages: no filename 1`] = `
+Object {
+  "en": Object {
+    "display_name": "Display Name",
+    "email": "E-Mail",
+    "navigation": Object {
+      "title": "title",
+    },
+  },
+  "ja": Object {
+    "navigation": Object {
+      "title": "タイトル",
+    },
+  },
+}
+`;
+
+exports[`getExternalLocaleMessages: no namespace 1`] = `
+Object {
+  "en": Object {
+    "common": Object {
+      "navigation": Object {
+        "title": "title",
+      },
+    },
+    "profile": Object {
+      "display_name": "Display Name",
+      "email": "E-Mail",
+    },
+  },
+  "ja": Object {
+    "common": Object {
+      "navigation": Object {
+        "title": "タイトル",
+      },
+    },
+    "profile": Object {},
+  },
+}
+`;
+
+exports[`splitLocaleMessages: basic usage 1`] = `
+Object {
+  "navigation": Object {
+    "title": "title",
+  },
+}
+`;
+
+exports[`splitLocaleMessages: basic usage 2`] = `
+Object {
+  "navigation": Object {
+    "title": "タイトル",
+  },
+}
+`;
+
+exports[`splitLocaleMessages: basic usage 3`] = `
+Object {
+  "display_name": "Display Name",
+  "email": "E-Mail",
+}
+`;
+
+exports[`splitLocaleMessages: basic usage 4`] = `Object {}`;

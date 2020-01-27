@@ -1,5 +1,6 @@
 import { Arguments, Argv } from 'yargs'
 const { diffString } = require('json-diff') // NOTE: not provided type definition ...
+import { DiffError, fail } from './fails/diff'
 
 import {
   resolveProviderConf,
@@ -21,8 +22,6 @@ type DiffOptions = {
 export const command = 'diff'
 export const aliases = 'df'
 export const describe = 'Diff locale messages between local and localization service'
-
-class DiffError extends Error {}
 
 export const builder = (args: Argv): Argv<DiffOptions> => {
   return args
@@ -62,37 +61,22 @@ export const builder = (args: Argv): Argv<DiffOptions> => {
       alias: 'n',
       describe: 'option for the locale messages structure, you can specify the option, if you hope to normalize for the provider.'
     })
-    .fail((msg, err) => {
-      if (msg) {
-        // TODO: should refactor console message
-        console.error(msg)
-        process.exit(1)
-      } else {
-        if (err instanceof DiffError) {
-          // TODO: should refactor console message
-          console.warn(err.message)
-          process.exit(64)
-        } else {
-          // TODO: should refactor console message
-          console.error(err.message)
-          process.exit(1)
-        }
-      }
-    })
+    .fail(fail)
 }
 
 export const handler = async (args: Arguments<DiffOptions>): Promise<unknown> => {
   const { normalize } = args
   const format = 'json'
+
   const ProviderFactory = loadProvider(args.provider)
 
   if (ProviderFactory === null) {
-    throw new Error(`Not found ${args.provider} provider`)
+    return Promise.reject(new Error(`Not found ${args.provider} provider`))
   }
 
   if (!args.target && !args.targetPaths) {
     // TODO: should refactor console message
-    throw new Error('You need to specify either --target or --target-paths')
+    return Promise.reject(new Error('You need to specify either --target or --target-paths'))
   }
 
   const confPath = resolveProviderConf(args.provider, args.conf)
@@ -108,7 +92,7 @@ export const handler = async (args: Arguments<DiffOptions>): Promise<unknown> =>
   console.log(ret)
 
   if (ret) {
-    throw new DiffError('There are differences!')
+    return Promise.reject(new DiffError('There are differences!'))
   }
 
   return Promise.resolve()

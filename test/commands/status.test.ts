@@ -1,5 +1,4 @@
-import * as yargs from 'yargs'
-import * as path from 'path'
+import { flash, runCommand } from '../helper'
 
 // ------
 // mocks
@@ -12,51 +11,45 @@ jest.mock('@scope/l10n-service-provider', () => {
 })
 import L10nServiceProvider from '@scope/l10n-service-provider'
 
+jest.mock('../../src/commands/fails/status', () => ({
+  ...jest.requireActual('../../src/commands/fails/status'),
+  fail: jest.fn()
+}))
+import statusFail from '../../src/commands/fails/status'
+
 // --------------------
 // setup/teadown hooks
 
-const PROCESS_CWD_TARGET_PATH = path.resolve(__dirname)
-
-let orgCwd // for process.cwd mock
-let orgExit // for process.exit mock
 let spyLog
-let spyError
 beforeEach(() => {
   spyLog = jest.spyOn(global.console, 'log')
-  spyError = jest.spyOn(global.console, 'error')
-  orgCwd = process.cwd
-  process.cwd = jest.fn(() => PROCESS_CWD_TARGET_PATH) // mock: process.cwd
-  process.exit = jest.fn((code => { return 'exit!' as never })) // mock: process.exit
 })
 
 afterEach(() => {
-  spyError.mockRestore()
   spyLog.mockRestore()
   jest.clearAllMocks()
-  process.exit = orgExit
-  process.cwd = orgCwd
 })
 
 // -----------
 // test cases
 
 test('require options', async () => {
+  // mocking ...
+  const mockStatusFail = statusFail as jest.Mocked<typeof statusFail>
+  mockStatusFail.fail.mockImplementation(() => {})
+
   // run
-  const status = await import('../../src/commands/status')
-  const cmd = yargs.command(status)
-  await new Promise((resolve, reject) => {
-    cmd.parse(`status`, (err, argv, output) => {
-      err ? reject(err) : resolve(output)
-    })
-  })
+  await runCommand('src/commands/status', `status`)
+  await flash()
 
   // verify
-  expect(spyError).toBeCalled()
-  expect(process.exit).toHaveBeenCalledWith(1)
+  expect(mockStatusFail.fail).toHaveBeenCalled()
 })
 
 test('getTranslationStatus: done', async () => {
   // setup mocking ...
+  const mockStatusFail = statusFail as jest.Mocked<typeof statusFail>
+  mockStatusFail.fail.mockImplementation(() => {})
   const mockStatusValue = [{
     locale: 'en',
     percentage: 100
@@ -64,23 +57,21 @@ test('getTranslationStatus: done', async () => {
     locale: 'ja',
     percentage: 100
   }]
-  mockStatus.mockImplementation(({ locales }) => Promise.resolve(mockStatusValue))
+  mockStatus.mockImplementation(() => Promise.resolve(mockStatusValue))
 
   // run
-  const status = await import('../../src/commands/status')
-  const cmd = yargs.command(status)
-  await new Promise((resolve, reject) => {
-    cmd.parse(`status --provider=@scope/l10n-service-provider`, (err, argv, output) => {
-      err ? reject(err) : resolve(output)
-    })
-  })
+  await runCommand('src/commands/status', `status --provider=@scope/l10n-service-provider`)
+  await flash()
 
   // verify
-  expect(process.exit).not.toBeCalled()
+  expect(mockStatusFail.fail).not.toHaveBeenCalled()
+  expect(spyLog.mock.calls[0][0]).toMatchSnapshot()
 })
 
 test('getTranslationStatus: wip', async () => {
   // setup mocking ...
+  const mockStatusFail = statusFail as jest.Mocked<typeof statusFail>
+  mockStatusFail.fail.mockImplementation(() => {})
   const mockStatusValue = [{
     locale: 'en',
     percentage: 72.4
@@ -88,18 +79,13 @@ test('getTranslationStatus: wip', async () => {
     locale: 'ja',
     percentage: 100
   }]
-  mockStatus.mockImplementation(({ locales }) => Promise.resolve(mockStatusValue))
+  mockStatus.mockImplementation(() => Promise.resolve(mockStatusValue))
 
   // run
-  const status = await import('../../src/commands/status')
-  const cmd = yargs.command(status)
-  await new Promise((resolve, reject) => {
-    cmd.parse(`status --provider=@scope/l10n-service-provider`, (err, argv, output) => {
-      err ? reject(err) : resolve(output)
-    })
-  })
+  await runCommand('src/commands/status', `status --provider=@scope/l10n-service-provider`)
+  await flash()
 
   // verify
-  // NOTE: cannot detect process.exit calling ...
-  // expect(process.exit).toHaveBeenCalledWith(4)
+  expect(mockStatusFail.fail.mock.calls[0][1].message).toEqual('Translation work in progress')
+  expect(spyLog.mock.calls[0][0]).toMatchSnapshot()
 })

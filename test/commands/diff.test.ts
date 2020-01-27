@@ -1,5 +1,4 @@
-import * as yargs from 'yargs'
-import * as path from 'path'
+import { flash, runCommand } from '../helper'
 
 // -------
 // mocking
@@ -19,82 +18,72 @@ jest.mock('@scope/l10n-omit-service-provider', () => {
 })
 import L10nOmitServiceProvider from '@scope/l10n-omit-service-provider' // eslint-disable-line
 
+jest.mock('../../src/commands/fails/diff', () => ({
+  ...jest.requireActual('../../src/commands/fails/diff'),
+  fail: jest.fn()
+}))
+import diffFail from '../../src/commands/fails/diff'
+
 // -------------------
 // setup/teadown hooks
 
-const PROCESS_CWD_TARGET_PATH = path.resolve(__dirname)
-
-let orgCwd // for process.cwd mock
-let orgExit // for process.exit mock
 let spyLog
-let spyWarn
-let spyError
 beforeEach(() => {
   spyLog = jest.spyOn(global.console, 'log')
-  spyWarn = jest.spyOn(global.console, 'warn')
-  spyError = jest.spyOn(global.console, 'error')
-  orgCwd = process.cwd
-  process.cwd = jest.fn(() => PROCESS_CWD_TARGET_PATH) // mock: process.cwd
-  process.exit = jest.fn((code => { return 'exit!' as never })) // mock: process.exit
 })
 
 afterEach(() => {
-  spyError.mockRestore()
-  spyWarn.mockRestore()
   spyLog.mockRestore()
   jest.clearAllMocks()
-  process.exit = orgExit
-  process.cwd = orgCwd
 })
 
 // ----------
 // test cases
 
 test('require option', async () => {
-  const diff = await import('../../src/commands/diff')
-  const cmd = yargs.command(diff)
-  try {
-    await new Promise((resolve, reject) => {
-      cmd.parse(`push`, (err, argv, output) => {
-        err ? reject(err) : resolve(output)
-      })
-    })
-  } catch (e) {
-    expect(e).toMatchObject({ name: 'YError' })
-  }
+  // mocking ...
+  const mockDiffFail = diffFail as jest.Mocked<typeof diffFail>
+  mockDiffFail.fail.mockImplementation(() => {})
+
+  // run
+  await runCommand('src/commands/diff', `diff`)
+  await flash()
+
+  // verify
+  expect(mockDiffFail.fail).toHaveBeenCalled()
 })
 
 test('--provider: not found', async () => {
+  // mocking ...
+  const mockDiffFail = diffFail as jest.Mocked<typeof diffFail>
+  mockDiffFail.fail.mockImplementation(() => {})
+
   // run
-  const diff = await import('../../src/commands/diff')
-  const cmd = yargs.command(diff)
-  await new Promise((resolve, reject) => {
-    cmd.parse(`diff --provider=./404-provider.js`, (err, argv, output) => {
-      err ? reject(err) : resolve(output)
-    })
-  })
+  await runCommand('src/commands/diff', `diff --provider=./404-provider.js`)
+  await flash()
 
   // verify
-  expect(spyError).toHaveBeenCalledWith('Not found ./404-provider.js provider')
+  expect(mockDiffFail.fail.mock.calls[0][1].message).toEqual('Not found ./404-provider.js provider')
 })
 
-test('not specified --target and --targetPaths', async () => {
+test('not specified --target and --target-paths', async () => {
+  // mocking ...
+  const mockDiffFail = diffFail as jest.Mocked<typeof diffFail>
+  mockDiffFail.fail.mockImplementation(() => {})
+
   // run
-  const diff = await import('../../src/commands/diff')
-  const cmd = yargs.command(diff)
-  await new Promise((resolve, reject) => {
-    cmd.parse(`diff --provider=l10n-service-provider`, (err, argv, output) => {
-      err ? reject(err) : resolve(output)
-    })
-  })
+  await runCommand('src/commands/diff', `diff --provider=l10n-service-provider`)
+  await flash()
 
   // verify
-  expect(spyError).toHaveBeenCalledWith('You need to specify either --target or --target-paths')
+  expect(mockDiffFail.fail.mock.calls[0][1].message).toEqual('You need to specify either --target or --target-paths')
 })
 
 test('--target option', async () => {
-  // setup mocks
-  mockPull.mockImplementation(({ locales }) => Promise.resolve({
+  // mocking ...
+  const mockDiffFail = diffFail as jest.Mocked<typeof diffFail>
+  mockDiffFail.fail.mockImplementation(() => {})
+  mockPull.mockImplementation(() => Promise.resolve({
     ja: {
       hello: 'こんにちは！',
       nest: {
@@ -104,24 +93,23 @@ test('--target option', async () => {
   }))
 
   // run
-  const diff = await import('../../src/commands/diff')
-  const cmd = yargs.command(diff)
-  await new Promise((resolve, reject) => {
-    cmd.parse(`diff --provider=@scope/l10n-service-provider --target=./test/fixtures/locales/ja.json`, (err, argv, output) => {
-      err ? reject(err) : resolve(output)
-    })
-  })
+  await runCommand(
+    'src/commands/diff',
+    `diff --provider=@scope/l10n-service-provider \
+      --target=./test/fixtures/locales/ja.json`
+  )
+  await flash()
 
-  // verify with snapshot
+  // verify
+  expect(mockDiffFail.fail.mock.calls[0][1].message).toEqual('There are differences!')
   expect(spyLog.mock.calls[0][0]).toMatchSnapshot()
-  // NOTE: cannot detect process.exit calling in `fail` ...
-  // expect(spyWarn).toHaveBeenCalledWith('There are differences!')
-  // expect(process.exit).toHaveBeenCalledWith(64)
 })
 
 test('--locale option', async () => {
-  // setup mocks
-  mockPull.mockImplementation(({ locales }) => Promise.resolve({
+  // mocking ...
+  const mockDiffFail = diffFail as jest.Mocked<typeof diffFail>
+  mockDiffFail.fail.mockImplementation(() => {})
+  mockPull.mockImplementation(() => Promise.resolve({
     en: {
       hello: 'hello!',
       nest: {
@@ -131,24 +119,24 @@ test('--locale option', async () => {
   }))
 
   // run
-  const push = await import('../../src/commands/diff')
-  const cmd = yargs.command(push)
-  await new Promise((resolve, reject) => {
-    cmd.parse(`diff --provider=@scope/l10n-service-provider --target=./test/fixtures/locales/lang.json --locale=en`, (err, argv, output) => {
-      err ? reject(err) : resolve(output)
-    })
-  })
+  await runCommand(
+    'src/commands/diff',
+    `diff --provider=@scope/l10n-service-provider \
+      --target=./test/fixtures/locales/lang.json \
+      --locale=en`
+  )
+  await flash()
 
-  // verify with snapshot
+  // verify
+  expect(mockDiffFail.fail.mock.calls[0][1].message).toEqual('There are differences!')
   expect(spyLog.mock.calls[0][0]).toMatchSnapshot()
-  // NOTE: cannot detect process.exit calling in `fail` ...
-  // expect(spyWarn).toHaveBeenCalledWith('There are differences!')
-  // expect(process.exit).toHaveBeenCalledWith(64)
 })
 
 test('--target-paths option', async () => {
-  // setup mocks
-  mockPull.mockImplementation(({ locales }) => Promise.resolve({
+  // mocking ...
+  const mockDiffFail = diffFail as jest.Mocked<typeof diffFail>
+  mockDiffFail.fail.mockImplementation(() => {})
+  mockPull.mockImplementation(() => Promise.resolve({
     en: {
       hello: 'hello!',
       nest: {
@@ -158,17 +146,15 @@ test('--target-paths option', async () => {
   }))
 
   // run
-  const diff = await import('../../src/commands/diff')
-  const cmd = yargs.command(diff)
-  await new Promise((resolve, reject) => {
-    cmd.parse(`diff --provider=@scope/l10n-service-provider --target-paths=./test/fixtures/locales/*.json --filename-match=^([\\w]*)\\.json`, (err, argv, output) => {
-      err ? reject(err) : resolve(output)
-    })
-  })
+  await runCommand(
+    'src/commands/diff',
+    `diff --provider=@scope/l10n-service-provider \
+      --target-paths=./test/fixtures/locales/*.json \
+      --filename-match=^([\\w]*)\\.json`
+  )
+  await flash()
 
-  // verify with snapshot
+  // verify
+  expect(mockDiffFail.fail.mock.calls[0][1].message).toEqual('There are differences!')
   expect(spyLog.mock.calls[1][0]).toMatchSnapshot()
-  // NOTE: cannot detect process.exit calling in `fail` ...
-  // expect(spyWarn).toHaveBeenCalledWith('There are differences!')
-  // expect(process.exit).toHaveBeenCalledWith(64)
 })
