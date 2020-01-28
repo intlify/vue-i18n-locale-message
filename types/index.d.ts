@@ -24,9 +24,13 @@ export type Locale = string
  *      }
  *    }
  */
+
+export type LocaleMessageDictionary = {
+  [property: string]: LocaleMessage
+}
 export type LocaleMessage =
   | string
-  | { [property: string]: LocaleMessage }
+  | LocaleMessageDictionary
   | LocaleMessage[]
 export type LocaleMessages = Record<Locale, LocaleMessage>
 

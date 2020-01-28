@@ -5,8 +5,10 @@ import { VueTemplateCompiler } from '@vue/component-compiler-utils/dist/types'
 import {
   SFCFileInfo,
   Locale,
-  MetaExternalLocaleMessages,
+  LocaleMessageDictionary,
+  LocaleMessage,
   LocaleMessages,
+  MetaExternalLocaleMessages,
   FormatOptions,
   ProviderFactory,
   ProviderConfiguration,
@@ -58,6 +60,10 @@ export function escape (s: string): string {
 
 export function resolve (...paths: string[]): string {
   return path.resolve(...paths)
+}
+
+export function isLocaleMessageDictionary (message: LocaleMessage): message is LocaleMessageDictionary {
+  return typeof message !== 'string' && !Array.isArray(message)
 }
 
 export function reflectSFCDescriptor (basePath: string, components: SFCFileInfo[]): SFCDescriptor[] {
@@ -402,13 +408,13 @@ export function splitLocaleMessages (
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const stack = [] as { key: string, ref: any }[]
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    let targetLocaleMessage = messages[locale] as any
-    if (namespace && targetLocaleMessage[namespace]) {
+    let targetLocaleMessage = messages[locale]
+    if (namespace && isLocaleMessageDictionary(targetLocaleMessage)) {
       const ref1 = targetLocaleMessage
       targetLocaleMessage = targetLocaleMessage[namespace]
       stack.push({ key: namespace, ref: ref1 })
     }
-    if (filename && targetLocaleMessage[filename]) {
+    if (filename && isLocaleMessageDictionary(targetLocaleMessage)) {
       const ref2 = targetLocaleMessage
       targetLocaleMessage = targetLocaleMessage[filename]
       stack.push({ key: filename, ref: ref2 })
