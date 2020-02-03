@@ -124,7 +124,7 @@ export const handler = async (args: Arguments<ListOptions>): Promise<unknown> =>
 
   const unflattedLocaleMessages = {} as LocaleMessages
   Object.keys(flattedLocaleMessages).forEach(locale => {
-    unflattedLocaleMessages[locale] = unflatten(flattedLocaleMessages[locale])
+    unflattedLocaleMessages[locale] = unflatten(flattedLocaleMessages[locale], { object: true })
   })
 
   await tweakLocaleMessages(unflattedLocaleMessages, args)
