@@ -1,4 +1,13 @@
 
+## v0.16.2 (2020-02-03)
+
+#### :bug: Bug Fixes
+* [#87](https://github.com/kazupon/vue-i18n-locale-message/pull/87) fix: cannot infuse with external locale messages ([@kazupon](https://github.com/kazupon))
+
+#### Committers: 1
+- kazuya kawaguchi ([@kazupon](https://github.com/kazupon))
+
+
 ## v0.16.1 (2020-02-03)
 
 #### :star: Features
