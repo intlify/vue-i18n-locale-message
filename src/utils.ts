@@ -401,42 +401,22 @@ export function splitLocaleMessages (
       return info
     }, info)
   }, [] as ExternalLocaleMessagesParseInfo[])
-  debug(`splitLocaleMessages: externalLocaleMessagesParseInfo = ${JSON.stringify(externalLocaleMessagesParseInfo)}`)
+  debug('splitLocaleMessages: externalLocaleMessagesParseInfo:', externalLocaleMessagesParseInfo)
 
-  debug(`splitLocaleMessages: messages (before) = ${JSON.stringify(messages)}`)
+  debug('splitLocaleMessages: messages (before):', messages)
   const metaExternalLocaleMessages = externalLocaleMessagesParseInfo.reduce((meta, { path, locale, namespace, filename }) => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const stack = [] as { key: string, ref: any }[]
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     let targetLocaleMessage = messages[locale]
     if (namespace && isLocaleMessageDictionary(targetLocaleMessage)) {
-      const ref1 = targetLocaleMessage
       targetLocaleMessage = targetLocaleMessage[namespace]
-      stack.push({ key: namespace, ref: ref1 })
     }
     if (filename && isLocaleMessageDictionary(targetLocaleMessage)) {
-      const ref2 = targetLocaleMessage
       targetLocaleMessage = targetLocaleMessage[filename]
-      stack.push({ key: filename, ref: ref2 })
     }
     meta.push({ path, messages: deepCopy(targetLocaleMessage) })
-
-    // remove properties from messages
-    let item = stack.shift()
-    while (item) {
-      const { ref: obj, key } = item
-      delete obj[key]
-      item.ref = null // remove reference
-      item = stack.shift()
-    }
-    if (Object.keys(messages[locale]).length === 0) {
-      delete messages[locale]
-    }
-
     return meta
   }, [] as MetaExternalLocaleMessages[])
-  debug(`splitLocaleMessages: messages (after) = ${JSON.stringify(messages)}`)
-  debug(`splitLocaleMessages: metaExternalLocaleMessages = ${JSON.stringify(metaExternalLocaleMessages)}`)
+  debug('splitLocaleMessages: messages (after):', messages)
+  debug('splitLocaleMessages: metaExternalLocaleMessages:', metaExternalLocaleMessages)
 
   return { sfc: messages, external: metaExternalLocaleMessages }
 }
