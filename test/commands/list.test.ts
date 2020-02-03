@@ -143,7 +143,10 @@ test('--define option', async () => {
   mockUtils.getLocaleMessages.mockImplementation((...args) => ({
     en: {
       foo: 'foo',
-      bar: { buz: 'buz' }
+      bar: { buz: 'buz' },
+      buz: {
+        inedexed: { '1': 'low', '10': 'middle', '20': 'high' }
+      }
     },
     ja: {}
   }))
@@ -164,12 +167,18 @@ test('--define option', async () => {
   await flash()
 
   // verify
-  expect(spyLog).toHaveBeenCalledTimes(3)
+  expect(spyLog).toHaveBeenCalledTimes(6)
   expect(spyLog.mock.calls[0]).toEqual([`ja: 'foo' undefined`])
   expect(spyLog.mock.calls[1]).toEqual([`ja: 'bar.buz' undefined`])
+  expect(spyLog.mock.calls[2]).toEqual([`ja: 'buz.inedexed.1' undefined`])
+  expect(spyLog.mock.calls[3]).toEqual([`ja: 'buz.inedexed.10' undefined`])
+  expect(spyLog.mock.calls[4]).toEqual([`ja: 'buz.inedexed.20' undefined`])
   expect(JSON.parse(writeFiles['ja.json'])).toEqual({
     foo: '',
-    bar: { buz: '' }
+    bar: { buz: '' },
+    buz: {
+      inedexed: { '1': '', '10': '', '20': '' }
+    }
   })
 })
 
