@@ -1,4 +1,16 @@
 
+## v0.16.1 (2020-02-03)
+
+#### :star: Features
+* [#83](https://github.com/kazupon/vue-i18n-locale-message/pull/83) feat: define LocaleMessageDictionary type ([@kazupon](https://github.com/kazupon))
+
+#### :bug: Bug Fixes
+* [#85](https://github.com/kazupon/vue-i18n-locale-message/pull/85) fix object is converted to array ([@kazupon](https://github.com/kazupon))
+
+#### Committers: 1
+- kazuya kawaguchi ([@kazupon](https://github.com/kazupon))
+
+
 ## v0.16.0 (2020-01-27)
 
 #### :boom: Breaking Change
