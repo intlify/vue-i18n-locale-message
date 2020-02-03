@@ -101,10 +101,10 @@ test('splitLocaleMessages: basic usage', async () => {
     './test/fixtures/packages/package2/locales/**/*.json': 'package2'
   }
   const unbundleTo = './test/fixtures/packages/package1/locales/**/*.json,./test/fixtures/packages/package2/locales/**/*.json'
-  const unbundleMatch = '([\\w]*)/([\\w]*)\\.json$'
+  const unbundleMatch = '.*/([\\w]{2})/([\\w]*)\\.json$'
   const { sfc, external } = splitLocaleMessages(messages, namespaces, unbundleTo, unbundleMatch)
 
-  expect(sfc).toEqual(squeezeLocaleMessages)
+  expect(sfc).toEqual(messages)
   external.forEach(ex => {
     expect(ex.messages).toMatchSnapshot()
   })
