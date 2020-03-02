@@ -41,7 +41,7 @@
     "@types/debug": "^4.1.4",
     "@types/deep-diff": "^1.0.0",
     "@types/deepmerge": "^2.2.0",
-    "@types/flat": "^0.0.28",
+    "@types/flat": "^5.0.0",
     "@types/glob": "^7.1.1",
     "@types/jest": "^25.0.0",
     "@types/js-yaml": "^3.12.1",
