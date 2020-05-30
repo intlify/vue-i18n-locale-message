@@ -6401,10 +6401,10 @@ typedarray-to-buffer@^3.1.5:
   dependencies:
     is-typedarray "^1.0.0"
 
-typescript-eslint-language-service@^2.0.0:
-  version "2.1.0"
-  resolved "https://registry.yarnpkg.com/typescript-eslint-language-service/-/typescript-eslint-language-service-2.1.0.tgz#70f8c424747caca09fd2721353aeff72f387ec60"
-  integrity sha512-S1LAMjHbap0IjEpXZ4vxibhmzrA2dIoByj3XXzCDXYdSDw2EkwIiVzhhBX/IS7t4PHfgGYpK2SNQBd4H0tQ56g==
+typescript-eslint-language-service@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/typescript-eslint-language-service/-/typescript-eslint-language-service-3.0.0.tgz#9abde675368854e4157bba1343e8606897865dc0"
+  integrity sha512-da3jE4vG+CWIwx68SMvM29aRM3DE5CI73n4yfdOpg825KVLcFfXa9fLVCTg1wP1YIJvYvARQg4mRqWHHkC65+Q==
   dependencies:
     read-pkg-up "^7.0.0"
 
