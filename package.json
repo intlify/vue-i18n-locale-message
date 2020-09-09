@@ -35,7 +35,7 @@
     "json-diff": "^0.5.4",
     "json5": "^2.1.0",
     "vue-template-compiler": "^2.6.10",
-    "yargs": "^15.1.0"
+    "yargs": "^16.0.0"
   },
   "devDependencies": {
     "@types/debug": "^4.1.4",
