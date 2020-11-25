@@ -16,7 +16,7 @@ executors:
 
     working_directory: ~/repo
 orbs:
-  codecov: codecov/codecov@1.1.2
+  codecov: codecov/codecov@1.1.3
 jobs:
   build:
     executor: default
