@@ -49,7 +49,7 @@ yarn add -D vue-i18n-locale-message
 If you can globally use CLI, you need `global` option the below command.
 
 ```sh
-yarn global vue-i18n-locale-message
+yarn global add vue-i18n-locale-message
 ```
 
 ## :star: Features
