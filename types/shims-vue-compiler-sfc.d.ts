@@ -1,7 +1,7 @@
-import { SFCDescriptor } from 'vue-template-compiler'
+import { SFCDescriptor } from '@vue/compiler-sfc'
 
 // extend for vue-i18n-locale-message
-declare module 'vue-template-compiler/types/index' {
+declare module '@vue/compiler-sfc' {
   export interface SFCDescriptor {
     raw: string
     contentPath: string

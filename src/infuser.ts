@@ -1,6 +1,6 @@
 /* eslint-disable-next-line */
-/// <reference path="../types/shims-vue-template-compiler.d.ts"/>
-import { SFCBlock, SFCDescriptor } from 'vue-template-compiler'
+/// <reference path="../types/shims-vue-compiler-sfc.d.ts"/>
+import { SFCBlock, SFCDescriptor } from '@vue/compiler-sfc'
 import { Locale, MetaLocaleMessage, SFCI18nBlock, SFCFileInfo, FormatOptions } from '../types'
 
 import { escape, reflectSFCDescriptor, parseContent, stringifyContent } from './utils'
@@ -24,7 +24,7 @@ function generate (meta: MetaLocaleMessage, descriptor: SFCDescriptor, options?:
   debug('target i18n blocks\n', i18nBlocks)
 
   const blocks: SFCBlock[] = getBlocks(descriptor)
-  blocks.forEach(b => debug(`block: type=${b.type}, start=${b.start}, end=${b.end}`))
+  blocks.forEach(b => debug(`block: type=${b.type}, start=${b.loc.start.offset}, end=${b.loc.end.offset}`))
 
   const { raw } = descriptor
   const content = buildContent(i18nBlocks, raw, blocks, options)
@@ -39,7 +39,9 @@ function getBlocks (descriptor: SFCDescriptor): SFCBlock[] {
   const blocks: SFCBlock[] = [...styles, ...customBlocks]
   template && blocks.push(template as SFCBlock)
   script && blocks.push(script as SFCBlock)
-  blocks.sort((a, b) => { return (a.start as number) - (b.start as number) })
+  blocks.sort((a, b) => {
+    return a.loc.start.offset - b.loc.start.offset
+  })
   return blocks
 }
 
@@ -68,14 +70,14 @@ function buildContent (i18nBlocks: SFCI18nBlock[], raw: string, blocks: SFCBlock
         messages = parseContent(block.content, lang)
       }
 
-      contents = contents.concat(raw.slice(offset, block.start))
+      contents = contents.concat(raw.slice(offset, block.loc.start.offset))
       const serialized = `\n${stringifyContent(messages, lang, options)}`
       contents = contents.concat(serialized)
-      offset = block.end as number
+      offset = block.loc.end.offset
       i18nBlockCounter++
     } else {
-      contents = contents.concat(raw.slice(offset, block.end))
-      offset = block.end as number
+      contents = contents.concat(raw.slice(offset, block.loc.end.offset))
+      offset = block.loc.end.offset
     }
     return contents
   }, contents)
