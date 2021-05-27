@@ -66,16 +66,13 @@ export function isLocaleMessageDictionary (message: LocaleMessage): message is L
 
 export function reflectSFCDescriptor (basePath: string, components: SFCFileInfo[]): SFCDescriptor[] {
   return components.map(target => {
-    const { template, script, styles, customBlocks } = parse(target.content, {
+    const descriptor = parse(target.content, {
       filename: target.path
     }).descriptor as SFCDescriptor
     return {
       ...parsePath(basePath, target.path),
-      raw: target.content,
-      customBlocks,
-      template,
-      script,
-      styles
+      ...descriptor,
+      raw: target.content
     }
   })
 }
