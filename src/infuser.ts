@@ -54,7 +54,7 @@ function buildContent (i18nBlocks: SFCI18nBlock[], raw: string, blocks: SFCBlock
     if (block.type === 'i18n') {
       let lang = block.attrs.lang
       lang = (!lang || typeof lang !== 'string') ? 'json' : lang
-      const locale: Locale | undefined = block.attrs.locale
+      const locale: Locale | true = block.attrs.locale
       const i18nBlock = i18nBlocks[i18nBlockCounter]
       debug(`meta.lang = ${i18nBlock.lang}, block.lang = ${lang}, meta.locale = ${i18nBlock.locale}, block.locale = ${locale}`)
 
