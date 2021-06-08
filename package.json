@@ -1,7 +1,7 @@
 {
   "name": "vue-i18n-locale-message",
   "description": "i18n locale messages management tool / library for vue-i18n",
-  "version": "0.16.3",
+  "version": "1.0.0",
   "author": {
     "name": "kazuya kawaguchi",
     "email": "kawakazu80@gmail.com"
@@ -47,6 +47,7 @@
     "@types/node": "^12.6.8",
     "@types/prettier": "^2.0.0",
     "@types/yargs": "^15.0.0",
+    "@sucrase/jest-plugin": "^2.1.0",
     "@typescript-eslint/eslint-plugin": "^3.0.0",
     "@typescript-eslint/parser": "^3.0.0",
     "@vue/compiler-sfc": "^3.0.11",
@@ -59,12 +60,12 @@
     "shipjs": "^0.23.0",
     "ts-jest": "^26.0.0",
     "tsd": "^0.13.0",
-    "typescript": "^4.0.0",
+    "typescript": "^3.9.5",
     "typescript-eslint-language-service": "^3.0.0",
     "vue": "^3.0.11"
   },
   "engines": {
-    "node": ">= 10"
+    "node": ">= 12"
   },
   "files": [
     "types/shims-vue-template-compiler.d.ts",
@@ -98,7 +99,7 @@
     "release:trigger": "shipjs trigger",
     "test": "npm run lint && npm run test:types && npm run test:cover && npm run build",
     "test:cover": "npm run test:unit -- --coverage",
-    "test:unit": "jest --env node",
+    "test:unit": "jest --clearCache && jest --env node",
     "test:types": "tsd",
     "test:watch": "jest --env node --watch"
   },
