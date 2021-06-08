@@ -25,7 +25,6 @@
     }
   },
   "dependencies": {
-    "@vue/component-compiler-utils": "^3.0.0",
     "debug": "^4.1.1",
     "deep-diff": "^1.0.2",
     "deepmerge": "^4.2.2",
@@ -34,7 +33,6 @@
     "js-yaml": "^3.13.1",
     "json-diff": "^0.5.4",
     "json5": "^2.1.0",
-    "vue-template-compiler": "^2.6.10",
     "yargs": "^15.1.0"
   },
   "devDependencies": {
@@ -52,6 +50,7 @@
     "@sucrase/jest-plugin": "^2.1.0",
     "@typescript-eslint/eslint-plugin": "^3.0.0",
     "@typescript-eslint/parser": "^3.0.0",
+    "@vue/compiler-sfc": "^3.0.11",
     "eslint": "^7.4.0",
     "eslint-plugin-vue-libs": "^4.0.0",
     "jest": "^26.0.0",
@@ -63,8 +62,7 @@
     "tsd": "^0.13.0",
     "typescript": "^3.9.5",
     "typescript-eslint-language-service": "^3.0.0",
-    "vue": "^2.6.11",
-    "vue-template-compiler": "^2.6.11"
+    "vue": "^3.0.11"
   },
   "engines": {
     "node": ">= 12"
@@ -84,8 +82,8 @@
   "license": "MIT",
   "main": "lib/index.js",
   "peerDependencies": {
-    "vue": "^2.6",
-    "vue-template-compiler": "^2.6"
+    "@vue/compiler-sfc": "^3.0.11",
+    "vue": "^3.0.11"
   },
   "repository": {
     "type": "git",

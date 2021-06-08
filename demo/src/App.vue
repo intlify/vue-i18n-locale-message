@@ -3,7 +3,7 @@
     <h1>{{ $t("title") }}</h1>
     <form>
       <label for="locale">{{ $t('lang') }}:</label>
-      <select v-model="$parent.$i18n.locale">
+      <select v-model="$i18n.locale">
         <option value="en">en</option>
         <option value="ja">ja</option>
       </select>
