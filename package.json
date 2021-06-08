@@ -101,7 +101,7 @@
     "release:trigger": "shipjs trigger",
     "test": "npm run lint && npm run test:types && npm run test:cover && npm run build",
     "test:cover": "npm run test:unit -- --coverage",
-    "test:unit": "jest --env node",
+    "test:unit": "jest --clearCache && jest --env node",
     "test:types": "tsd",
     "test:watch": "jest --env node --watch"
   },
