@@ -5,9 +5,9 @@
 i18n locale messages management tool / library for vue-i18n
 
 ## :warning: NOTICE
-Currently version is supported [vue-i18n@v8.x](https://github.com/kazupon/vue-i18n) (for Vue 2.x)
+`v2.x or later` is for [vue-i18n-next](https://github.com/intlify/vue-i18n-next) (Vue 3.x)
 
-[vue-i18n-next](https://github.com/intlify/vue-i18n-next) (for Vue 3.x) isn't supported yet.
+If you want to use for [vue-i18n@v8.x](https://github.com/kazupon/vue-i18n) (Vue 2.x), use the `v1.x`
 
 ## :raising_hand: Motivations
 
