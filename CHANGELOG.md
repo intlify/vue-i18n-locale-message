@@ -1,4 +1,13 @@
 
+## v2.0.0-beta.1 (2021-06-09)
+
+#### :star: Features
+* [#140](https://github.com/intlify/vue-i18n-locale-message/pull/140) Vue 3 support ([@ardier16](https://github.com/ardier16))
+
+#### Committers: 1
+- Maksym Shopynskyi ([@ardier16](https://github.com/ardier16))
+
+
 ## v1.0.0 (2021-06-08)
 
 #### :boom: Breaking Change
