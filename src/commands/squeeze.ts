@@ -27,6 +27,7 @@ type SqueezeOptions = {
   bundleMatch?: string
   namespace?: string
   output: string
+  ignorePath?: string
 }
 
 export const command = 'squeeze'
@@ -69,6 +70,11 @@ export const builder = (args: Argv): Argv<SqueezeOptions> => {
       default: outputDefault,
       describe: 'path to output squeezed locale messages'
     })
+    .option('ignorePath', {
+      type: 'string',
+      alias: 'i',
+      describe: 'path to dot ignore file, i.e. ./.ignore-i18n'
+    })
 }
 
 export const handler = async (args: Arguments<SqueezeOptions>) => {
@@ -85,7 +91,7 @@ export const handler = async (args: Arguments<SqueezeOptions>) => {
     console.warn('cannot load external locale messages failed')
   }
 
-  const meta = squeeze(targetPath, readSFC(targetPath))
+  const meta = squeeze(targetPath, readSFC(targetPath, args.ignorePath))
   const messages = deepmerge(generate(meta), externalMessages)
 
   writeLocaleMessages(messages, args)

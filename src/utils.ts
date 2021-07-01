@@ -28,6 +28,8 @@ import JSON5 from 'json5'
 import yaml from 'js-yaml'
 import deepmerge from 'deepmerge'
 import { promisify } from 'util'
+import ignore from 'ignore'
+import type { Ignore } from 'ignore'
 
 import { debug as Debug } from 'debug'
 const debug = Debug('vue-i18n-locale-message:utils')
@@ -139,8 +141,18 @@ export function stringifyContent (content: any, lang: string, options?: FormatOp
   return result
 }
 
-export function readSFC (target: string): SFCFileInfo[] {
+export function readSFC (target: string, ignorePath?: string): SFCFileInfo[] {
   const targets = resolveGlob(target)
+  if ((ignorePath !== undefined)) {
+    const ig = returnIgnoreInstance(ignorePath)
+    targets.filter(t => {
+      if (t.startsWith('/')) {
+        return !ig.ignores(path.relative('/', t))
+      } else {
+        return !ig.ignores(path.relative('./', t))
+      }
+    })
+  }
   debug('readSFC: targets = ', targets)
 
   // TODO: async implementation
@@ -419,4 +431,14 @@ export function splitLocaleMessages (
   debug('splitLocaleMessages: metaExternalLocaleMessages:', metaExternalLocaleMessages)
 
   return { sfc: messages, external: metaExternalLocaleMessages }
+}
+
+function returnIgnoreInstance (ignorePath: string): Ignore {
+  const ig = ignore()
+  if (fs.existsSync(ignorePath)) {
+    ig.add(fs.readFileSync(ignorePath).toString())
+  } else {
+    console.warn('cannot find ignore file.')
+  }
+  return ig
 }
