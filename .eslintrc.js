@@ -25,6 +25,7 @@ module.exports = {
     '@typescript-eslint/member-delimiter-style': 'off',
     '@typescript-eslint/no-use-before-define': 'off',
     '@typescript-eslint/explicit-function-return-type': 'off',
+    '@typescript-eslint/explicit-module-boundary-types': 'off',
     'no-unused-vars': 'off' // HACK: due to duplicate with @typescript-eslint/no-unused-vars
   }
 }

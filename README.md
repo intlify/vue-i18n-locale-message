@@ -1,22 +1,13 @@
 # :globe_with_meridians: vue-i18n-locale-message
 
 [![npm](https://img.shields.io/npm/v/vue-i18n-locale-message.svg)](https://www.npmjs.com/package/vue-i18n-locale-message)
-[![CircleCI](https://circleci.com/gh/kazupon/vue-i18n-locale-message.svg?style=svg)](https://circleci.com/gh/kazupon/vue-i18n-locale-message)
-[![codecov](https://codecov.io/gh/kazupon/vue-i18n-locale-message/branch/master/graph/badge.svg)](https://codecov.io/gh/kazupon/vue-i18n-locale-message)
 
 i18n locale messages management tool / library for vue-i18n
 
-<a href="https://www.patreon.com/kazupon" target="_blank">
-  <img src="https://c5.patreon.com/external/logo/become_a_patron_button.png" alt="Become a Patreon">
-</a>
+## :warning: NOTICE
+`v2.x or later` is for [vue-i18n-next](https://github.com/intlify/vue-i18n-next) (Vue 3.x)
 
-## :loudspeaker: Notice
-
-vue-i18n-locale-message will soon be transferred to [intlify organaization](https://github.com/intlify). After that, it will be developed and maintained on intlify.
-
-The `vue-i18n-locale-message` that has been released on npm will be released as `@intlify/vue-i18n-locale-message` in near future.
-
-Intlify is a new i18n project kickoff by @kazupon. 😉 
+If you want to use for [vue-i18n@v8.x](https://github.com/kazupon/vue-i18n) (Vue 2.x), use the `v1.x`
 
 ## :raising_hand: Motivations
 

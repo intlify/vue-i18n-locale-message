@@ -1,4 +1,23 @@
 
+## v2.0.0-beta.1 (2021-06-09)
+
+#### :star: Features
+* [#140](https://github.com/intlify/vue-i18n-locale-message/pull/140) Vue 3 support ([@ardier16](https://github.com/ardier16))
+
+#### Committers: 1
+- Maksym Shopynskyi ([@ardier16](https://github.com/ardier16))
+
+
+## v1.0.0 (2021-06-08)
+
+#### :boom: Breaking Change
+* [#143](https://github.com/intlify/vue-i18n-locale-message/pull/143) drop node v10 ([@kazupon](https://github.com/kazupon))
+
+#### Committers: 2
+- Sébastien LeBlanc ([@mrleblanc101](https://github.com/mrleblanc101))
+- kazuya kawaguchi ([@kazupon](https://github.com/kazupon))
+
+
 ## v0.16.3 (2020-07-07)
 Upgrade deps
 

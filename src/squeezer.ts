@@ -1,4 +1,4 @@
-import { SFCBlock } from 'vue-template-compiler'
+import { SFCBlock } from '@vue/compiler-sfc'
 import { MetaLocaleMessage, I18nLang, SFCFileInfo, SFCI18nBlock } from '../types'
 
 import { reflectSFCDescriptor, parseContent } from './utils'
@@ -9,7 +9,9 @@ const debug = Debug('vue-i18n-locale-message:squeezer')
 export default function squeeze (basePath: string, files: SFCFileInfo[]): MetaLocaleMessage {
   const descriptors = reflectSFCDescriptor(basePath, files)
   return descriptors.reduce((meta, descriptor) => {
-    descriptor.customBlocks.sort((a, b) => { return (a.start as number) - (b.start as number) })
+    descriptor.customBlocks.sort((a, b) => {
+      return a.loc.start.offset - b.loc.start.offset
+    })
     const i18nBlocks = squeezeFromCustomBlocks(descriptor.customBlocks)
     debug('squeezeFromCustomBlocks: i18nBlocks', JSON.stringify(i18nBlocks, null, 2))
     meta.components[descriptor.contentPath] = i18nBlocks
