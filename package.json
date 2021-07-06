@@ -30,12 +30,14 @@
     "deepmerge": "^4.2.2",
     "flat": "^5.0.0",
     "glob": "^7.1.4",
+    "ignore": "^5.1.8",
     "js-yaml": "^3.13.1",
     "json-diff": "^0.5.4",
     "json5": "^2.1.0",
     "yargs": "^15.1.0"
   },
   "devDependencies": {
+    "@sucrase/jest-plugin": "^2.1.0",
     "@types/debug": "^4.1.4",
     "@types/deep-diff": "^1.0.0",
     "@types/deepmerge": "^2.2.0",
@@ -47,7 +49,6 @@
     "@types/node": "^12.6.8",
     "@types/prettier": "^2.0.0",
     "@types/yargs": "^15.0.0",
-    "@sucrase/jest-plugin": "^2.1.0",
     "@typescript-eslint/eslint-plugin": "^3.0.0",
     "@typescript-eslint/parser": "^3.0.0",
     "@vue/compiler-sfc": "^3.0.11",
