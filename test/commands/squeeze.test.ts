@@ -166,12 +166,13 @@ test('ignore option', async () => {
   mockUtils.resolve.mockImplementation((...paths) => paths[0])
   mockUtils.loadNamespaceDictionary.mockImplementation(async () => ({}))
   mockUtils.getExternalLocaleMessages.mockImplementation(() => ({}))
-  fs.readFileSync.mockImplementationOnce(path => MOCK_IGNORE_FILES);
+  const mockFS = fs as jest.Mocked<typeof fs>
+  mockFS.readFileSync.mockImplementationOnce(path => MOCK_IGNORE_FILES);
 
   const squeeze = await import('../../src/commands/squeeze')
   const cmd = yargs.command(squeeze)
   const output = await new Promise(resolve => {
-    cmd.parse(`squeeze --target=${TARGET_PATH}/src --output=${TARGET_PATH}/locales --ignorePath=./test/fixtures/ignore-i18n`, () => {
+    cmd.parse(`squeeze --target=${TARGET_PATH}/src --output=${TARGET_PATH}/locales --ignorePath=./test/fixtures/.ignore-i18n`, () => {
       resolve(writeFiles)
     })
   })
