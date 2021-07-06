@@ -24,6 +24,7 @@ const MOCK_FILES = SFC_FILES.reduce((files, file) => {
   const meta = jsonMetaInfo.find(meta => meta.contentPath === file)
   return Object.assign(files, { [file]: meta.raw })
 }, {})
+const MOCK_IGNORE_FILES = '**/Login.vue'
 
 let orgCwd // for process.cwd mock
 
@@ -41,7 +42,8 @@ import * as utils from '../../src/utils'
 jest.mock('fs', () => ({
   ...jest.requireActual('fs'),
   readFileSync: jest.fn(),
-  writeFileSync: jest.fn()
+  writeFileSync: jest.fn(),
+  existsSync: jest.fn().mockImplementation(path => true)
 }))
 import fs from 'fs'
 
@@ -269,4 +271,39 @@ test('bundle option', async () => {
   })
 
   expect(output).toMatchSnapshot()
+})
+
+test('ignore option', async () => {
+  // setup mocks
+  const mockUtils = utils as jest.Mocked<typeof utils>
+  mockUtils.resolve.mockImplementation((...paths) => paths[0])
+  mockUtils.loadNamespaceDictionary.mockImplementation(async () => ({}))
+  mockUtils.splitLocaleMessages.mockImplementation((messages) => ({ sfc: messages }))
+  const writeFiles = {}
+  const mockFS = fs as jest.Mocked<typeof fs>
+  mockFS.readFileSync.mockImplementation(path => {
+    if (MOCK_FILES[path as string]) {
+      return MOCK_FILES[path as string]
+    } else {
+      return JSON.stringify(json)
+    }
+  })
+  mockFS.writeFileSync.mockImplementation((path, data) => {
+    writeFiles[path as string] = data.toString()
+  })
+  mockFS.readFileSync.mockImplementationOnce(path => MOCK_IGNORE_FILES);
+
+  // run
+  const infuse = await import('../../src/commands/infuse')
+  const cmd = yargs.command(infuse)
+  const output = await new Promise(resolve => {
+    cmd.parse(`infuse --target=${TARGET_PATH}/src --locales=${TARGET_PATH}/locales.json --ignorePath=./test/fixtures/.ignore-i18n`, () => {
+      resolve(writeFiles)
+    })
+  })
+
+  // check
+  for (const [key, value] of Object.entries(output)) {
+    expect(value).toMatchSnapshot(key)
+  }
 })
