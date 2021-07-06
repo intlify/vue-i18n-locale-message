@@ -1,4 +1,5 @@
 import * as yargs from 'yargs'
+import * as fs from 'fs';
 import jsonMetaInfo from '../fixtures/meta/json'
 import external from '../fixtures/external'
 
@@ -16,6 +17,7 @@ const MOCK_FILES = SFC_FILES.reduce((files, file) => {
   const meta = jsonMetaInfo.find(meta => meta.contentPath === file)
   return Object.assign(files, { [file]: meta.raw })
 }, {})
+const MOCK_IGNORE_FILES = '**/Login.vue'
 let writeFiles = {} // for fs mock
 let orgCwd // for process.cwd mock
 
@@ -39,7 +41,8 @@ jest.mock('fs', () => ({
   writeFileSync: jest.fn().mockImplementation((path, data) => {
     writeFiles[path as string] = data.toString()
   }),
-  mkdirSync: jest.fn().mockImplementation(path => {})
+  mkdirSync: jest.fn().mockImplementation(path => {}),
+  existsSync: jest.fn().mockImplementation(path => true)
 }))
 
 // -------------------
@@ -151,6 +154,25 @@ test('bundle options', async () => {
       --withBundleMatch=([\\w]*)/([\\w]*)\\.json$ \
       --namespace=./test/fixtures/namespace.json \
       --output=${TARGET_PATH}/locales`, () => {
+      resolve(writeFiles)
+    })
+  })
+
+  expect(output).toMatchSnapshot()
+})
+
+test('ignore option', async () => {
+  const mockUtils = utils as jest.Mocked<typeof utils>
+  mockUtils.resolve.mockImplementation((...paths) => paths[0])
+  mockUtils.loadNamespaceDictionary.mockImplementation(async () => ({}))
+  mockUtils.getExternalLocaleMessages.mockImplementation(() => ({}))
+  const mockFS = fs as jest.Mocked<typeof fs>
+  mockFS.readFileSync.mockImplementationOnce(path => MOCK_IGNORE_FILES);
+
+  const squeeze = await import('../../src/commands/squeeze')
+  const cmd = yargs.command(squeeze)
+  const output = await new Promise(resolve => {
+    cmd.parse(`squeeze --target=${TARGET_PATH}/src --output=${TARGET_PATH}/locales --ignorePath=./test/fixtures/.ignore-i18n`, () => {
       resolve(writeFiles)
     })
   })

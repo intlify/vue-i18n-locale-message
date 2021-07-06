@@ -34,6 +34,7 @@ type InfuseOptions = {
   unbundleMatch?: string
   namespace?: string
   dryRun: boolean
+  ignorePath?: string
 }
 
 export const command = 'infuse'
@@ -80,6 +81,11 @@ export const builder = (args: Argv): Argv<InfuseOptions> => {
       default: false,
       describe: 'run the infuse command, but do not apply them'
     })
+    .option('ignorePath', {
+      type: 'string',
+      alias: 'i',
+      describe: 'path to dot ignore file, i.e. ./.ignore-i18n'
+    })
 }
 
 export const handler = async (args: Arguments<InfuseOptions>) => {
@@ -96,7 +102,7 @@ export const handler = async (args: Arguments<InfuseOptions>) => {
   }
   debug('namespace dictionary:', nsDictionary)
 
-  const sources = readSFC(targetPath)
+  const sources = readSFC(targetPath, args.ignorePath)
   const messages = readLocaleMessages(messagesPath, args.match)
 
   const { sfc, external } = splitLocaleMessages(messages, nsDictionary, args.unbundleTo, args.unbundleMatch)

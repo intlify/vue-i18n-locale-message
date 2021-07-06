@@ -26,6 +26,8 @@ import JSON5 from 'json5'
 import yaml from 'js-yaml'
 import deepmerge from 'deepmerge'
 import { promisify } from 'util'
+import ignore from 'ignore'
+import type { Ignore } from 'ignore'
 
 import { debug as Debug } from 'debug'
 const debug = Debug('vue-i18n-locale-message:utils')
@@ -132,15 +134,26 @@ export function stringifyContent (content: any, lang: string, options?: FormatOp
   return result
 }
 
-export function readSFC (target: string): SFCFileInfo[] {
-  const targets = resolveGlob(target)
+export function readSFC (target: string, ignorePath?: string): SFCFileInfo[] {
+  let targets = resolveGlob(target)
+  if ((ignorePath !== undefined)) {
+    const ig = returnIgnoreInstance(ignorePath)
+    targets = targets.filter(t => {
+      if (path.isAbsolute(t)) {
+        console.debug('Target is absolute path. Please change relative path.')
+        return !ig.ignores(path.relative('/', t))
+      } else {
+        return !ig.ignores(path.relative('./', t))
+      }
+    })
+  }
   debug('readSFC: targets = ', targets)
 
   // TODO: async implementation
-  return targets.map(target => {
-    const data = fs.readFileSync(target)
+  return targets.map(t => {
+    const data = fs.readFileSync(t)
     return {
-      path: target,
+      path: t,
       content: data.toString()
     }
   })
@@ -412,4 +425,31 @@ export function splitLocaleMessages (
   debug('splitLocaleMessages: metaExternalLocaleMessages:', metaExternalLocaleMessages)
 
   return { sfc: messages, external: metaExternalLocaleMessages }
+}
+
+function returnIgnoreInstance (ignorePath: string): Ignore {
+  const ig = ignore()
+  if (fs.existsSync(ignorePath)) {
+    addIgnoreFile(ig, ignorePath)
+  } else {
+    console.warn('cannot find ignore file.')
+  }
+  return ig
+}
+
+function readIgnoreFile (ignorePath: string): string[] {
+  const ignoreFiles = fs.readFileSync(ignorePath, 'utf8')
+    .split(/\r?\n/g)
+    .filter(Boolean)
+  console.log(`ignoreFiles ${ignoreFiles}`)
+  return ignoreFiles
+}
+
+function addIgnoreFile (
+  ig: Ignore,
+  ignorePath: string
+): void {
+  readIgnoreFile(ignorePath).forEach(ignoreRule =>
+    ig.add(ignoreRule)
+  )
 }
