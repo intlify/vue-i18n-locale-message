@@ -1,5 +1,7 @@
 
+## v2.0.0-beta.2 (2021-07-06)
 
+* Support ignore path
 
 ## v2.0.0-beta.1 (2021-06-09)
 
