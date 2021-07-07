@@ -331,6 +331,38 @@ exports[`ignore option: /path/to/project1/src/components/nest/RankingTable.vue 1
 </i18n>"
 `;
 
+exports[`ignore option: /path/to/project1/src/pages/Login.vue 1`] = `
+"
+  <template>
+    <p>template</p>
+  </template>
+  
+  <script>
+  export default {}
+  </script>
+
+  <i18n>
+{
+  \\"ja\\": {
+    \\"id\\": \\"ユーザーID\\",
+    \\"passowrd\\": \\"パスワード\\",
+    \\"confirm\\": \\"パスワードの確認入力\\",
+    \\"button\\": \\"ログイン\\"
+  }
+}
+</i18n>
+  
+
+<i18n locale=\\"en\\">
+{
+  \\"id\\": \\"User ID\\",
+  \\"password\\": \\"Password\\",
+  \\"confirm\\": \\"Confirm Password\\",
+  \\"button\\": \\"Login\\"
+}
+</i18n>"
+`;
+
 exports[`match option: /path/to/project1/src/App.vue 1`] = `
 "
   <template>
