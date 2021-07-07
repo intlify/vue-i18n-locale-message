@@ -135,16 +135,11 @@ export function stringifyContent (content: any, lang: string, options?: FormatOp
 }
 
 export function readSFC (target: string, ignorePath?: string): SFCFileInfo[] {
-  let targets = resolveGlob(target)
+  let targets = resolveGlob(path.relative(process.cwd(), target))
   if ((ignorePath !== undefined)) {
     const ig = returnIgnoreInstance(ignorePath)
     targets = targets.filter(t => {
-      if (path.isAbsolute(t)) {
-        console.debug('Target is absolute path. Please change relative path.')
-        return !ig.ignores(path.relative('/', t))
-      } else {
-        return !ig.ignores(path.relative('./', t))
-      }
+      return !ig.ignores(path.relative(process.cwd(), t))
     })
   }
   debug('readSFC: targets = ', targets)
