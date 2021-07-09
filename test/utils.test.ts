@@ -13,6 +13,8 @@ import {
   splitLocaleMessages
 } from '../src/utils'
 
+import ignore from 'ignore'
+
 // ------
 // mocks
 
@@ -63,7 +65,8 @@ test('getExternalLocaleMessages: basic usage', async () => {
   }
   const withBundle = './test/fixtures/packages/package1/locales/**/*.json,./test/fixtures/packages/package2/locales/**/*.json'
   const withBundleMatch = '([\\w]*)/([\\w]*)\\.json$'
-  const messages = getExternalLocaleMessages(namespaces, withBundle, withBundleMatch)
+  const ig = ignore()
+  const messages = getExternalLocaleMessages(namespaces, ig, withBundle, withBundleMatch)
 
   expect(messages).toMatchSnapshot()
 })
@@ -71,7 +74,8 @@ test('getExternalLocaleMessages: basic usage', async () => {
 test('getExternalLocaleMessages: no namespace', async () => {
   const withBundle = './test/fixtures/packages/package1/locales/**/*.json,./test/fixtures/packages/package2/locales/**/*.json'
   const withBundleMatch = '([\\w]*)/([\\w]*)\\.json$'
-  const messages = getExternalLocaleMessages({}, withBundle, withBundleMatch)
+  const ig = ignore()
+  const messages = getExternalLocaleMessages({}, ig, withBundle, withBundleMatch)
 
   expect(messages).toMatchSnapshot()
 })
@@ -79,7 +83,8 @@ test('getExternalLocaleMessages: no namespace', async () => {
 test('getExternalLocaleMessages: no filename', async () => {
   const withBundle = './test/fixtures/packages/package1/locales/**/*.json,./test/fixtures/packages/package2/locales/**/*.json'
   const withBundleMatch = '([\\w]*)/[\\w]*\\.json$'
-  const messages = getExternalLocaleMessages({}, withBundle, withBundleMatch)
+  const ig = ignore()
+  const messages = getExternalLocaleMessages({}, ig, withBundle, withBundleMatch)
 
   expect(messages).toMatchSnapshot()
 })
@@ -89,7 +94,8 @@ test('getExternalLocaleMessages: no bundle option', async () => {
     './test/fixtures/packages/package1/locales/**/*.json': 'package1',
     './test/fixtures/packages/package2/locales/**/*.json': 'package2'
   }
-  const messages = getExternalLocaleMessages(namespaces)
+  const ig = ignore()
+  const messages = getExternalLocaleMessages(namespaces, ig)
 
   expect(messages).toMatchObject({})
 })

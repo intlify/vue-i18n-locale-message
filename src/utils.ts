@@ -26,7 +26,6 @@ import JSON5 from 'json5'
 import yaml from 'js-yaml'
 import deepmerge from 'deepmerge'
 import { promisify } from 'util'
-import ignore from 'ignore'
 import type { Ignore } from 'ignore'
 
 import { debug as Debug } from 'debug'
@@ -134,18 +133,15 @@ export function stringifyContent (content: any, lang: string, options?: FormatOp
   return result
 }
 
-export function readSFC (target: string, ignorePath?: string): SFCFileInfo[] {
-  let targets = resolveGlob(path.relative(process.cwd(), target))
-  if ((ignorePath !== undefined)) {
-    const ig = returnIgnoreInstance(ignorePath)
-    targets = targets.filter(t => {
-      return !ig.ignores(path.relative(process.cwd(), t))
-    })
-  }
-  debug('readSFC: targets = ', targets)
+export function readSFC (target: string, ig: Ignore): SFCFileInfo[] {
+  const targets = resolveGlob(target)
+  const cookedTargets = targets.filter(t => {
+    return !ig.ignores(path.relative(process.cwd(), t))
+  }).map(p => path.resolve(p))
+  debug('readSFC: targets = ', cookedTargets)
 
   // TODO: async implementation
-  return targets.map(t => {
+  return cookedTargets.map(t => {
     const data = fs.readFileSync(t)
     return {
       path: t,
@@ -155,8 +151,9 @@ export function readSFC (target: string, ignorePath?: string): SFCFileInfo[] {
 }
 
 function resolveGlob (target: string) {
+  const relativeTarget = path.relative(process.cwd(), target)
   // TODO: async implementation
-  return glob.sync(`${target}/**/*.vue`)
+  return glob.sync(`${relativeTarget}/**/*.vue`)
 }
 
 export const DEFUALT_CONF = { provider: {}} as ProviderConfiguration
@@ -337,14 +334,16 @@ function getLocaleMessagePathInfo (fullPath: string, bundleMatch?: string): Pars
 }
 
 export function getExternalLocaleMessages (
-  dictionary: NamespaceDictionary, bundleWith?: string, bundleMatch?: string
+  dictionary: NamespaceDictionary, ig: Ignore, bundleWith?: string, bundleMatch?: string
 ) {
   if (!bundleWith) { return {} }
 
   const bundleTargetPaths = bundleWith.split(',').filter(p => p)
   return bundleTargetPaths.reduce((messages, targetPath) => {
     const namespace = dictionary[targetPath] || ''
-    const globedPaths = glob.sync(targetPath).map(p => resolve(p))
+    const globedPaths = glob.sync(path.relative(process.cwd(), targetPath)).filter(t => {
+      return !ig.ignores(t)
+    }).map(p => resolve(p))
     return globedPaths.reduce((messages, fullPath) => {
       const { locale, filename } = getLocaleMessagePathInfo(fullPath, bundleMatch)
       if (!locale) { return messages }
@@ -422,17 +421,7 @@ export function splitLocaleMessages (
   return { sfc: messages, external: metaExternalLocaleMessages }
 }
 
-function returnIgnoreInstance (ignorePath: string): Ignore {
-  const ig = ignore()
-  if (fs.existsSync(ignorePath)) {
-    addIgnoreFile(ig, ignorePath)
-  } else {
-    console.warn('cannot find ignore file.')
-  }
-  return ig
-}
-
-function readIgnoreFile (ignorePath: string): string[] {
+export function readIgnoreFile (ignorePath: string): string[] {
   const ignoreFiles = fs.readFileSync(ignorePath, 'utf8')
     .split(/\r?\n/g)
     .filter(Boolean)
@@ -440,11 +429,8 @@ function readIgnoreFile (ignorePath: string): string[] {
   return ignoreFiles
 }
 
-function addIgnoreFile (
-  ig: Ignore,
-  ignorePath: string
-): void {
-  readIgnoreFile(ignorePath).forEach(ignoreRule =>
+export function returnIgnoreInstance (ig: Ignore, ignoreFiles: string[]): void {
+  ignoreFiles.forEach(ignoreRule => {
     ig.add(ignoreRule)
-  )
+  })
 }

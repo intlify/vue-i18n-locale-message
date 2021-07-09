@@ -4,7 +4,9 @@ import {
   parsePath,
   readSFC,
   loadNamespaceDictionary,
-  getExternalLocaleMessages
+  getExternalLocaleMessages,
+  readIgnoreFile,
+  returnIgnoreInstance
 } from '../utils'
 import squeeze from '../squeezer'
 import fs from 'fs'
@@ -18,6 +20,7 @@ import {
 } from '../../types'
 
 import { debug as Debug } from 'debug'
+import ignore from 'ignore'
 const debug = Debug('vue-i18n-locale-message:commands:squeeze')
 
 type SqueezeOptions = {
@@ -82,16 +85,21 @@ export const handler = async (args: Arguments<SqueezeOptions>) => {
 
   let nsDictionary = {} as NamespaceDictionary
   let externalMessages = {} as LocaleMessages
+  const ig = ignore()
+  if (args.ignorePath && fs.existsSync(args.ignorePath)) {
+    const ignoreFiles = readIgnoreFile(args.ignorePath)
+    returnIgnoreInstance(ig, ignoreFiles)
+  }
   try {
     if (args.namespace) {
       nsDictionary = await loadNamespaceDictionary(args.namespace)
     }
-    externalMessages = getExternalLocaleMessages(nsDictionary, args.bundleWith, args.bundleMatch)
+    externalMessages = getExternalLocaleMessages(nsDictionary, ig, args.bundleWith, args.bundleMatch)
   } catch (e) {
     console.warn('cannot load external locale messages failed')
   }
 
-  const meta = squeeze(targetPath, readSFC(targetPath, args.ignorePath))
+  const meta = squeeze(targetPath, readSFC(targetPath, ig))
   const messages = deepmerge(generate(meta), externalMessages)
 
   writeLocaleMessages(messages, args)
