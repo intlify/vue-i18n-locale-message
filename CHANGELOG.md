@@ -1,4 +1,13 @@
 
+## v1.1.2 (2021-07-09)
+
+#### :bug: Bug Fixes
+* [#158](https://github.com/intlify/vue-i18n-locale-message/pull/158) fix: ignore files when using bundle option ([@kiibo382](https://github.com/kiibo382))
+
+#### Committers: 1
+- shota kizawa ([@kiibo382](https://github.com/kiibo382))
+
+
 ## v1.1.1 (2021-07-07)
 
 #### :bug: Bug Fixes
