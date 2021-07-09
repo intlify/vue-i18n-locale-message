@@ -5,7 +5,9 @@ import {
   parsePath,
   readSFC,
   loadNamespaceDictionary,
-  splitLocaleMessages
+  splitLocaleMessages,
+  readIgnoreFile,
+  returnIgnoreInstance
 } from '../utils'
 
 import infuse from '../infuser'
@@ -24,6 +26,7 @@ import {
 } from '../../types'
 
 import { debug as Debug } from 'debug'
+import ignore from 'ignore'
 const debug = Debug('vue-i18n-locale-message:commands:infuse')
 
 type InfuseOptions = {
@@ -91,6 +94,11 @@ export const builder = (args: Argv): Argv<InfuseOptions> => {
 export const handler = async (args: Arguments<InfuseOptions>) => {
   const targetPath = resolve(args.target)
   const messagesPath = resolve(args.locales)
+  const ig = ignore()
+  if (args.ignorePath && fs.existsSync(args.ignorePath)) {
+    const ignoreFiles = readIgnoreFile(args.ignorePath)
+    returnIgnoreInstance(ig, ignoreFiles)
+  }
 
   let nsDictionary = {} as NamespaceDictionary
   try {
@@ -102,7 +110,7 @@ export const handler = async (args: Arguments<InfuseOptions>) => {
   }
   debug('namespace dictionary:', nsDictionary)
 
-  const sources = readSFC(targetPath, args.ignorePath)
+  const sources = readSFC(targetPath, ig)
   const messages = readLocaleMessages(messagesPath, args.match)
 
   const { sfc, external } = splitLocaleMessages(messages, nsDictionary, args.unbundleTo, args.unbundleMatch)

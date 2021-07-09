@@ -55,6 +55,7 @@ jest.mock('glob', () => ({ sync: jest.fn((pattern) => {
     return SFC_FILES
   }
 }) }))
+import * as glob from "glob"
 
 // -------------------
 // setup/teadown hooks
