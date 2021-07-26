@@ -1,4 +1,13 @@
 
+## v1.2.1 (2021-07-26)
+
+#### :bug: Bug Fixes
+* [#165](https://github.com/intlify/vue-i18n-locale-message/pull/165) fix:  function in utils.ts ([@kiibo382](https://github.com/kiibo382))
+
+#### Committers: 1
+- shota kizawa ([@kiibo382](https://github.com/kiibo382))
+
+
 ## v1.2.0 (2021-07-26)
 
 #### :boom: Breaking Change
