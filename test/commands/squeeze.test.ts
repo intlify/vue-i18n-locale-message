@@ -1,5 +1,5 @@
 import * as yargs from 'yargs'
-import * as fs from 'fs';
+import * as fs from 'fs'
 import jsonMetaInfo from '../fixtures/meta/json'
 import external from '../fixtures/external'
 
@@ -33,6 +33,7 @@ import * as utils from '../../src/utils'
 
 // mock: glob
 jest.mock('glob', () => ({ sync: jest.fn(() => SFC_FILES) }))
+import glob from 'glob'
 
 // mock: fs
 jest.mock('fs', () => ({
@@ -44,6 +45,13 @@ jest.mock('fs', () => ({
   mkdirSync: jest.fn().mockImplementation(path => {}),
   existsSync: jest.fn().mockImplementation(path => true)
 }))
+
+// mock: path
+jest.mock('path', () => ({
+  ...jest.requireActual('path'),
+  dirname: jest.fn()
+}))
+import path from 'path'
 
 // -------------------
 // setup/teadown hooks
@@ -167,12 +175,16 @@ test('ignore option', async () => {
   mockUtils.loadNamespaceDictionary.mockImplementation(async () => ({}))
   mockUtils.getExternalLocaleMessages.mockImplementation(() => ({}))
   const mockFS = fs as jest.Mocked<typeof fs>
-  mockFS.readFileSync.mockImplementationOnce(path => MOCK_IGNORE_FILES);
+  mockFS.readFileSync.mockImplementationOnce(p => MOCK_IGNORE_FILES);
+  const mockGlob = glob as jest.Mocked<typeof glob>
+  mockGlob.sync.mockImplementationOnce(p => [path.resolve('./test/fixtures/.ignore-i18n')])
+  const mockPath = path as jest.Mocked<typeof path>
+  mockPath.dirname.mockImplementationOnce(p => TARGET_PATH)
 
   const squeeze = await import('../../src/commands/squeeze')
   const cmd = yargs.command(squeeze)
   const output = await new Promise(resolve => {
-    cmd.parse(`squeeze --target=${TARGET_PATH}/src --output=${TARGET_PATH}/locales --ignorePath=./test/fixtures/.ignore-i18n`, () => {
+    cmd.parse(`squeeze --target=${TARGET_PATH}/src --output=${TARGET_PATH}/locales --ignoreFileName=.ignore-i18n`, () => {
       resolve(writeFiles)
     })
   })

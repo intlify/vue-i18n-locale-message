@@ -30,7 +30,7 @@ type SqueezeOptions = {
   bundleMatch?: string
   namespace?: string
   output: string
-  ignorePath?: string
+  ignoreFileName?: string
 }
 
 export const command = 'squeeze'
@@ -73,10 +73,10 @@ export const builder = (args: Argv): Argv<SqueezeOptions> => {
       default: outputDefault,
       describe: 'path to output squeezed locale messages'
     })
-    .option('ignorePath', {
+    .option('ignoreFileName', {
       type: 'string',
       alias: 'i',
-      describe: 'path to dot ignore file, i.e. ./.ignore-i18n'
+      describe: 'dot ignore file name, i.e. .ignore-i18n'
     })
 }
 
@@ -86,8 +86,8 @@ export const handler = async (args: Arguments<SqueezeOptions>) => {
   let nsDictionary = {} as NamespaceDictionary
   let externalMessages = {} as LocaleMessages
   const ig = ignore()
-  if (args.ignorePath && fs.existsSync(args.ignorePath)) {
-    const ignoreFiles = readIgnoreFile(args.ignorePath)
+  if (args.ignoreFileName && fs.existsSync(args.ignoreFileName)) {
+    const ignoreFiles = readIgnoreFile(args.target, args.ignoreFileName)
     returnIgnoreInstance(ig, ignoreFiles)
   }
   try {

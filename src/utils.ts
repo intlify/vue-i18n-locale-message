@@ -142,9 +142,10 @@ export function stringifyContent (content: any, lang: string, options?: FormatOp
 
 export function readSFC (target: string, ig: Ignore): SFCFileInfo[] {
   const targets = resolveGlob(target)
-  const cookedTargets = targets.filter(t => {
+  const tmp = targets.filter(t => {
     return !ig.ignores(path.relative(process.cwd(), t))
-  }).map(p => path.resolve(p))
+  })
+  const cookedTargets = tmp.map(p => path.resolve(p))
   debug('readSFC: targets = ', cookedTargets)
 
   // TODO: async implementation
@@ -428,12 +429,24 @@ export function splitLocaleMessages (
   return { sfc: messages, external: metaExternalLocaleMessages }
 }
 
-export function readIgnoreFile (ignorePath: string): string[] {
-  const ignoreFiles = fs.readFileSync(ignorePath, 'utf8')
-    .split(/\r?\n/g)
-    .filter(Boolean)
-  console.log(`ignoreFiles ${ignoreFiles}`)
-  return ignoreFiles
+export function readIgnoreFile (target: string, ignoreFileName: string): string[] {
+  const ignoreFiles = glob.sync(`${target}/**/${ignoreFileName}`)
+  console.log(`allignore ${ignoreFiles}`)
+  const ignoreTargets = [] as string[]
+  ignoreFiles.forEach(ignoreFile => {
+    fs.readFileSync(ignoreFile, 'utf8')
+      .split(/\r?\n/g)
+      .filter(Boolean)
+      .forEach(ignoreTarget => {
+        ignoreTargets.push(formatPath(ignoreFile, ignoreTarget))
+      })
+  })
+  console.log(`ignoreTargets ${ignoreTargets}`)
+  return ignoreTargets
+}
+
+function formatPath (ignoreFile: string, ignoreTarget: string): string {
+  return path.join(path.relative(process.cwd(), path.dirname(ignoreFile)), ignoreTarget)
 }
 
 export function returnIgnoreInstance (ig: Ignore, ignoreFiles: string[]): void {

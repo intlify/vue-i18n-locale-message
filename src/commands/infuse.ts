@@ -37,7 +37,7 @@ type InfuseOptions = {
   unbundleMatch?: string
   namespace?: string
   dryRun: boolean
-  ignorePath?: string
+  ignoreFileName?: string
 }
 
 export const command = 'infuse'
@@ -84,10 +84,10 @@ export const builder = (args: Argv): Argv<InfuseOptions> => {
       default: false,
       describe: 'run the infuse command, but do not apply them'
     })
-    .option('ignorePath', {
+    .option('ignoreFileName', {
       type: 'string',
       alias: 'i',
-      describe: 'path to dot ignore file, i.e. ./.ignore-i18n'
+      describe: 'dot ignore file name, i.e. .ignore-i18n'
     })
 }
 
@@ -95,8 +95,8 @@ export const handler = async (args: Arguments<InfuseOptions>) => {
   const targetPath = resolve(args.target)
   const messagesPath = resolve(args.locales)
   const ig = ignore()
-  if (args.ignorePath && fs.existsSync(args.ignorePath)) {
-    const ignoreFiles = readIgnoreFile(args.ignorePath)
+  if (args.ignoreFileName && fs.existsSync(args.ignoreFileName)) {
+    const ignoreFiles = readIgnoreFile(args.target, args.ignoreFileName)
     returnIgnoreInstance(ig, ignoreFiles)
   }
 

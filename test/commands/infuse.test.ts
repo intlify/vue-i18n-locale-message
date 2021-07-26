@@ -1,6 +1,5 @@
 import * as yargs from 'yargs'
 import deepmerge from 'deepmerge'
-import path from 'path'
 
 import jsonMetaInfo from '../fixtures/meta/json'
 import json from '../fixtures/squeeze'
@@ -55,7 +54,14 @@ jest.mock('glob', () => ({ sync: jest.fn((pattern) => {
     return SFC_FILES
   }
 }) }))
-import * as glob from "glob"
+import glob from 'glob'
+
+// mock: path
+jest.mock('path', () => ({
+  ...jest.requireActual('path'),
+  dirname: jest.fn()
+}))
+import path from 'path'
 
 // -------------------
 // setup/teadown hooks
@@ -293,12 +299,16 @@ test('ignore option', async () => {
     writeFiles[path as string] = data.toString()
   })
   mockFS.readFileSync.mockImplementationOnce(path => MOCK_IGNORE_FILES);
+  const mockGlob = glob as jest.Mocked<typeof glob>
+  mockGlob.sync.mockImplementationOnce(p => [`${TARGET_PATH}/src/App.vue`])
+  const mockPath = path as jest.Mocked<typeof path>
+  mockPath.dirname.mockImplementationOnce(p => TARGET_PATH)
 
   // run
   const infuse = await import('../../src/commands/infuse')
   const cmd = yargs.command(infuse)
   const output = await new Promise(resolve => {
-    cmd.parse(`infuse --target=${TARGET_PATH}/src --locales=${TARGET_PATH}/locales.json --ignorePath=./test/fixtures/.ignore-i18n`, () => {
+    cmd.parse(`infuse --target=${TARGET_PATH}/src --locales=${TARGET_PATH}/locales.json --ignoreFileName=.ignore-i18n`, () => {
       resolve(writeFiles)
     })
   })
