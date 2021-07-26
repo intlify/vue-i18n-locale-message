@@ -152,9 +152,8 @@ export function readSFC (target: string, ig: Ignore): SFCFileInfo[] {
 }
 
 function resolveGlob (target: string) {
-  const relativeTarget = path.relative(process.cwd(), target)
   // TODO: async implementation
-  return glob.sync(`${relativeTarget}/**/*.vue`)
+  return glob.sync(`${target}/**/*.vue`)
 }
 
 export const DEFUALT_CONF = { provider: {}} as ProviderConfiguration
@@ -424,7 +423,7 @@ export function splitLocaleMessages (
 
 export function readIgnoreFile (target: string, ignoreFileName: string): string[] {
   const ignoreFiles = glob.sync(`${target}/**/${ignoreFileName}`)
-  console.log(`allignore ${ignoreFiles}`)
+  console.log(`ignoreFiles ${ignoreFiles}`)
   const ignoreTargets = [] as string[]
   ignoreFiles.forEach(ignoreFile => {
     fs.readFileSync(ignoreFile, 'utf8')
