@@ -1,4 +1,13 @@
 
+## v1.2.0 (2021-07-26)
+
+#### :boom: Breaking Change
+* [#161](https://github.com/intlify/vue-i18n-locale-message/pull/161) change how to specify dot ignore files: from file path to file name ([@kiibo382](https://github.com/kiibo382))
+
+#### Committers: 1
+- shota kizawa ([@kiibo382](https://github.com/kiibo382))
+
+
 ## v1.1.2 (2021-07-09)
 
 #### :bug: Bug Fixes
