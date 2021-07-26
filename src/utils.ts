@@ -159,8 +159,9 @@ export function readSFC (target: string, ig: Ignore): SFCFileInfo[] {
 }
 
 function resolveGlob (target: string) {
+  const relativeTarget = path.relative(process.cwd(), target)
   // TODO: async implementation
-  return glob.sync(`${target}/**/*.vue`)
+  return glob.sync(`${relativeTarget}/**/*.vue`)
 }
 
 export const DEFUALT_CONF = { provider: {}} as ProviderConfiguration
