@@ -1,4 +1,13 @@
 
+## v1.1.1 (2021-07-07)
+
+#### :bug: Bug Fixes
+* [#155](https://github.com/intlify/vue-i18n-locale-message/pull/155) fix: I took into account the format of the path. ([@kiibo382](https://github.com/kiibo382))
+
+#### Committers: 1
+- shota kizawa ([@kiibo382](https://github.com/kiibo382))
+
+
 
 
 ## v1.0.0 (2021-06-08)
