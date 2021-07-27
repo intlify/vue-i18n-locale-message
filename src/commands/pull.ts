@@ -25,6 +25,7 @@ type PullOptions = {
   normalize?: string
   format: string
   dryRun: boolean
+  providerArgs?: string
 }
 
 export const command = 'pull'
@@ -73,10 +74,15 @@ export const builder = (args: Argv): Argv<PullOptions> => {
       default: false,
       describe: 'run the pull command, but do not pull to locale messages of localization service'
     })
+    .option('providerArgs', {
+      type: 'string',
+      alias: 'pa',
+      describe: `option to give parameters to the provider by using strings like URL query parameters (e.g. arg1=1&arg2=2).`
+    })
 }
 
 export const handler = async (args: Arguments<PullOptions>): Promise<unknown> => {
-  const { dryRun, normalize, format } = args
+  const { dryRun, normalize, format, providerArgs } = args
   const ProviderFactory = loadProvider(args.provider)
 
   if (ProviderFactory === null) {
@@ -97,7 +103,7 @@ export const handler = async (args: Arguments<PullOptions>): Promise<unknown> =>
   try {
     const locales = args.locales?.split(',').filter(p => p) as Locale[] || []
     const provider = ProviderFactory(conf)
-    const messages = await provider.pull({ locales, dryRun, normalize, format })
+    const messages = await provider.pull({ locales, dryRun, normalize, format, providerArgs })
     await applyPullLocaleMessages(args.output, messages, args.dryRun)
     // TODO: should refactor console message
     console.log('pull success')
