@@ -266,3 +266,28 @@ test('--normalize option', async () => {
     normalize: 'flat'
   })
 })
+
+test('--providerArgs option', async () => {
+  // setup mocks
+  mockPush.mockImplementation(({ resource }) => true)
+
+  // run
+  const push = await import('../../src/commands/push')
+  const cmd = yargs.command(push)
+  await new Promise((resolve, reject) => {
+    cmd.parse(`push --provider=@scope/l10n-service-provider \
+      --target=./test/fixtures/locales/en.json \
+      --providerArgs=arg1=1&arg2=2`, (err, argv, output) => {
+      err ? reject(err) : resolve(output)
+    })
+  })
+
+  expect(mockPush).toHaveBeenCalledWith({
+    messages: {
+      en: { hello: 'world' }
+    },
+    dryRun: false,
+    normalize: undefined,
+    providerArgs: 'arg1=1&arg2=2'
+  })
+})
