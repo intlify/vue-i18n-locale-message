@@ -35,6 +35,7 @@
     "js-yaml": "^3.13.1",
     "json-diff": "^0.5.4",
     "json5": "^2.1.0",
+    "query-string": "^7.0.1",
     "vue-template-compiler": "^2.6.10",
     "yargs": "^15.1.0"
   },

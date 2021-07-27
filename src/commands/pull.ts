@@ -2,6 +2,7 @@ import * as fs from 'fs'
 import * as path from 'path'
 import { promisify } from 'util'
 import { Arguments, Argv } from 'yargs'
+import querystring from 'query-string'
 
 import { debug as Debug } from 'debug'
 const debug = Debug('vue-i18n-locale-message:commands:pull')
@@ -103,7 +104,10 @@ export const handler = async (args: Arguments<PullOptions>): Promise<unknown> =>
   try {
     const locales = args.locales?.split(',').filter(p => p) as Locale[] || []
     const provider = ProviderFactory(conf)
-    const messages = await provider.pull({ locales, dryRun, normalize, format, providerArgs })
+    const messages = await provider.pull({
+      locales, dryRun, normalize, format,
+      providerArgs: providerArgs !== undefined ? querystring.parse(providerArgs) : undefined
+    })
     await applyPullLocaleMessages(args.output, messages, args.dryRun)
     // TODO: should refactor console message
     console.log('pull success')

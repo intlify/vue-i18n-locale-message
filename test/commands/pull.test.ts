@@ -234,6 +234,9 @@ test('--providerArgs option', async () => {
     format: 'json',
     dryRun: false,
     normalize: undefined,
-    providerArgs: 'arg1=1&arg2=2'
+    providerArgs: Object({
+      arg1: '1',
+      arg2: '2'
+    })
   })
 })

@@ -1,4 +1,5 @@
 import { Arguments, Argv } from 'yargs'
+import querystring from 'query-string'
 
 import {
   resolveProviderConf,
@@ -94,7 +95,10 @@ export const handler = async (args: Arguments<PushOptions>): Promise<unknown> =>
   try {
     const messages = getLocaleMessages(args)
     const provider = ProviderFactory(conf)
-    await provider.push({ messages, dryRun, normalize, providerArgs })
+    await provider.push({
+      messages, dryRun, normalize,
+      providerArgs: providerArgs !== undefined ? querystring.parse(providerArgs) : undefined
+    })
     // TODO: should refactor console message
     console.log('push success')
   } catch (e) {

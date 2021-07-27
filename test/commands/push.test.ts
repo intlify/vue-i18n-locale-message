@@ -288,6 +288,9 @@ test('--providerArgs option', async () => {
     },
     dryRun: false,
     normalize: undefined,
-    providerArgs: 'arg1=1&arg2=2'
+    providerArgs: {
+      arg1: '1',
+      arg2: '2'
+    }
   })
 })

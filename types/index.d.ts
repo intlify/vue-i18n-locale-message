@@ -226,7 +226,7 @@ export interface Provider {
 type CommonArguments = {
   dryRun: boolean // whether the CLI run as dryRun mode
   normalize?: string // normalization ways for locale messages or resource
-  providerArgs?: string // parameters to give to the provider
+  providerArgs?: object // parameters to give to the provider
 }
 
 /**
