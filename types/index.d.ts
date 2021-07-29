@@ -223,9 +223,10 @@ export interface Provider {
   export (args: ExportArguments): Promise<RawLocaleMessage[]>
 }
 
-type CommonArguments = {
+type CommonArguments<T extends Record<string, any> = {}> = {
   dryRun: boolean // whether the CLI run as dryRun mode
   normalize?: string // normalization ways for locale messages or resource
+  providerArgs?: T // parameters to give to the provider
 }
 
 /**

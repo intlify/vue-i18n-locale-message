@@ -1,4 +1,5 @@
 import { Arguments, Argv } from 'yargs'
+import querystring from 'query-string'
 
 import {
   resolveProviderConf,
@@ -14,6 +15,7 @@ type PushOptions = {
   conf?: string
   normalize?: string
   dryRun: boolean
+  providerArgs?: string
 } & PushableOptions
 
 export const command = 'push'
@@ -64,10 +66,15 @@ export const builder = (args: Argv): Argv<PushOptions> => {
       default: false,
       describe: `run the push command, but do not apply to locale messages of localization service`
     })
+    .option('providerArgs', {
+      type: 'string',
+      alias: 'pa',
+      describe: `option to give parameters to the provider by using strings like URL query parameters (e.g. arg1=1&arg2=2).`
+    })
 }
 
 export const handler = async (args: Arguments<PushOptions>): Promise<unknown> => {
-  const { dryRun, normalize } = args
+  const { dryRun, normalize, providerArgs } = args
   const ProviderFactory = loadProvider(args.provider)
 
   if (ProviderFactory === null) {
@@ -88,7 +95,10 @@ export const handler = async (args: Arguments<PushOptions>): Promise<unknown> =>
   try {
     const messages = getLocaleMessages(args)
     const provider = ProviderFactory(conf)
-    await provider.push({ messages, dryRun, normalize })
+    await provider.push({
+      messages, dryRun, normalize,
+      providerArgs: providerArgs !== undefined ? querystring.parse(providerArgs) : undefined
+    })
     // TODO: should refactor console message
     console.log('push success')
   } catch (e) {

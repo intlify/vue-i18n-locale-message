@@ -213,3 +213,30 @@ test('--format option', async () => {
     normalize: undefined
   })
 })
+
+test('--providerArgs option', async () => {
+  // setup mocks
+  mockPull.mockImplementation(({ locales }) => Promise.resolve({ ja: {}, en: {}}))
+
+  // run
+  const pull = await import('../../src/commands/pull')
+  const cmd = yargs.command(pull)
+  await new Promise((resolve, reject) => {
+    cmd.parse(`pull --provider=@scope/l10n-service-provider \
+      --output=./test/fixtures/locales \
+      --providerArgs=arg1=1&arg2=2`, (err, argv, output) => {
+      err ? reject(err) : resolve(output)
+    })
+  })
+
+  expect(mockPull).toHaveBeenCalledWith({
+    locales: [],
+    format: 'json',
+    dryRun: false,
+    normalize: undefined,
+    providerArgs: Object({
+      arg1: '1',
+      arg2: '2'
+    })
+  })
+})
