@@ -1,4 +1,13 @@
 
+## v1.3.0 (2021-07-29)
+
+#### :star: Features
+* [#169](https://github.com/intlify/vue-i18n-locale-message/pull/169) feat: providerArgs option to the push & pull command ([@kiibo382](https://github.com/kiibo382))
+
+#### Committers: 1
+- shota kizawa ([@kiibo382](https://github.com/kiibo382))
+
+
 ## v1.2.1 (2021-07-26)
 
 #### :bug: Bug Fixes
