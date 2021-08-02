@@ -1,17 +1,9 @@
 import { Arguments, Argv } from 'yargs'
-const { diffString } = require('json-diff') // NOTE: not provided type definition ...
 import { DiffError, fail } from './fails/diff'
 
-import {
-  resolveProviderConf,
-  loadProvider,
-  loadProviderConf,
-  DEFUALT_CONF,
-  getLocaleMessages,
-  PushableOptions
-} from '../utils'
+import { returnDiff } from '../utils'
 
-import { Locale } from '../../types'
+import { PushableOptions } from '../../types'
 
 type DiffOptions = {
   provider: string
@@ -65,31 +57,11 @@ export const builder = (args: Argv): Argv<DiffOptions> => {
 }
 
 export const handler = async (args: Arguments<DiffOptions>): Promise<unknown> => {
-  const { normalize } = args
-  const format = 'json'
+  const { provider, conf, normalize, target, locale, targetPaths, filenameMatch } = args
 
-  const ProviderFactory = loadProvider(args.provider)
-
-  if (ProviderFactory === null) {
-    return Promise.reject(new Error(`Not found ${args.provider} provider`))
-  }
-
-  if (!args.target && !args.targetPaths) {
-    // TODO: should refactor console message
-    return Promise.reject(new Error('You need to specify either --target or --target-paths'))
-  }
-
-  const confPath = resolveProviderConf(args.provider, args.conf)
-  const conf = loadProviderConf(confPath) || DEFUALT_CONF
-
-  const localeMessages = getLocaleMessages(args)
-
-  const provider = ProviderFactory(conf)
-  const locales = Object.keys(localeMessages) as Locale[]
-  const serviceMessages = await provider.pull({ locales, dryRun: false, normalize, format })
-
-  const ret = diffString(serviceMessages, localeMessages)
-  console.log(ret)
+  const ret = await returnDiff({
+    provider, conf, normalize, target, locale, targetPaths, filenameMatch
+  })
 
   if (ret) {
     return Promise.reject(new DiffError('There are differences!'))

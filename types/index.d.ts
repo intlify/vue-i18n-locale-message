@@ -193,6 +193,28 @@ export type TranslationStatusOptions = {
 declare function status (options: TranslationStatusOptions): Promise<TranslationStatus[]>
 
 /**
+ *  pushable options
+ */
+ export type PushableOptions = {
+  target?: string
+  locale?: string
+  targetPaths?: string
+  filenameMatch?: string
+  format?: string
+}
+
+/**
+ *  Diff
+ */
+export type DiffOptions = {
+  provider: string
+  conf?: string
+  normalize?: string
+} & PushableOptions
+
+declare function diff (options: DiffOptions): Promise<boolean>
+
+/**
  *  Provider factory function
  */
 export type ProviderFactory<T = {}> = (configration: ProviderConfiguration<T>) => Provider
