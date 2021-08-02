@@ -15,7 +15,9 @@ import {
   TranslationStatusOptions,
   TranslationStatus,
   RawLocaleMessage,
-  NamespaceDictionary
+  NamespaceDictionary,
+  PushableOptions,
+  DiffOptions
 } from '../types'
 
 // import modules
@@ -29,20 +31,12 @@ import yaml from 'js-yaml'
 import deepmerge from 'deepmerge'
 import { promisify } from 'util'
 import type { Ignore } from 'ignore'
+const { diffString } = require('json-diff') // NOTE: not provided type definition ...
 
 import { debug as Debug } from 'debug'
 const debug = Debug('vue-i18n-locale-message:utils')
 
 const readFile = promisify(fs.readFile)
-
-// define types
-export type PushableOptions = {
-  target?: string
-  locale?: string
-  targetPaths?: string
-  filenameMatch?: string
-  format?: string
-}
 
 const ESC: { [key in string]: string } = {
   '<': '&lt;',
@@ -198,7 +192,7 @@ export function loadProviderConf (confPath: string): ProviderConfiguration {
   return conf
 }
 
-export function getLocaleMessages (args: Arguments<PushableOptions>): LocaleMessages {
+export function getLocaleMessages (args: Arguments<PushableOptions> | PushableOptions): LocaleMessages {
   let messages = {} as LocaleMessages
 
   if (args.target) {
@@ -452,4 +446,36 @@ export function returnIgnoreInstance (ig: Ignore, ignoreFiles: string[]): void {
   ignoreFiles.forEach(ignoreRule => {
     ig.add(ignoreRule)
   })
+}
+
+export async function returnDiff (options: DiffOptions): Promise<boolean> {
+  const format = 'json'
+  const ProviderFactory = loadProvider(options.provider)
+
+  if (ProviderFactory === null) {
+    return Promise.reject(new Error(`Not found ${options.provider} provider`))
+  }
+
+  if (!options.target && !options.targetPaths) {
+    // TODO: should refactor console message
+    return Promise.reject(new Error('You need to specify either --target or --target-paths'))
+  }
+
+  const confPath = resolveProviderConf(options.provider, options.conf)
+  const conf = loadProviderConf(confPath) || DEFUALT_CONF
+
+  const localeMessages = getLocaleMessages(options)
+
+  const provider = ProviderFactory(conf)
+  const locales = Object.keys(localeMessages) as Locale[]
+  const serviceMessages = await provider.pull({ locales, dryRun: false, normalize: options.normalize, format })
+
+  const ret = diffString(serviceMessages, localeMessages)
+  console.log(ret)
+
+  if (ret) {
+    return Promise.resolve(true)
+  } else {
+    return Promise.resolve(false)
+  }
 }

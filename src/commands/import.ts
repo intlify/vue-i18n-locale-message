@@ -5,9 +5,10 @@ import {
   loadProvider,
   loadProviderConf,
   DEFUALT_CONF,
-  getRawLocaleMessages,
-  PushableOptions
+  getRawLocaleMessages
 } from '../utils'
+
+import { PushableOptions } from '../../types'
 
 type ImportOptions = {
   provider: string
