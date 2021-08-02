@@ -49,6 +49,7 @@ yarn global add vue-i18n-locale-message
   - squeeze the meta of locale messages from `i18n` custom block
   - infuse the meta of locale messages to `i18n` custom block
   - get translation status from localization service
+  - diff locale messages between local and localization service
 - CLI
   - squeeze: squeeze the locale messages from `i18n` custom block
   - infuse: infuse the locale messages to `i18n` custom block
