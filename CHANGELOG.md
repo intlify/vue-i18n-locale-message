@@ -1,4 +1,13 @@
 
+## v1.4.0 (2021-08-02)
+
+#### :star: Features
+* [#172](https://github.com/intlify/vue-i18n-locale-message/pull/172) feat: add api for diff command ([@kiibo382](https://github.com/kiibo382))
+
+#### Committers: 1
+- shota kizawa ([@kiibo382](https://github.com/kiibo382))
+
+
 ## v1.3.0 (2021-07-29)
 
 #### :star: Features
