@@ -443,7 +443,7 @@ export function returnIgnoreInstance (ig: Ignore, ignoreFiles: string[]): void {
   })
 }
 
-export async function returnDiff (options: DiffOptions): Promise<boolean> {
+export async function isDifferent (options: DiffOptions): Promise<boolean> {
   const format = 'json'
   const ProviderFactory = loadProvider(options.provider)
 
