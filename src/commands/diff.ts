@@ -59,15 +59,19 @@ export const builder = (args: Argv): Argv<DiffOptions> => {
 export const handler = async (args: Arguments<DiffOptions>): Promise<unknown> => {
   const { provider, conf, normalize, target, locale, targetPaths, filenameMatch } = args
 
-  const ret = await returnDiff({
-    provider, conf, normalize, target, locale, targetPaths, filenameMatch
-  })
+  try {
+    const ret = await returnDiff({
+      provider, conf, normalize, target, locale, targetPaths, filenameMatch
+    })
 
-  if (ret) {
-    return Promise.reject(new DiffError('There are differences!'))
+    if (ret) {
+      return Promise.reject(new DiffError('There are differences!'))
+    }
+    return Promise.resolve()
+  } catch (e) {
+    console.error(e.message)
+    return Promise.reject(e)
   }
-
-  return Promise.resolve()
 }
 
 export default {

@@ -39,15 +39,20 @@ export const builder = (args: Argv): Argv<StatusOptions> => {
 export const handler = async (args: Arguments<StatusOptions>): Promise<unknown> => {
   const { provider, conf, locales } = args
   debug(`status args: provider=${provider}, conf=${conf}, locales=${locales}`)
-  const status = await getTranslationStatus({ provider, conf, locales })
-  debug('raw status', status)
-  console.table(status)
+  try {
+    const status = await getTranslationStatus({ provider, conf, locales })
+    debug('raw status', status)
+    console.table(status)
 
-  const completes = status.filter(st => st.percentage < 100)
+    const completes = status.filter(st => st.percentage < 100)
 
-  return completes.length > 0
-    ? Promise.reject(new TranslationStatusError('Translation work in progress'))
-    : Promise.resolve('Translation done')
+    return completes.length > 0
+      ? Promise.reject(new TranslationStatusError('Translation work in progress'))
+      : Promise.resolve('Translation done')
+  } catch (e) {
+    console.error(e.message)
+    return Promise.reject(e)
+  }
 }
 
 export default {

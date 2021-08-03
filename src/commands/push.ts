@@ -1,23 +1,7 @@
 import { Arguments, Argv } from 'yargs'
-import querystring from 'query-string'
 
-import {
-  resolveProviderConf,
-  loadProvider,
-  loadProviderConf,
-  DEFUALT_CONF,
-  getLocaleMessages
-} from '../utils'
-
-import { PushableOptions } from '../../types'
-
-type PushOptions = {
-  provider: string
-  conf?: string
-  normalize?: string
-  dryRun: boolean
-  providerArgs?: string
-} & PushableOptions
+import { pushFunc } from '../utils'
+import { PushOptions } from '../../types'
 
 export const command = 'push'
 export const aliases = 'ph'
@@ -75,36 +59,14 @@ export const builder = (args: Argv): Argv<PushOptions> => {
 }
 
 export const handler = async (args: Arguments<PushOptions>): Promise<unknown> => {
-  const { dryRun, normalize, providerArgs } = args
-  const ProviderFactory = loadProvider(args.provider)
-
-  if (ProviderFactory === null) {
-    // TODO: should refactor console message
-    console.log(`Not found ${args.provider} provider`)
-    return
-  }
-
-  if (!args.target && !args.targetPaths) {
-    // TODO: should refactor console message
-    console.log('You need to specify either --target or --target-paths')
-    return
-  }
-
-  const confPath = resolveProviderConf(args.provider, args.conf)
-  const conf = loadProviderConf(confPath) || DEFUALT_CONF
+  const { provider, conf, normalize, dryRun, providerArgs, target, locale, targetPaths, filenameMatch } = args
 
   try {
-    const messages = getLocaleMessages(args)
-    const provider = ProviderFactory(conf)
-    await provider.push({
-      messages, dryRun, normalize,
-      providerArgs: providerArgs !== undefined ? querystring.parse(providerArgs) : undefined
-    })
+    await pushFunc({ provider, conf, normalize, dryRun, providerArgs, target, locale, targetPaths, filenameMatch })
     // TODO: should refactor console message
     console.log('push success')
-  } catch (e) {
-    // TODO: should refactor console message
-    console.error('push fail:', e.message)
+  } catch {
+    return
   }
 }
 
