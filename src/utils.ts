@@ -16,7 +16,8 @@ import {
   RawLocaleMessage,
   NamespaceDictionary,
   PushableOptions,
-  DiffOptions
+  DiffOptions,
+  PushOptions
 } from '../types'
 
 // import modules
@@ -29,6 +30,7 @@ import yaml from 'js-yaml'
 import deepmerge from 'deepmerge'
 import { promisify } from 'util'
 import type { Ignore } from 'ignore'
+import querystring from 'query-string'
 const { diffString } = require('json-diff') // NOTE: not provided type definition ...
 
 import { debug as Debug } from 'debug'
@@ -471,4 +473,37 @@ export async function returnDiff (options: DiffOptions): Promise<boolean> {
   } else {
     return Promise.resolve(false)
   }
+}
+
+export async function pushFunc (options: PushOptions): Promise<unknown> {
+  const ProviderFactory = loadProvider(options.provider)
+
+  if (ProviderFactory === null) {
+    // TODO: should refactor message
+    console.error(`Not found ${options.provider} provider`)
+    return Promise.reject()
+  }
+
+  if (!options.target && !options.targetPaths) {
+    // TODO: should refactor message
+    console.error(`You need to specify either --target or --target-paths`)
+    return Promise.reject()
+  }
+
+  const confPath = resolveProviderConf(options.provider, options.conf)
+  const conf = loadProviderConf(confPath) || DEFUALT_CONF
+
+  try {
+    const messages = getLocaleMessages(options)
+    const provider = ProviderFactory(conf)
+    await provider.push({
+      messages, dryRun: options.dryRun, normalize: options.normalize,
+      providerArgs: options.providerArgs !== undefined ? querystring.parse(options.providerArgs) : undefined
+    })
+  } catch (e) {
+    // TODO: should refactor message
+    console.error('push fail:', e.message)
+    return Promise.reject()
+  }
+  return Promise.resolve()
 }

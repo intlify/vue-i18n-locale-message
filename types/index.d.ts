@@ -195,13 +195,25 @@ declare function status (options: TranslationStatusOptions): Promise<Translation
 /**
  *  pushable options
  */
- export type PushableOptions = {
+export type PushableOptions = {
   target?: string
   locale?: string
   targetPaths?: string
   filenameMatch?: string
   format?: string
 }
+
+/**
+ *  push locale Message to l10n service
+ */
+export type PushOptions = {
+  provider: string
+  conf?: string
+  normalize?: string
+  dryRun: boolean
+  providerArgs?: string
+} & PushableOptions
+declare function push (options: PushOptions): Promise<unknown>
 
 /**
  *  Diff
