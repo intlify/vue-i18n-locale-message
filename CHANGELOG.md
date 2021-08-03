@@ -1,4 +1,13 @@
 
+## v1.5.1 (2021-08-03)
+
+#### :bug: Bug Fixes
+* [#177](https://github.com/intlify/vue-i18n-locale-message/pull/177) fix: push API's bug ([@kiibo382](https://github.com/kiibo382))
+
+#### Committers: 1
+- shota kizawa ([@kiibo382](https://github.com/kiibo382))
+
+
 ## v1.5.0 (2021-08-03)
 
 #### :star: Features
