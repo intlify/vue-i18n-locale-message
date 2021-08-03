@@ -69,7 +69,7 @@ export const handler = async (args: Arguments<DiffOptions>): Promise<unknown> =>
     }
     return Promise.resolve()
   } catch (e) {
-    console.error
+    console.error(e.message)
     return Promise.reject(e)
   }
 }
