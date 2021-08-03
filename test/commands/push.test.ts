@@ -66,7 +66,7 @@ test('--provider: not found', async () => {
       err ? reject(err) : resolve(output)
     })
   })
-  expect(spyLog).toHaveBeenCalledWith('Not found ./404-provider.js provider')
+  expect(spyError).toHaveBeenCalledWith('Not found ./404-provider.js provider')
 })
 
 test('not specified --target and --targetPaths', async () => {
@@ -77,7 +77,7 @@ test('not specified --target and --targetPaths', async () => {
       err ? reject(err) : resolve(output)
     })
   })
-  expect(spyLog).toHaveBeenCalledWith('You need to specify either --target or --target-paths')
+  expect(spyError).toHaveBeenCalledWith('You need to specify either --target or --target-paths')
 })
 
 test('--target option', async () => {
