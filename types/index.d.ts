@@ -224,7 +224,12 @@ export type DiffOptions = {
   normalize?: string
 } & PushableOptions
 
-declare function diff (options: DiffOptions): Promise<boolean>
+export type diffInfo = {
+  __old?: any
+  __new?: any
+}
+
+declare function diff (options: DiffOptions): Promise<diffInfo>
 
 /**
  *  Provider factory function
