@@ -64,7 +64,7 @@ export const handler = async (args: Arguments<DiffOptions>): Promise<unknown> =>
       provider, conf, normalize, target, locale, targetPaths, filenameMatch
     })
 
-    if (ret) {
+    if (Object.keys(ret).length) {
       return Promise.reject(new DiffError('There are differences!'))
     }
     return Promise.resolve()
