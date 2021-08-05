@@ -18,7 +18,8 @@ import {
   NamespaceDictionary,
   PushableOptions,
   DiffOptions,
-  PushOptions
+  PushOptions,
+  diffInfo
 } from '../types'
 
 // import modules
@@ -33,7 +34,7 @@ import deepmerge from 'deepmerge'
 import { promisify } from 'util'
 import type { Ignore } from 'ignore'
 import querystring from 'query-string'
-const { diffString } = require('json-diff') // NOTE: not provided type definition ...
+const jsonDiff = require('json-diff') // NOTE: not provided type definition ...
 
 import { debug as Debug } from 'debug'
 const debug = Debug('vue-i18n-locale-message:utils')
@@ -450,7 +451,7 @@ export function returnIgnoreInstance (ig: Ignore, ignoreFiles: string[]): void {
   })
 }
 
-export async function isDifferent (options: DiffOptions): Promise<boolean> {
+export async function isDifferent (options: DiffOptions): Promise<diffInfo> {
   const format = 'json'
   const ProviderFactory = loadProvider(options.provider)
 
@@ -472,13 +473,14 @@ export async function isDifferent (options: DiffOptions): Promise<boolean> {
   const locales = Object.keys(localeMessages) as Locale[]
   const serviceMessages = await provider.pull({ locales, dryRun: false, normalize: options.normalize, format })
 
-  const ret = diffString(serviceMessages, localeMessages)
+  const ret = jsonDiff.diffString(serviceMessages, localeMessages)
   console.log(ret)
 
   if (ret) {
-    return Promise.resolve(true)
+    const diffObj = jsonDiff.diff(serviceMessages, localeMessages)
+    return Promise.resolve(diffObj)
   } else {
-    return Promise.resolve(false)
+    return Promise.resolve({})
   }
 }
 
