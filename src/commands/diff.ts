@@ -1,7 +1,7 @@
 import { Arguments, Argv } from 'yargs'
 import { DiffError, fail } from './fails/diff'
 
-import { isDifferent } from '../utils'
+import { returnDiff } from '../utils'
 
 import { PushableOptions } from '../../types'
 
@@ -60,7 +60,7 @@ export const handler = async (args: Arguments<DiffOptions>): Promise<unknown> =>
   const { provider, conf, normalize, target, locale, targetPaths, filenameMatch } = args
 
   try {
-    const ret = await isDifferent({
+    const ret = await returnDiff({
       provider, conf, normalize, target, locale, targetPaths, filenameMatch
     })
 
@@ -69,7 +69,6 @@ export const handler = async (args: Arguments<DiffOptions>): Promise<unknown> =>
     }
     return Promise.resolve()
   } catch (e) {
-    console.error(e.message)
     return Promise.reject(e)
   }
 }

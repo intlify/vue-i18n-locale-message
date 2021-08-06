@@ -227,7 +227,7 @@ export type DiffOptions = {
 export type diffInfo = {
   __old?: any
   __new?: any
-}
+} & LocaleMessages
 
 declare function diff (options: DiffOptions): Promise<diffInfo>
 

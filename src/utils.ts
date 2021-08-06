@@ -34,6 +34,7 @@ import deepmerge from 'deepmerge'
 import { promisify } from 'util'
 import type { Ignore } from 'ignore'
 import querystring from 'query-string'
+import { flatten, unflatten } from 'flat'
 const jsonDiff = require('json-diff') // NOTE: not provided type definition ...
 
 import { debug as Debug } from 'debug'
@@ -451,7 +452,7 @@ export function returnIgnoreInstance (ig: Ignore, ignoreFiles: string[]): void {
   })
 }
 
-export async function isDifferent (options: DiffOptions): Promise<diffInfo> {
+export async function returnDiff (options: DiffOptions): Promise<diffInfo> {
   const format = 'json'
   const ProviderFactory = loadProvider(options.provider)
 
@@ -477,6 +478,18 @@ export async function isDifferent (options: DiffOptions): Promise<diffInfo> {
   console.log(ret)
 
   if (ret) {
+    if (options.normalize === 'flat') {
+      const flattenedServiceMessages = flatten(serviceMessages)
+      const flattenedlocaleMessages = flatten(localeMessages)
+      const flattenedDiffObj = jsonDiff.diff(flattenedServiceMessages, flattenedlocaleMessages)
+      return Promise.resolve(flattenedDiffObj)
+    }
+    if (options.normalize === 'hierarchy') {
+      const unflattenedServiceMessages = unflatten(serviceMessages, { object: true })
+      const unflattenedlocaleMessages = unflatten(localeMessages, { object: true })
+      const unflattenedDiffObj = jsonDiff.diff(unflattenedServiceMessages, unflattenedlocaleMessages)
+      return Promise.resolve(unflattenedDiffObj)
+    }
     const diffObj = jsonDiff.diff(serviceMessages, localeMessages)
     return Promise.resolve(diffObj)
   } else {
