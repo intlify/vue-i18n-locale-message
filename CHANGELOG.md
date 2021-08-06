@@ -1,4 +1,13 @@
 
+## v1.6.0 (2021-08-05)
+
+#### :boom: Breaking Change
+* [#181](https://github.com/intlify/vue-i18n-locale-message/pull/181) fix: change the return value of the diff API to an object ([@kiibo382](https://github.com/kiibo382))
+
+#### Committers: 1
+- shota kizawa ([@kiibo382](https://github.com/kiibo382))
+
+
 ## v1.5.1 (2021-08-03)
 
 #### :bug: Bug Fixes
