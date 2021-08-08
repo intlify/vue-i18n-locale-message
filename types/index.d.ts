@@ -224,15 +224,7 @@ export type DiffOptions = {
   normalize?: string
 } & PushableOptions
 
-export type diffInfo= {
-  __old?: any
-  __new?: any
-} & LocaleMessages | {
-  __old?: any
-  __new?: any
-}
-
-declare function diff (options: DiffOptions): Promise<diffInfo>
+declare function diff (options: DiffOptions): Promise<LocaleMessages>
 
 /**
  *  Provider factory function

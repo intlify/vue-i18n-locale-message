@@ -18,8 +18,7 @@ import {
   NamespaceDictionary,
   PushableOptions,
   DiffOptions,
-  PushOptions,
-  diffInfo
+  PushOptions
 } from '../types'
 
 // import modules
@@ -452,7 +451,7 @@ export function returnIgnoreInstance (ig: Ignore, ignoreFiles: string[]): void {
   })
 }
 
-export async function returnDiff (options: DiffOptions): Promise<diffInfo> {
+export async function returnDiff (options: DiffOptions): Promise<LocaleMessages> {
   const format = 'json'
   const ProviderFactory = loadProvider(options.provider)
 
