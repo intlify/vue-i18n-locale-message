@@ -2,7 +2,7 @@ import squeeze from './squeezer'
 import infuse from './infuser'
 import {
   getTranslationStatus as status,
-  isDifferent as diff,
+  returnDiff as diff,
   pushFunc as push
 } from './utils'
 
