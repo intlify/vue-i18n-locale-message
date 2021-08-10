@@ -19,7 +19,7 @@ import {
   PushableOptions,
   DiffOptions,
   DiffInfo,
-  PushOptions,
+  PushOptions
 } from '../types'
 
 // import modules
