@@ -10,7 +10,8 @@ import {
   reflectSFCDescriptor,
   getTranslationStatus,
   getExternalLocaleMessages,
-  splitLocaleMessages
+  splitLocaleMessages,
+  returnDiff
 } from '../src/utils'
 
 import ignore from 'ignore'
@@ -20,9 +21,10 @@ import ignore from 'ignore'
 
 // l10n service provider module
 const mockStatus = jest.fn()
+const mockPull = jest.fn()
 jest.mock('@scope/l10n-service-provider', () => {
   return jest.fn().mockImplementation(() => {
-    return { status: mockStatus }
+    return { status: mockStatus, pull: mockPull }
   })
 })
 import L10nServiceProvider from '@scope/l10n-service-provider'
@@ -135,4 +137,41 @@ test('splitLocaleMessages: no namespace', async () => {
 
   expect(sfc).toEqual(messages)
   expect(external).toBeUndefined()
+})
+
+test('returnDiff: no normalize', async() => {
+  mockPull.mockImplementation(() => Promise.resolve({
+    en: {
+      hello: 'hello!',
+      nest: {
+        world: 'world!'
+      }
+    }
+  }))
+  const diffMsg = await returnDiff({
+    provider: '@scope/l10n-service-provider',
+    conf: './test/fixtures/conf/l10n-service-provider-conf.json',
+    format: 'json',
+    target: './test/fixtures/locales/en.json'
+  })
+  expect(diffMsg).toMatchSnapshot()
+})
+
+test('returnDiff: normalize=flat', async() => {
+  mockPull.mockImplementation(() => Promise.resolve({
+    en: {
+      hello: 'hello!',
+      nest: {
+        world: 'world!'
+      }
+    }
+  }))
+  const diffMsg = await returnDiff({
+    provider: '@scope/l10n-service-provider',
+    conf: './test/fixtures/conf/l10n-service-provider-conf.json',
+    format: 'json',
+    target: './test/fixtures/locales/en.json',
+    normalize: 'flat'
+  })
+  expect(diffMsg).toMatchSnapshot()
 })
