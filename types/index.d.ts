@@ -224,7 +224,9 @@ export type DiffOptions = {
   normalize?: string
 } & PushableOptions
 
-declare function diff (options: DiffOptions): Promise<Record<string, any>>
+export type DiffInfo = Record<string, any>
+
+declare function diff (options: DiffOptions): Promise<DiffInfo>
 
 /**
  *  Provider factory function
