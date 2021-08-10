@@ -451,7 +451,7 @@ export function returnIgnoreInstance (ig: Ignore, ignoreFiles: string[]): void {
   })
 }
 
-export async function returnDiff (options: DiffOptions): Promise<LocaleMessages> {
+export async function returnDiff (options: DiffOptions): Promise<Record<string, any>> {
   const format = 'json'
   const ProviderFactory = loadProvider(options.provider)
 
@@ -480,16 +480,16 @@ export async function returnDiff (options: DiffOptions): Promise<LocaleMessages>
     if (options.normalize === 'flat') {
       const flattenedServiceMessages = flatten(serviceMessages)
       const flattenedlocaleMessages = flatten(localeMessages)
-      const flattenedDiffObj = jsonDiff.diff(flattenedServiceMessages, flattenedlocaleMessages)
+      const flattenedDiffObj = jsonDiff.diff(flattenedServiceMessages, flattenedlocaleMessages) as Record<string, any>
       return Promise.resolve(flattenedDiffObj)
     }
     if (options.normalize === 'hierarchy') {
       const unflattenedServiceMessages = unflatten(serviceMessages, { object: true })
       const unflattenedlocaleMessages = unflatten(localeMessages, { object: true })
-      const unflattenedDiffObj = jsonDiff.diff(unflattenedServiceMessages, unflattenedlocaleMessages)
+      const unflattenedDiffObj = jsonDiff.diff(unflattenedServiceMessages, unflattenedlocaleMessages) as Record<string, any>
       return Promise.resolve(unflattenedDiffObj)
     }
-    const diffObj = jsonDiff.diff(serviceMessages, localeMessages)
+    const diffObj = jsonDiff.diff(serviceMessages, localeMessages) as Record<string, any>
     return Promise.resolve(diffObj)
   } else {
     return Promise.resolve({})
