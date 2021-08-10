@@ -139,10 +139,6 @@ test('splitLocaleMessages: no namespace', async () => {
   expect(external).toBeUndefined()
 })
 
-test('pushFunc test', async() => {
-  
-})
-
 test('returnDiff: no normalize', async() => {
   mockPull.mockImplementation(() => Promise.resolve({
     en: {
