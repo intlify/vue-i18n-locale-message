@@ -73,6 +73,32 @@ Object {
 }
 `;
 
+exports[`returnDiff: no normalize 1`] = `
+Object {
+  "en": Object {
+    "hello": Object {
+      "__new": "world",
+      "__old": "hello!",
+    },
+    "nest__deleted": Object {
+      "world": "world!",
+    },
+  },
+}
+`;
+
+exports[`returnDiff: normalize=flat 1`] = `
+Object {
+  "en": Object {
+    "hello": Object {
+      "__new": "world",
+      "__old": "hello!",
+    },
+    "nest.world__deleted": "world!",
+  },
+}
+`;
+
 exports[`splitLocaleMessages: basic usage 1`] = `
 Object {
   "navigation": Object {
