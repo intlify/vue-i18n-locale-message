@@ -1,4 +1,13 @@
 
+## v1.7.0 (2021-08-10)
+
+#### :boom: Breaking Change
+* [#183](https://github.com/intlify/vue-i18n-locale-message/pull/183) feat: add the normalize option to the diff API. ([@kiibo382](https://github.com/kiibo382))
+
+#### Committers: 1
+- shota kizawa ([@kiibo382](https://github.com/kiibo382))
+
+
 ## v1.6.0 (2021-08-05)
 
 #### :boom: Breaking Change
