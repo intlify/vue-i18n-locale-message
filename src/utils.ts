@@ -479,9 +479,12 @@ export async function returnDiff (options: DiffOptions): Promise<DiffInfo> {
 
   if (ret) {
     if (options.normalize === 'flat') {
-      const flattenedServiceMessages = flatten(serviceMessages)
-      const flattenedlocaleMessages = flatten(localeMessages)
-      const flattenedDiffObj = jsonDiff.diff(flattenedServiceMessages, flattenedlocaleMessages)
+      const flattenedDiffObj = {} as Record<Locale, Record<string, string>>
+      for (const locale in serviceMessages) {
+        flattenedDiffObj[locale] = jsonDiff.diff(
+          flatten(serviceMessages[locale]), flatten(localeMessages[locale])
+        )
+      }
       return Promise.resolve(flattenedDiffObj)
     }
     if (options.normalize === 'hierarchy') {

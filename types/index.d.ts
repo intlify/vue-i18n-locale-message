@@ -224,7 +224,7 @@ export type DiffOptions = {
   normalize?: string
 } & PushableOptions
 
-export type DiffInfo = Record<string, any>
+export type DiffInfo = Record<Locale, Record<string, any>>
 
 declare function diff (options: DiffOptions): Promise<DiffInfo>
 
