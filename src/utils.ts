@@ -33,6 +33,7 @@ import { promisify } from 'util'
 import type { Ignore } from 'ignore'
 import querystring from 'query-string'
 import { flatten, unflatten } from 'flat'
+import { cosmiconfig } from 'cosmiconfig'
 const jsonDiff = require('json-diff') // NOTE: not provided type definition ...
 
 import { debug as Debug } from 'debug'
@@ -524,4 +525,9 @@ export async function pushFunc (options: PushOptions): Promise<unknown> {
     return Promise.reject()
   }
   return Promise.resolve()
+}
+
+export async function getPrettierConfig (filepath: string) {
+  const explorer = cosmiconfig('prettier')
+  return await explorer.load(filepath)
 }

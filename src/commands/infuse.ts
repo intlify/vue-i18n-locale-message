@@ -1,4 +1,8 @@
 import { Arguments, Argv } from 'yargs'
+import fs from 'fs'
+import path from 'path'
+import { applyDiff } from 'deep-diff'
+import glob from 'glob'
 
 import {
   resolve,
@@ -7,15 +11,12 @@ import {
   loadNamespaceDictionary,
   splitLocaleMessages,
   readIgnoreFile,
-  returnIgnoreInstance
+  returnIgnoreInstance,
+  getPrettierConfig
 } from '../utils'
 
 import infuse from '../infuser'
 import squeeze from '../squeezer'
-import fs from 'fs'
-import path from 'path'
-import { applyDiff } from 'deep-diff'
-import glob from 'glob'
 import {
   Locale,
   LocaleMessages,
@@ -36,6 +37,7 @@ type InfuseOptions = {
   unbundleTo?: string
   unbundleMatch?: string
   namespace?: string
+  prettier?: string
   dryRun: boolean
   ignoreFileName?: string
 }
@@ -89,6 +91,11 @@ export const builder = (args: Argv): Argv<InfuseOptions> => {
       alias: 'i',
       describe: 'dot ignore file name, i.e. .ignore-i18n'
     })
+    .option('prettier', {
+      type: 'string',
+      alias: 'p',
+      describe: 'the config file path of prettier'
+    })
 }
 
 export const handler = async (args: Arguments<InfuseOptions>) => {
@@ -99,6 +106,12 @@ export const handler = async (args: Arguments<InfuseOptions>) => {
     const ignoreFiles = readIgnoreFile(args.target, args.ignoreFileName)
     returnIgnoreInstance(ig, ignoreFiles)
   }
+
+  const prettierConfig = args.prettier
+    ? await getPrettierConfig(path.resolve(process.cwd(), args.prettier))
+    : undefined
+  debug('prettier config', prettierConfig)
+  const format = loadFormat()
 
   let nsDictionary = {} as NamespaceDictionary
   try {
@@ -122,7 +135,7 @@ export const handler = async (args: Arguments<InfuseOptions>) => {
   const newSources = infuse(targetPath, sources, meta)
 
   if (!args.dryRun) {
-    writeSFC(newSources)
+    writeSFC(newSources, format, prettierConfig)
   }
 
   if (!args.dryRun && external) {
@@ -248,9 +261,13 @@ function getTargetLocaleMessages (messages: LocaleMessages, hierarchy: string[])
   }, {} as LocaleMessages)
 }
 
-function writeSFC (sources: SFCFileInfo[]) {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+async function writeSFC (sources: SFCFileInfo[], format?: any, prettier?: any) {
   // TODO: async implementation
   sources.forEach(({ path, content }) => {
+    if (format && prettier) {
+      content = format(content, path, { prettier })
+    }
     fs.writeFileSync(path, content)
   })
 }
@@ -260,6 +277,16 @@ function writeExternalLocaleMessages (meta: MetaExternalLocaleMessages[]) {
   meta.forEach(({ path, messages }) => {
     fs.writeFileSync(path, JSON.stringify(messages, null, 2))
   })
+}
+
+function loadFormat () {
+  let format
+  try {
+    format = require('@intlify/cli').format
+  } catch (e) {
+    debug('@intlify/cli format loading error', e)
+  }
+  return format
 }
 
 export default {
