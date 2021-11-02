@@ -63,6 +63,13 @@ jest.mock('path', () => ({
 }))
 import path from 'path'
 
+// mock: `@intlify/cli
+// jest.mock('@intlify/cli', () => ({
+//   __esModule: true,
+//   ...jest.requireActual('@intlify/cli')
+// }))
+// import '@intlify/cli'
+
 // -------------------
 // setup/teadown hooks
 
