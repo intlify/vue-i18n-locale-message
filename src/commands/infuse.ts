@@ -38,6 +38,7 @@ type InfuseOptions = {
   unbundleMatch?: string
   namespace?: string
   prettier?: string
+  vue?: number
   dryRun: boolean
   ignoreFileName?: string
 }
@@ -96,9 +97,15 @@ export const builder = (args: Argv): Argv<InfuseOptions> => {
       alias: 'p',
       describe: 'the config file path of prettier'
     })
+    .option('vue', {
+      type: 'number',
+      alias: 'v',
+      describe: 'the vue template compiler version'
+    })
 }
 
 export const handler = async (args: Arguments<InfuseOptions>) => {
+  const vue = args.vue || 2
   const targetPath = resolve(args.target)
   const messagesPath = resolve(args.locales)
   const ig = ignore()
@@ -135,7 +142,7 @@ export const handler = async (args: Arguments<InfuseOptions>) => {
   const newSources = infuse(targetPath, sources, meta)
 
   if (!args.dryRun) {
-    writeSFC(newSources, format, prettierConfig)
+    writeSFC(newSources, format, prettierConfig, vue)
   }
 
   if (!args.dryRun && external) {
@@ -262,14 +269,15 @@ function getTargetLocaleMessages (messages: LocaleMessages, hierarchy: string[])
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-async function writeSFC (sources: SFCFileInfo[], format?: any, prettier?: any) {
-  // TODO: async implementation
-  sources.forEach(({ path, content }) => {
+async function writeSFC (sources: SFCFileInfo[], format: any, prettier: any, vue: number) {
+  for (const { path, content } of sources) {
+    let _content = content
     if (format && prettier) {
-      content = format(content, path, { prettier })
+      _content = await format(content, path, { prettier, vue })
     }
-    fs.writeFileSync(path, content)
-  })
+    // TODO: async implementation
+    fs.writeFileSync(path, _content)
+  }
 }
 
 function writeExternalLocaleMessages (meta: MetaExternalLocaleMessages[]) {
