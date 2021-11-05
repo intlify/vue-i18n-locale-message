@@ -1,4 +1,13 @@
 
+## v1.10.0 (2021-11-05)
+
+#### :zap: Improvement Features
+* [#194](https://github.com/intlify/vue-i18n-locale-message/pull/194) improvement: infuse formatting with vue template compiler v2 ([@kazupon](https://github.com/kazupon))
+
+#### Committers: 1
+- kazuya kawaguchi ([@kazupon](https://github.com/kazupon))
+
+
 
 
 ## v1.8.0 (2021-08-10)
