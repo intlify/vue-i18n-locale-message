@@ -63,13 +63,6 @@ jest.mock('path', () => ({
 }))
 import path from 'path'
 
-// mock: `@intlify/cli
-// jest.mock('@intlify/cli', () => ({
-//   __esModule: true,
-//   ...jest.requireActual('@intlify/cli')
-// }))
-// import '@intlify/cli'
-
 // -------------------
 // setup/teadown hooks
 
@@ -305,7 +298,7 @@ test('ignore option', async () => {
   mockFS.writeFileSync.mockImplementation((path, data) => {
     writeFiles[path as string] = data.toString()
   })
-  mockFS.readFileSync.mockImplementationOnce(path => MOCK_IGNORE_FILES);
+  mockFS.readFileSync.mockImplementationOnce(path => MOCK_IGNORE_FILES)
   const mockGlob = glob as jest.Mocked<typeof glob>
   mockGlob.sync.mockImplementationOnce(p => [`${TARGET_PATH}/src/App.vue`])
   const mockPath = path as jest.Mocked<typeof path>

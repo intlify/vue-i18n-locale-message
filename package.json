@@ -25,7 +25,7 @@
     }
   },
   "dependencies": {
-    "@intlify/cli": "^0.10.0",
+    "@intlify/cli": "^0.11.0",
     "@vue/component-compiler-utils": "^3.0.0",
     "cosmiconfig": "^7.0.1",
     "debug": "^4.1.1",
