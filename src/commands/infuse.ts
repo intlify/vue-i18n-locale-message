@@ -289,7 +289,7 @@ function writeExternalLocaleMessages (meta: MetaExternalLocaleMessages[], pretti
       prettierConfig,
       {
         parser: 'json',
-        plugin: ['./node_modules/prettier-plugin-sort-json'],
+        plugins: ['./node_modules/prettier-plugin-sort-json'],
         pluginSearchDirs: ['./node_modules'],
         jsonRecursiveSort: true
       })
