@@ -1,4 +1,13 @@
 
+## v1.11.0 (2021-11-08)
+
+#### :star: Features
+* [#196](https://github.com/intlify/vue-i18n-locale-message/pull/196) feat: json formatting ([@kazupon](https://github.com/kazupon))
+
+#### Committers: 1
+- kazuya kawaguchi ([@kazupon](https://github.com/kazupon))
+
+
 ## v1.10.0 (2021-11-05)
 
 #### :zap: Improvement Features
