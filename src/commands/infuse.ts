@@ -3,6 +3,7 @@ import fs from 'fs'
 import path from 'path'
 import { applyDiff } from 'deep-diff'
 import glob from 'glob'
+import { format as prettierFormat } from 'prettier'
 
 import {
   resolve,
@@ -146,7 +147,7 @@ export const handler = async (args: Arguments<InfuseOptions>) => {
   }
 
   if (!args.dryRun && external) {
-    writeExternalLocaleMessages(external)
+    writeExternalLocaleMessages(external, prettierConfig)
   }
 }
 
@@ -280,11 +281,27 @@ async function writeSFC (sources: SFCFileInfo[], format: any, prettier: any, vue
   }
 }
 
-function writeExternalLocaleMessages (meta: MetaExternalLocaleMessages[]) {
-  // TODO: async implementation
-  meta.forEach(({ path, messages }) => {
-    fs.writeFileSync(path, JSON.stringify(messages, null, 2))
-  })
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function writeExternalLocaleMessages (meta: MetaExternalLocaleMessages[], prettierConfig: any) {
+  const config = prettierConfig
+    ? Object.assign(
+      {},
+      prettierConfig,
+      {
+        parser: 'json',
+        plugin: ['./node_modules/prettier-plugin-sort-json'],
+        pluginSearchDirs: ['./node_modules'],
+        jsonRecursiveSort: true
+      })
+    : null
+  for (const { path, messages } of meta) {
+    let _messages = JSON.stringify(messages, null, 2)
+    if (config) {
+      _messages = prettierFormat(_messages, config)
+    }
+    // TODO: async implementation
+    fs.writeFileSync(path, _messages)
+  }
 }
 
 function loadFormat () {
