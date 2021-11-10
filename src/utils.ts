@@ -328,9 +328,19 @@ function getLocaleMessagePathInfo (fullPath: string, bundleMatch?: string): Pars
     const re = new RegExp(bundleMatch, 'ig')
     const match = re.exec(fullPath)
     debug('getLocaleMessagePathInfo: regex match', match)
-    return {
-      locale: (match && match[1]) ? match[1] : '',
-      filename: (match && match[2]) ? match[2] : ''
+    if (!match) {
+      return { locale: '', filename: '' }
+    } else {
+      if (match.groups) {
+        const locale = match.groups.locale || ''
+        const filename = match.groups.filename || ''
+        return { locale, filename }
+      } else {
+        return {
+          locale: match[1] ? match[1] : '',
+          filename: match[2] ? match[2] : ''
+        }
+      }
     }
   } else {
     return {
