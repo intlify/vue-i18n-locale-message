@@ -1,4 +1,13 @@
 
+## v1.12.0 (2021-11-10)
+
+#### :star: Features
+* [#198](https://github.com/intlify/vue-i18n-locale-message/pull/198) feat: support named capture for bundleMatch option ([@kazupon](https://github.com/kazupon))
+
+#### Committers: 1
+- kazuya kawaguchi ([@kazupon](https://github.com/kazupon))
+
+
 ## v1.11.0 (2021-11-08)
 
 #### :star: Features
