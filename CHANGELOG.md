@@ -1,4 +1,13 @@
 
+## v1.12.2 (2021-11-11)
+
+#### :bug: Bug Fixes
+* [#202](https://github.com/intlify/vue-i18n-locale-message/pull/202) fix: miss-taken infuse external reousrce path interpolation ([@kazupon](https://github.com/kazupon))
+
+#### Committers: 1
+- kazuya kawaguchi ([@kazupon](https://github.com/kazupon))
+
+
 ## v1.12.1 (2021-11-11)
 
 #### :bug: Bug Fixes
