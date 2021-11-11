@@ -431,7 +431,12 @@ export function splitLocaleMessages (
           let buildingPath = ''
           for (let i = 0; i < groupLen; i++) {
             if (match[i + 1]) {
-              buildingPath = `${buildingPath}${match[i + 1] === filename ? filename : match[i + 1] === locale ? l : match[i + 1]}${(i + 1) === groupLen - 1 ? '' : '/'}`
+              // prettier-ignore
+              buildingPath = `${buildingPath}${match[i + 1] === filename
+                ? filename
+                : match[i + 1] === locale
+                  ? l
+                  : match[i + 1]}${(i === groupLen - 1) ? '' : '/'}`
             }
             if (i === groupLen - 1) {
               buildingPath = `${buildingPath}.json`
