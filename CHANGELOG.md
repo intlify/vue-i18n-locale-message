@@ -1,4 +1,13 @@
 
+## v1.12.1 (2021-11-11)
+
+#### :bug: Bug Fixes
+* [#200](https://github.com/intlify/vue-i18n-locale-message/pull/200) improvement: infuse for external resource bundling ([@kazupon](https://github.com/kazupon))
+
+#### Committers: 1
+- kazuya kawaguchi ([@kazupon](https://github.com/kazupon))
+
+
 ## v1.12.0 (2021-11-10)
 
 #### :star: Features
