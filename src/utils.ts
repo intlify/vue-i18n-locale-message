@@ -312,6 +312,7 @@ export async function loadNamespaceDictionary (path: string) {
 type ParsedLocaleMessagePathInfo = {
   locale: Locale
   filename?: string
+  base?: string
 }
 
 function getLocaleMessagePathInfo (fullPath: string, bundleMatch?: string): ParsedLocaleMessagePathInfo {
@@ -322,16 +323,18 @@ function getLocaleMessagePathInfo (fullPath: string, bundleMatch?: string): Pars
     const match = re.exec(fullPath)
     debug('getLocaleMessagePathInfo: regex match', match)
     if (!match) {
-      return { locale: '', filename: '' }
+      return { locale: '', filename: '', base: '' }
     } else {
       if (match.groups) {
         const locale = match.groups.locale || ''
-        const filename = match.groups.filename || ''
-        return { locale, filename }
+        const filename = match.groups.filename || match.groups.basekey || ''
+        const base = match.groups.base || ''
+        return { locale, filename, base }
       } else {
         return {
           locale: match[1] ? match[1] : '',
-          filename: match[2] ? match[2] : ''
+          filename: match[2] ? match[2] : '',
+          base: ''
         }
       }
     }
@@ -382,6 +385,7 @@ type ExternalLocaleMessagesParseInfo = {
   namespace: string
   locale: Locale
   filename?: string
+  base?: string
 }
 
 // TODO: should be selected more other library ...
@@ -399,18 +403,50 @@ export function splitLocaleMessages (
   if (!bundle) { return { sfc: messages } }
 
   const bundleTargetPaths = bundle.split(',').filter(p => p)
-  const externalLocaleMessagesParseInfo = bundleTargetPaths.reduce((info, targetPath) => {
+  const externalExists = bundleTargetPaths.reduce((info, targetPath) => {
     const namespace = dictionary[targetPath] || ''
     const globedPaths = glob.sync(targetPath).map(p => resolve(p))
     debug('splitLocaleMessages globedPaths', globedPaths)
     return globedPaths.reduce((info, fullPath) => {
-      const { locale, filename } = getLocaleMessagePathInfo(fullPath, bundleMatch)
+      const { locale, filename, base } = getLocaleMessagePathInfo(fullPath, bundleMatch)
       if (!locale) { return info }
-      info.push({ path: fullPath, locale, namespace, filename })
+      info.set(fullPath, { path: fullPath, locale, namespace, filename, base })
       return info
     }, info)
+  }, new Map<string, ExternalLocaleMessagesParseInfo>())
+  const _externalExists = [...externalExists.values()]
+  debug('splitLocaleMessages: externalLocaleMessagesParseInfo (exisit):', _externalExists)
+
+  const locales = Object.keys(messages)
+  const externalAdditional = _externalExists.reduce((ext, { path, locale, namespace, filename, base }) => {
+    const additionalLocales = locales.filter(l => l !== locale)
+    additionalLocales.forEach(l => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      if (bundleMatch && filename && base && messages[l] && (messages[l] as any)[namespace] && ((messages[l] as any)[namespace] as any)[filename]) {
+        const re = new RegExp(bundleMatch, 'ig')
+        const match = re.exec(path)
+        debug('splitLocaleMessages: regex match', match)
+        if (match && match.groups) {
+          const groupLen = Object.keys(match.groups).length
+          let buildingPath = ''
+          for (let i = 0; i < groupLen; i++) {
+            if (match[i + 1]) {
+              buildingPath = `${buildingPath}${match[i + 1] === filename ? filename : match[i + 1] === l ? l : match[i + 1]}/`
+            }
+            if (i === groupLen - 1) {
+              buildingPath = `${buildingPath}.json`
+            }
+          }
+          ext.push({ path: buildingPath, locale: l, namespace, filename, base })
+        }
+      }
+    })
+    return ext
   }, [] as ExternalLocaleMessagesParseInfo[])
-  debug('splitLocaleMessages: externalLocaleMessagesParseInfo:', externalLocaleMessagesParseInfo)
+  debug('splitLocaleMessages: externalLocaleMessagesParseInfo (addiotnal):', externalAdditional)
+
+  const externalLocaleMessagesParseInfo = [..._externalExists, ...externalAdditional]
+  debug('splitLocaleMessages: externalLocaleMessagesParseInfo (added):', externalLocaleMessagesParseInfo)
 
   debug('splitLocaleMessages: messages (before):', messages)
   const metaExternalLocaleMessages = externalLocaleMessagesParseInfo.reduce((meta, { path, locale, namespace, filename }) => {
