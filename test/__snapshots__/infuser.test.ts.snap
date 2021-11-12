@@ -64,7 +64,7 @@ export default {}
 }
 </i18n>
 
-<i18n locale=\\"ja\\">
+<i18n locale=\\"ja\\" lang=\\"json\\">
 {
   \\"headers\\": {
     \\"rank\\": \\"ランク\\",
@@ -147,7 +147,7 @@ export default {}
 }
 </i18n>
 
-<i18n locale=\\"en\\">
+<i18n locale=\\"en\\" lang=\\"json\\">
 {
   \\"id\\": \\"User ID\\",
   \\"password\\": \\"Password\\",
