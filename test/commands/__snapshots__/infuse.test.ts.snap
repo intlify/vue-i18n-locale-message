@@ -70,7 +70,7 @@ exports[`absolute path: /path/to/project1/src/components/nest/RankingTable.vue 1
 </i18n>
   
 
-<i18n locale=\\"ja\\">
+<i18n locale=\\"ja\\" lang=\\"json\\">
 {
   \\"headers\\": {
     \\"rank\\": \\"ランク\\",
@@ -103,7 +103,7 @@ exports[`absolute path: /path/to/project1/src/pages/Login.vue 1`] = `
 </i18n>
   
 
-<i18n locale=\\"en\\">
+<i18n locale=\\"en\\" lang=\\"json\\">
 {
   \\"id\\": \\"User ID\\",
   \\"password\\": \\"Password\\",
@@ -209,7 +209,7 @@ Object {
 </i18n>
   
 
-<i18n locale=\\"ja\\">
+<i18n locale=\\"ja\\" lang=\\"json\\">
 {
   \\"headers\\": {
     \\"rank\\": \\"ランク\\",
@@ -239,7 +239,7 @@ Object {
 </i18n>
   
 
-<i18n locale=\\"en\\">
+<i18n locale=\\"en\\" lang=\\"json\\">
 {
   \\"id\\": \\"User ID\\",
   \\"password\\": \\"Password\\",
@@ -320,7 +320,7 @@ exports[`ignore option: /path/to/project1/src/components/nest/RankingTable.vue 1
 </i18n>
   
 
-<i18n locale=\\"ja\\">
+<i18n locale=\\"ja\\" lang=\\"json\\">
 {
   \\"headers\\": {
     \\"rank\\": \\"ランク\\",
@@ -401,7 +401,7 @@ exports[`match option: /path/to/project1/src/components/nest/RankingTable.vue 1`
 </i18n>
   
 
-<i18n locale=\\"ja\\">
+<i18n locale=\\"ja\\" lang=\\"json\\">
 {
   \\"headers\\": {
     \\"rank\\": \\"ランク\\",
@@ -434,7 +434,7 @@ exports[`match option: /path/to/project1/src/pages/Login.vue 1`] = `
 </i18n>
   
 
-<i18n locale=\\"en\\">
+<i18n locale=\\"en\\" lang=\\"json\\">
 {
   \\"id\\": \\"User ID\\",
   \\"password\\": \\"Password\\",
@@ -514,7 +514,7 @@ exports[`relative path: /path/to/project1/src/components/nest/RankingTable.vue 1
 </i18n>
   
 
-<i18n locale=\\"ja\\">
+<i18n locale=\\"ja\\" lang=\\"json\\">
 {
   \\"headers\\": {
     \\"rank\\": \\"ランク\\",
@@ -547,7 +547,7 @@ exports[`relative path: /path/to/project1/src/pages/Login.vue 1`] = `
 </i18n>
   
 
-<i18n locale=\\"en\\">
+<i18n locale=\\"en\\" lang=\\"json\\">
 {
   \\"id\\": \\"User ID\\",
   \\"password\\": \\"Password\\",
