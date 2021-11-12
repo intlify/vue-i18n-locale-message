@@ -1,4 +1,13 @@
 
+## v1.12.5 (2021-11-12)
+
+#### :zap: Improvement Features
+* [#208](https://github.com/intlify/vue-i18n-locale-message/pull/208) improvement: i18n custom block default lang ([@kazupon](https://github.com/kazupon))
+
+#### Committers: 1
+- kazuya kawaguchi ([@kazupon](https://github.com/kazupon))
+
+
 ## v1.12.4 (2021-11-11)
 
 #### :bug: Bug Fixes
