@@ -99,6 +99,8 @@ function buildI18nTag (i18nBlock: SFCI18nBlock, options?: FormatOptions): string
   }
   if (lang !== 'json') {
     tag += ` lang="${escape(lang)}"`
+  } else if (lang === undefined) { // default json
+    tag += ` lang="json"`
   }
   tag += '>'
 
