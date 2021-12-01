@@ -469,7 +469,7 @@ export function splitLocaleMessages (
     if (filename && isLocaleMessageDictionary(targetLocaleMessage)) {
       targetLocaleMessage = targetLocaleMessage[filename]
     }
-    meta.push({ path, messages: deepCopy(targetLocaleMessage) })
+    targetLocaleMessage && meta.push({ path, messages: deepCopy(targetLocaleMessage) })
     return meta
   }, [] as MetaExternalLocaleMessages[])
   debug('splitLocaleMessages: messages (after):', messages)
