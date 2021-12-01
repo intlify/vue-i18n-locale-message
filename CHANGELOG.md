@@ -1,4 +1,13 @@
 
+## v1.12.8 (2021-12-01)
+
+#### :bug: Bug Fixes
+* [#215](https://github.com/intlify/vue-i18n-locale-message/pull/215) fix: undefined resource copy ([@kazupon](https://github.com/kazupon))
+
+#### Committers: 1
+- kazuya kawaguchi ([@kazupon](https://github.com/kazupon))
+
+
 ## v1.12.7 (2021-11-12)
 
 #### :bug: Bug Fixes
