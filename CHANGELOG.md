@@ -1,4 +1,13 @@
 
+## v1.13.1 (2021-12-09)
+
+#### :zap: Improvement Features
+* [#219](https://github.com/intlify/vue-i18n-locale-message/pull/219) fix: change to debug log ([@kazupon](https://github.com/kazupon))
+
+#### Committers: 1
+- kazuya kawaguchi ([@kazupon](https://github.com/kazupon))
+
+
 ## v1.13.0 (2021-12-09)
 
 #### :zap: Improvement Features
