@@ -1,4 +1,13 @@
 
+## v1.13.0 (2021-12-09)
+
+#### :zap: Improvement Features
+* [#217](https://github.com/intlify/vue-i18n-locale-message/pull/217) feat: support multi ignore files for squeeze and infuse ([@kazupon](https://github.com/kazupon))
+
+#### Committers: 1
+- kazuya kawaguchi ([@kazupon](https://github.com/kazupon))
+
+
 ## v1.12.8 (2021-12-01)
 
 #### :bug: Bug Fixes
