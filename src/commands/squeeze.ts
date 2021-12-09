@@ -5,8 +5,7 @@ import {
   readSFC,
   loadNamespaceDictionary,
   getExternalLocaleMessages,
-  readIgnoreFile,
-  returnIgnoreInstance
+  getIgnore
 } from '../utils'
 import squeeze from '../squeezer'
 import fs from 'fs'
@@ -76,7 +75,7 @@ export const builder = (args: Argv): Argv<SqueezeOptions> => {
     .option('ignoreFileName', {
       type: 'string',
       alias: 'i',
-      describe: 'dot ignore file name, i.e. .ignore-i18n'
+      describe: 'ignore file names, i.e. .ignore-i18n .ignore-i18n-2'
     })
 }
 
@@ -85,11 +84,11 @@ export const handler = async (args: Arguments<SqueezeOptions>) => {
 
   let nsDictionary = {} as NamespaceDictionary
   let externalMessages = {} as LocaleMessages
-  const ig = ignore()
-  if (args.ignoreFileName && fs.existsSync(args.ignoreFileName)) {
-    const ignoreFiles = readIgnoreFile(args.target, args.ignoreFileName)
-    returnIgnoreInstance(ig, ignoreFiles)
+  let ig = ignore()
+  if (args.ignoreFileName) {
+    ig = getIgnore(args.target, args.ignoreFileName)
   }
+
   try {
     if (args.namespace) {
       nsDictionary = await loadNamespaceDictionary(args.namespace)
