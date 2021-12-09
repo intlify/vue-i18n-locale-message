@@ -485,7 +485,7 @@ export function getIgnore (target:string, ignoreFileNames: string): Ignore {
   const files = ignoreFileNames.split(',').filter(Boolean)
   files.forEach(file => {
     const fullPath = resolve(path.join(target, path.normalize(file)))
-    console.log('fullpaht', fullPath, fs.existsSync(fullPath))
+    debug('getIgnore: fullpath', fullPath, fs.existsSync(fullPath))
     if (fs.existsSync(fullPath)) {
       const ignoreFiles = readIgnoreFile(fullPath)
       returnIgnoreInstance(ig, ignoreFiles)
@@ -495,7 +495,7 @@ export function getIgnore (target:string, ignoreFileNames: string): Ignore {
 }
 
 function readIgnoreFile (ignoreFile: string): string[] {
-  console.log('readIgnoreFile: ignoreFile', ignoreFile)
+  debug('readIgnoreFile: ignoreFile', ignoreFile)
   const ignoreTargets = [] as string[]
   fs.readFileSync(ignoreFile, 'utf8')
     .split(/\r?\n/g)
@@ -503,7 +503,7 @@ function readIgnoreFile (ignoreFile: string): string[] {
     .forEach(ignoreTarget => {
       ignoreTargets.push(formatPath(ignoreFile, ignoreTarget))
     })
-  console.log(`ignoreTargets ${ignoreTargets}`)
+  debug(`ignoreTargets ${ignoreTargets}`)
   return ignoreTargets
 }
 
