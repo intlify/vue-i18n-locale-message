@@ -176,8 +176,6 @@ test('ignore option', async () => {
   mockUtils.getExternalLocaleMessages.mockImplementation(() => ({}))
   const mockFS = fs as jest.Mocked<typeof fs>
   mockFS.readFileSync.mockImplementationOnce(p => MOCK_IGNORE_FILES);
-  const mockGlob = glob as jest.Mocked<typeof glob>
-  mockGlob.sync.mockImplementationOnce(p => [path.resolve('./test/fixtures/.ignore-i18n')])
   const mockPath = path as jest.Mocked<typeof path>
   mockPath.dirname.mockImplementationOnce(p => TARGET_PATH)
 

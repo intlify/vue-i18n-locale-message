@@ -32,13 +32,15 @@ import JSON5 from 'json5'
 import yaml from 'js-yaml'
 import deepmerge from 'deepmerge'
 import { promisify } from 'util'
-import type { Ignore } from 'ignore'
 import querystring from 'query-string'
+import { debug as Debug } from 'debug'
+import ignore from 'ignore'
 import { flatten, unflatten } from 'flat'
 import { cosmiconfig } from 'cosmiconfig'
 const jsonDiff = require('json-diff') // NOTE: not provided type definition ...
 
-import { debug as Debug } from 'debug'
+import type { Ignore } from 'ignore'
+
 const debug = Debug('vue-i18n-locale-message:utils')
 
 const readFile = promisify(fs.readFile)
@@ -478,30 +480,41 @@ export function splitLocaleMessages (
   return { sfc: messages, external: metaExternalLocaleMessages }
 }
 
-export function readIgnoreFile (target: string, ignoreFileName: string): string[] {
-  const ignoreFiles = glob.sync(`${target}/**/${ignoreFileName}`)
-  console.log(`ignoreFiles ${ignoreFiles}`)
-  const ignoreTargets = [] as string[]
-  ignoreFiles.forEach(ignoreFile => {
-    fs.readFileSync(ignoreFile, 'utf8')
-      .split(/\r?\n/g)
-      .filter(Boolean)
-      .forEach(ignoreTarget => {
-        ignoreTargets.push(formatPath(ignoreFile, ignoreTarget))
-      })
+export function getIgnore (target:string, ignoreFileNames: string): Ignore {
+  const ig = ignore()
+  const files = ignoreFileNames.split(',').filter(Boolean)
+  files.forEach(file => {
+    const fullPath = resolve(path.join(target, path.normalize(file)))
+    console.log('fullpaht', fullPath, fs.existsSync(fullPath))
+    if (fs.existsSync(fullPath)) {
+      const ignoreFiles = readIgnoreFile(fullPath)
+      returnIgnoreInstance(ig, ignoreFiles)
+    }
   })
+  return ig
+}
+
+function readIgnoreFile (ignoreFile: string): string[] {
+  console.log('readIgnoreFile: ignoreFile', ignoreFile)
+  const ignoreTargets = [] as string[]
+  fs.readFileSync(ignoreFile, 'utf8')
+    .split(/\r?\n/g)
+    .filter(Boolean)
+    .forEach(ignoreTarget => {
+      ignoreTargets.push(formatPath(ignoreFile, ignoreTarget))
+    })
   console.log(`ignoreTargets ${ignoreTargets}`)
   return ignoreTargets
 }
 
-function formatPath (ignoreFile: string, ignoreTarget: string): string {
-  return path.join(path.relative(process.cwd(), path.dirname(ignoreFile)), ignoreTarget)
-}
-
-export function returnIgnoreInstance (ig: Ignore, ignoreFiles: string[]): void {
+function returnIgnoreInstance (ig: Ignore, ignoreFiles: string[]): void {
   ignoreFiles.forEach(ignoreRule => {
     ig.add(ignoreRule)
   })
+}
+
+function formatPath (ignoreFile: string, ignoreTarget: string): string {
+  return path.join(path.relative(process.cwd(), path.dirname(ignoreFile)), ignoreTarget)
 }
 
 export async function returnDiff (options: DiffOptions): Promise<DiffInfo> {

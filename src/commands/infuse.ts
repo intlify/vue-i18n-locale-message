@@ -11,8 +11,7 @@ import {
   readSFC,
   loadNamespaceDictionary,
   splitLocaleMessages,
-  readIgnoreFile,
-  returnIgnoreInstance,
+  getIgnore,
   getPrettierConfig
 } from '../utils'
 
@@ -91,7 +90,7 @@ export const builder = (args: Argv): Argv<InfuseOptions> => {
     .option('ignoreFileName', {
       type: 'string',
       alias: 'i',
-      describe: 'dot ignore file name, i.e. .ignore-i18n'
+      describe: 'ignore file names, i.e. .ignore-i18n .ignore-i18n-2'
     })
     .option('prettier', {
       type: 'string',
@@ -109,10 +108,9 @@ export const handler = async (args: Arguments<InfuseOptions>) => {
   const vue = args.vue || 2
   const targetPath = resolve(args.target)
   const messagesPath = resolve(args.locales)
-  const ig = ignore()
-  if (args.ignoreFileName && fs.existsSync(args.ignoreFileName)) {
-    const ignoreFiles = readIgnoreFile(args.target, args.ignoreFileName)
-    returnIgnoreInstance(ig, ignoreFiles)
+  let ig = ignore()
+  if (args.ignoreFileName) {
+    ig = getIgnore(args.target, args.ignoreFileName)
   }
 
   const prettierConfig = args.prettier
