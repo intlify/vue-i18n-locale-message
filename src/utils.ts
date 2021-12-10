@@ -484,25 +484,25 @@ export function getIgnore (target:string, ignoreFileNames: string): Ignore {
   const ig = ignore()
   const files = ignoreFileNames.split(',').filter(Boolean)
   files.forEach(file => {
-    const fullPath = resolve(path.join(target, path.normalize(file)))
-    debug('getIgnore: fullpath', fullPath, fs.existsSync(fullPath))
-    if (fs.existsSync(fullPath)) {
-      const ignoreFiles = readIgnoreFile(fullPath)
-      returnIgnoreInstance(ig, ignoreFiles)
-    }
+    debug('ignore target file', file)
+    const ignoreFiles = readIgnoreFile(target, file)
+    returnIgnoreInstance(ig, ignoreFiles)
   })
   return ig
 }
 
-function readIgnoreFile (ignoreFile: string): string[] {
-  debug('readIgnoreFile: ignoreFile', ignoreFile)
+function readIgnoreFile (target: string, _ignoreFile: string): string[] {
+  const ignoreFiles = glob.sync(`${target}/**/${_ignoreFile}`)
+  debug('readIgnoreFile: ignoreFiles', ignoreFiles)
   const ignoreTargets = [] as string[]
-  fs.readFileSync(ignoreFile, 'utf8')
-    .split(/\r?\n/g)
-    .filter(Boolean)
-    .forEach(ignoreTarget => {
-      ignoreTargets.push(formatPath(ignoreFile, ignoreTarget))
-    })
+  ignoreFiles.forEach(ignoreFile => {
+    fs.readFileSync(ignoreFile, 'utf8')
+      .split(/\r?\n/g)
+      .filter(Boolean)
+      .forEach(ignoreTarget => {
+        ignoreTargets.push(formatPath(ignoreFile, ignoreTarget))
+      })
+  })
   debug(`ignoreTargets ${ignoreTargets}`)
   return ignoreTargets
 }
