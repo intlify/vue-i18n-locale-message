@@ -1,4 +1,13 @@
 
+## v1.13.2 (2021-12-10)
+
+#### :bug: Bug Fixes
+* [#221](https://github.com/intlify/vue-i18n-locale-message/pull/221) fix: ignore resolving ([@kazupon](https://github.com/kazupon))
+
+#### Committers: 1
+- kazuya kawaguchi ([@kazupon](https://github.com/kazupon))
+
+
 ## v1.13.1 (2021-12-09)
 
 #### :zap: Improvement Features
