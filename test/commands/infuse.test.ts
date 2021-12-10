@@ -299,6 +299,8 @@ test('ignore option', async () => {
     writeFiles[path as string] = data.toString()
   })
   mockFS.readFileSync.mockImplementationOnce(path => MOCK_IGNORE_FILES)
+  const mockGlob = glob as jest.Mocked<typeof glob>
+  mockGlob.sync.mockImplementationOnce(p => [`${TARGET_PATH}/src/App.vue`])
   const mockPath = path as jest.Mocked<typeof path>
   mockPath.dirname.mockImplementationOnce(p => TARGET_PATH)
 
