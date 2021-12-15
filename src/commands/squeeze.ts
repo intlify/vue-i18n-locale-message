@@ -30,6 +30,7 @@ type SqueezeOptions = {
   namespace?: string
   output: string
   ignoreFileName?: string
+  ignoreMultipleMode?: boolean
 }
 
 export const command = 'squeeze'
@@ -75,18 +76,24 @@ export const builder = (args: Argv): Argv<SqueezeOptions> => {
     .option('ignoreFileName', {
       type: 'string',
       alias: 'i',
-      describe: 'ignore file names, i.e. .ignore-i18n .ignore-i18n-2'
+      describe: 'ignore file names, i.e. .ignore-i18n'
+    })
+    .option('ignoreMultipleMode', {
+      type: 'boolean',
+      default: false,
+      describe: 'use multiple ignore file with --ignoreFileName (NOTE: This option is EXPERIMENTAL)'
     })
 }
 
 export const handler = async (args: Arguments<SqueezeOptions>) => {
   const targetPath = resolve(args.target)
+  const ignoreMultipleMode = args.ignoreMultipleMode || false
 
   let nsDictionary = {} as NamespaceDictionary
   let externalMessages = {} as LocaleMessages
   let ig = ignore()
   if (args.ignoreFileName) {
-    ig = getIgnore(args.target, args.ignoreFileName)
+    ig = getIgnore(args.target, args.ignoreFileName, ignoreMultipleMode)
   }
 
   try {
