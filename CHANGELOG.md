@@ -1,4 +1,13 @@
 
+## v1.14.0 (2021-12-15)
+
+#### :star: Features
+* [#223](https://github.com/intlify/vue-i18n-locale-message/pull/223) feat: experimental multiple ignore file mode ([@kazupon](https://github.com/kazupon))
+
+#### Committers: 1
+- kazuya kawaguchi ([@kazupon](https://github.com/kazupon))
+
+
 ## v1.13.2 (2021-12-10)
 
 #### :bug: Bug Fixes
