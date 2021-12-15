@@ -89,7 +89,7 @@ export const builder = (args: Argv): Argv<InfuseOptions> => {
     .option('ignoreFileName', {
       type: 'string',
       alias: 'i',
-      describe: 'ignore file names, i.e. .ignore-i18n .ignore-i18n-2'
+      describe: 'ignore file names, i.e. .ignore-i18n'
     })
     .option('prettier', {
       type: 'string',

@@ -473,29 +473,48 @@ export function splitLocaleMessages (
   return { sfc: messages, external: metaExternalLocaleMessages }
 }
 
-export function getIgnore (target:string, ignoreFileNames: string): Ignore {
+export function getIgnore (target:string, ignoreFileNames: string, ignoreMultipleMode = false): Ignore {
   const ig = ignore()
   const files = ignoreFileNames.split(',').filter(Boolean)
-  files.forEach(file => {
-    debug('ignore target file', file)
-    const ignoreFiles = readIgnoreFile(target, file)
+  files.forEach((file, index) => {
+    debug('ignore target file', file, index)
+    if (index > 0 && !ignoreMultipleMode) {
+      return
+    }
+    const ignoreFiles = readIgnoreFile(target, file, ignoreMultipleMode)
     returnIgnoreInstance(ig, ignoreFiles)
   })
   return ig
 }
 
-function readIgnoreFile (target: string, _ignoreFile: string): string[] {
-  const ignoreFiles = glob.sync(`${target}/**/${_ignoreFile}`)
-  debug('readIgnoreFile: ignoreFiles', ignoreFiles)
+function readIgnoreFile (target: string, _ignoreFile: string, ignoreMultipleMode = false): string[] {
   const ignoreTargets = [] as string[]
-  ignoreFiles.forEach(ignoreFile => {
-    fs.readFileSync(ignoreFile, 'utf8')
+  if (!ignoreMultipleMode) {
+    const ignoreFiles = glob.sync(`${target}/**/${_ignoreFile}`)
+    debug('readIgnoreFile: ignoreFiles', ignoreFiles)
+    ignoreFiles.forEach(ignoreFile => {
+      fs.readFileSync(ignoreFile, 'utf8')
+        .split(/\r?\n/g)
+        .filter(line => line.trim() && !line.trim().startsWith('#'))
+        .filter(Boolean)
+        .forEach(ignoreTarget => {
+          ignoreTargets.push(formatPath(ignoreFile, ignoreTarget))
+        })
+    })
+  } else {
+    debug(`ignoreMultipleMode target: ${target}, _ignoreFile: ${_ignoreFile}`)
+    const fullPath = resolve(path.join(target, path.normalize(_ignoreFile)))
+    debug(`ignoreMultipleMode fullpath: ${fullPath}`)
+    fs.readFileSync(fullPath, 'utf8')
       .split(/\r?\n/g)
+      .filter(line => line.trim() && !line.trim().startsWith('#'))
       .filter(Boolean)
       .forEach(ignoreTarget => {
-        ignoreTargets.push(formatPath(ignoreFile, ignoreTarget))
+        const igTarget = path.join(target, ignoreTarget)
+        debug('ignore target', igTarget)
+        ignoreTargets.push(igTarget)
       })
-  })
+  }
   debug(`ignoreTargets ${ignoreTargets}`)
   return ignoreTargets
 }
