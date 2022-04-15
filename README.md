@@ -190,7 +190,7 @@ vue-i18n-locale-message list --locale=en \
 <p align="center"><img width="476px" height="544px" src="./assets/api-usage-image.png" alt="API Usage Image"></p>
 
 
-### sqeeze (basePath: string, files: SFCFileInfo[]): MetaLocaleMessage
+### squeeze (basePath: string, files: SFCFileInfo[]): MetaLocaleMessage
 
   * **Arguments:**
     * `{string} basePath`: The base path that single-file components are located in project
