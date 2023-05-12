@@ -91,7 +91,7 @@ export const handler = async (args: Arguments<ImportOptions>): Promise<unknown> 
     await provider.import({ messages, dryRun })
     // TODO: should refactor console message
     console.log('import success')
-  } catch (e) {
+  } catch (e: any) { // eslint-disable-line @typescript-eslint/no-explicit-any
     // TODO: should refactor console message
     console.error('import fail:', e.message)
   }

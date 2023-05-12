@@ -176,7 +176,7 @@ function splitLocaleMessages (path: string, messages: LocaleMessages) {
   try {
     fs.mkdirSync(path)
     write()
-  } catch (err) {
+  } catch (err: any) { // eslint-disable-line @typescript-eslint/no-explicit-any
     if (err.code === 'EEXIST') {
       write()
     } else {

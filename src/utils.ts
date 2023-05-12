@@ -609,7 +609,7 @@ export async function pushFunc (options: PushOptions): Promise<unknown> {
       messages, dryRun: options.dryRun, normalize: options.normalize,
       providerArgs: options.providerArgs !== undefined ? querystring.parse(options.providerArgs) : undefined
     })
-  } catch (e) {
+  } catch (e: any) { // eslint-disable-line @typescript-eslint/no-explicit-any
     // TODO: should refactor message
     console.error('push fail:', e.message)
     return Promise.reject()

@@ -27,6 +27,7 @@ jest.mock('@scope/l10n-service-provider', () => {
     return { status: mockStatus, pull: mockPull }
   })
 })
+// @ts-ignore
 import L10nServiceProvider from '@scope/l10n-service-provider'
 
 test('reflectSFCDescriptor', () => {

@@ -49,7 +49,7 @@ export const handler = async (args: Arguments<StatusOptions>): Promise<unknown> 
     return completes.length > 0
       ? Promise.reject(new TranslationStatusError('Translation work in progress'))
       : Promise.resolve('Translation done')
-  } catch (e) {
+  } catch (e: any) { // eslint-disable-line @typescript-eslint/no-explicit-any
     console.error(e.message)
     return Promise.reject(e)
   }
