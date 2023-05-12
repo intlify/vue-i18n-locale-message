@@ -4,6 +4,8 @@ import { MetaLocaleMessage, I18nLang, SFCFileInfo, SFCI18nBlock } from '../types
 import { reflectSFCDescriptor, parseContent } from './utils'
 
 import { debug as Debug } from 'debug'
+
+const VERBOSE = process.env.DEBUG_VERBOSE
 const debug = Debug('vue-i18n-locale-message:squeezer')
 
 export default function squeeze (basePath: string, files: SFCFileInfo[]): MetaLocaleMessage {
@@ -11,7 +13,7 @@ export default function squeeze (basePath: string, files: SFCFileInfo[]): MetaLo
   return descriptors.reduce((meta, descriptor) => {
     descriptor.customBlocks.sort((a, b) => { return (a.start as number) - (b.start as number) })
     const i18nBlocks = squeezeFromCustomBlocks(descriptor.customBlocks)
-    debug('squeezeFromCustomBlocks: i18nBlocks', JSON.stringify(i18nBlocks, null, 2))
+    VERBOSE && debug('squeezeFromCustomBlocks: i18nBlocks', JSON.stringify(i18nBlocks, null, 2))
     meta.components[descriptor.contentPath] = i18nBlocks
     return meta
   }, { target: basePath, components: {}} as MetaLocaleMessage)

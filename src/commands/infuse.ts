@@ -28,6 +28,8 @@ import {
 
 import { debug as Debug } from 'debug'
 import ignore from 'ignore'
+
+const VERBOSE = process.env.DEBUG_VERBOSE
 const debug = Debug('vue-i18n-locale-message:commands:infuse')
 
 type InfuseOptions = {
@@ -133,8 +135,8 @@ export const handler = async (args: Arguments<InfuseOptions>) => {
   const messages = readLocaleMessages(messagesPath, args.match)
 
   const { sfc, external } = splitLocaleMessages(messages, nsDictionary, args.unbundleTo, args.unbundleMatch)
-  debug('sfc', sfc)
-  debug('external', external)
+  VERBOSE && debug('sfc', sfc)
+  VERBOSE && debug('external', external)
 
   const meta = squeeze(targetPath, sources)
   apply(sfc, meta)
@@ -186,7 +188,7 @@ function apply (messages: LocaleMessages, meta: MetaLocaleMessage): MetaLocaleMe
     const { hierarchy } = parsePath(target, component)
 
     const collectMessages = getTargetLocaleMessages(messages, hierarchy)
-    debug('collect messages', JSON.stringify(collectMessages, null, 2))
+    VERBOSE && debug('collect messages', JSON.stringify(collectMessages, null, 2))
 
     const sourceLocales: Locale[] = Object.keys(collectMessages)
     const targetLocales = blocks.reduce((locales, block) => {
@@ -239,7 +241,7 @@ function apply (messages: LocaleMessages, meta: MetaLocaleMessage): MetaLocaleMe
 
 function getTargetLocaleMessages (messages: LocaleMessages, hierarchy: string[]): LocaleMessages {
   return Object.keys(messages).reduce((target, locale) => {
-    debug(`processing curernt: locale=${locale}, target=${JSON.stringify(target)}`)
+    VERBOSE && debug(`processing curernt: locale=${locale}, target=${JSON.stringify(target)}`)
 
     const obj = messages[locale]
     if (obj) {
@@ -253,7 +255,7 @@ function getTargetLocaleMessages (messages: LocaleMessages, hierarchy: string[])
         if (!key || !o) { break }
         o = o[key]
         prev = o
-        debug(`processing o = ${JSON.stringify(o)}, prev = ${JSON.stringify(prev)}`)
+        VERBOSE && debug(`processing o = ${JSON.stringify(o)}, prev = ${JSON.stringify(prev)}`)
       }
 
       if (!o && !prev) {
