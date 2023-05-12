@@ -305,7 +305,9 @@ function writeExternalLocaleMessages (meta: MetaExternalLocaleMessages[], pretti
 function loadFormat () {
   let format
   try {
+    debug('load @intlify/cli ...')
     format = require('@intlify/cli').format
+    debug('... loaded @intlify/cli', format)
   } catch (e) {
     debug('@intlify/cli format loading error', e)
   }
