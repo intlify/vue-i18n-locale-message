@@ -135,8 +135,8 @@ export const handler = async (args: Arguments<InfuseOptions>) => {
   const messages = readLocaleMessages(messagesPath, args.match)
 
   const { sfc, external } = splitLocaleMessages(messages, nsDictionary, args.unbundleTo, args.unbundleMatch)
-  debug('sfc', sfc)
-  debug('external', external)
+  VERBOSE && debug('sfc', sfc)
+  VERBOSE && debug('external', external)
 
   const meta = squeeze(targetPath, sources)
   apply(sfc, meta)
