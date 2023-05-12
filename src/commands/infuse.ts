@@ -182,10 +182,11 @@ function removeItem<T> (item: T, items: T[]): boolean {
 
 function apply (messages: LocaleMessages, meta: MetaLocaleMessage): MetaLocaleMessage {
   const { target, components } = meta
+  debug(`apply meta.target = ${target}`)
 
   for (const [component, blocks] of Object.entries(components)) {
-    debug(`apply component = ${component}, blocks = ${JSON.stringify(blocks)}`)
     const { hierarchy } = parsePath(target, component)
+    debug(`apply component = ${component}, hierarchy = ${hierarchy}, blocks = ${JSON.stringify(blocks)}`)
 
     const collectMessages = getTargetLocaleMessages(messages, hierarchy)
     VERBOSE && debug('collect messages', JSON.stringify(collectMessages, null, 2))
