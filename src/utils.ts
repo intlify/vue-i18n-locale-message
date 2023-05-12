@@ -88,9 +88,12 @@ export function reflectSFCDescriptor (basePath: string, components: SFCFileInfo[
 
 export function parsePath (basePath: string, targetPath: string) {
   const { dir, name } = path.parse(targetPath)
+  debug(`parsePath: dir = ${dir}, name = ${name}`)
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [_, target] = dir.split(basePath)
+  debug(`parsePath: 1st splited _ = ${_}, target = ${target}`)
   const parsedTargetPath = target.split(path.sep)
+  debug(`parsePath: 2nd splited parsedTargetPath = ${parsedTargetPath}`)
   parsedTargetPath.shift()
   debug(`parsePath: contentPath = ${targetPath}, component = ${name}, messageHierarchy = ${parsedTargetPath}`)
   return {
