@@ -73,7 +73,7 @@
     "vue-template-compiler": "^2.6.11"
   },
   "engines": {
-    "node": ">= 12"
+    "node": ">= 16"
   },
   "files": [
     "types/shims-vue-template-compiler.d.ts",
