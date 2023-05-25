@@ -27,6 +27,7 @@ type SqueezeOptions = {
   split?: boolean
   bundleWith?: string
   bundleMatch?: string
+  bundleOnly?: boolean
   namespace?: string
   output: string
   ignoreFileName?: string
@@ -61,6 +62,12 @@ export const builder = (args: Argv): Argv<SqueezeOptions> => {
       type: 'string',
       alias: 'm',
       describe: `option should be accepted regex filename of external locale messages, must be specified if it's directory path of external locale messages with --with-bundle`
+    })
+    .option('bundleOnly', {
+      type: 'boolean',
+      alias: 'B',
+      default: false,
+      describe: 'squeeze external locales messages only (not bundle SFC locale messages)'
     })
     .option('namespace', {
       type: 'string',
@@ -105,9 +112,13 @@ export const handler = async (args: Arguments<SqueezeOptions>) => {
     console.warn('cannot load external locale messages failed')
   }
 
-  const meta = squeeze(targetPath, readSFC(targetPath, ig))
-  const messages = deepmerge(generate(meta), externalMessages)
+  let sfcMessages = {} as LocaleMessages
+  if (!args.bundleOnly) {
+    const meta = squeeze(targetPath, readSFC(targetPath, ig))
+    sfcMessages = generate(meta)
+  }
 
+  const messages = deepmerge(sfcMessages, externalMessages)
   writeLocaleMessages(messages, args)
 }
 
