@@ -38,6 +38,7 @@ type InfuseOptions = {
   match?: string
   unbundleTo?: string
   unbundleMatch?: string
+  unbundleOnly?: boolean
   namespace?: string
   prettier?: string
   vue?: number
@@ -77,6 +78,12 @@ export const builder = (args: Argv): Argv<InfuseOptions> => {
       type: 'string',
       alias: 'M',
       describe: `option should be accepted regex filename of external locale messages, must be specified if it's directory path of external locale messages with --unbundle-to`
+    })
+    .option('unbundleOnly', {
+      type: 'boolean',
+      alias: 'U',
+      default: false,
+      describe: 'infuse external locales messages only (not unbundle SFC locale messages)'
     })
     .option('namespace', {
       type: 'string',
@@ -131,19 +138,21 @@ export const handler = async (args: Arguments<InfuseOptions>) => {
   }
   debug('namespace dictionary:', nsDictionary)
 
-  const sources = readSFC(targetPath, ig)
+  const sources = !args.unbundleOnly ? readSFC(targetPath, ig) : []
   const messages = readLocaleMessages(messagesPath, args.match)
 
-  const { sfc, external } = splitLocaleMessages(messages, nsDictionary, args.unbundleTo, args.unbundleMatch)
-  VERBOSE && debug('sfc', sfc)
+  const { main, external } = splitLocaleMessages(messages, nsDictionary, args.unbundleTo, args.unbundleMatch)
+  VERBOSE && debug('main', main)
   VERBOSE && debug('external', external)
 
-  const meta = squeeze(targetPath, sources)
-  apply(sfc, meta)
-  const newSources = infuse(targetPath, sources, meta)
+  if (!args.unbundleOnly) {
+    const meta = squeeze(targetPath, sources)
+    apply(main, meta)
+    const newSources = infuse(targetPath, sources, meta)
 
-  if (!args.dryRun) {
-    writeSFC(newSources, format, prettierConfig, vue)
+    if (!args.dryRun) {
+      writeSFC(newSources, format, prettierConfig, vue)
+    }
   }
 
   if (!args.dryRun && external) {

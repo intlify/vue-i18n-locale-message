@@ -111,9 +111,9 @@ test('splitLocaleMessages: basic usage', async () => {
   }
   const unbundleTo = './test/fixtures/packages/package1/locales/**/*.json,./test/fixtures/packages/package2/locales/**/*.json'
   const unbundleMatch = '.*/([\\w]{2})/([\\w]*)\\.json$'
-  const { sfc, external } = splitLocaleMessages(messages, namespaces, unbundleTo, unbundleMatch)
+  const { main, external } = splitLocaleMessages(messages, namespaces, unbundleTo, unbundleMatch)
 
-  expect(sfc).toEqual(messages)
+  expect(main).toEqual(messages)
   external.forEach(ex => {
     expect(ex.messages).toMatchSnapshot()
   })
@@ -125,18 +125,18 @@ test('splitLocaleMessages: no bundle option', async () => {
     './test/fixtures/packages/package1/locales/**/*.json': 'package1',
     './test/fixtures/packages/package2/locales/**/*.json': 'package2'
   }
-  const { sfc, external } = splitLocaleMessages(messages, namespaces)
+  const { main, external } = splitLocaleMessages(messages, namespaces)
 
-  expect(sfc).toEqual(messages)
+  expect(main).toEqual(messages)
   expect(external).toBeUndefined()
 })
 
 test('splitLocaleMessages: no namespace', async () => {
   const messages = deepmerge(squeezeLocaleMessages, externalLocaleMessages)
   const namespaces: NamespaceDictionary = {}
-  const { sfc, external } = splitLocaleMessages(messages, namespaces)
+  const { main, external } = splitLocaleMessages(messages, namespaces)
 
-  expect(sfc).toEqual(messages)
+  expect(main).toEqual(messages)
   expect(external).toBeUndefined()
 })
 

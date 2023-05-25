@@ -412,7 +412,7 @@ export function splitLocaleMessages (
   bundle?: string,
   bundleMatch?: string
 ) {
-  if (!bundle) { return { sfc: messages } }
+  if (!bundle) { return { main: messages } }
 
   const bundleTargetPaths = bundle.split(',').filter(p => p)
   const externalExists = bundleTargetPaths.reduce((info, targetPath) => {
@@ -480,7 +480,7 @@ export function splitLocaleMessages (
   debug('splitLocaleMessages: messages (after):', messages)
   debug('splitLocaleMessages: metaExternalLocaleMessages:', metaExternalLocaleMessages)
 
-  return { sfc: messages, external: metaExternalLocaleMessages }
+  return { main: messages, external: metaExternalLocaleMessages }
 }
 
 export function getIgnore (target:string, ignoreFileNames: string, ignoreMultipleMode = false): Ignore {
